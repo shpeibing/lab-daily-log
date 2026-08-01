@@ -742,20 +742,20 @@ input:checked + .slider:before { transform:translateX(20px); }
   <div class="login-subtitle">工作日志 · 绩效考核 · 积分管理</div>
   <div class="login-card">
     <div class="form-group">
-      <label class="form-label">👤 工号</label>
-      <input type="text" class="form-input" id="loginUsername" placeholder="请输入工号" autocomplete="username">
+      <label class="form-label" style="font-size:14px;font-weight:600;color:#333;">👤 工号</label>
+      <input type="text" class="form-input" id="loginUsername" placeholder="请输入工号" autocomplete="username" style="padding:14px 16px;font-size:15px;border-radius:12px;border:2px solid #E0E0E0;transition:all 0.3s;background:#FAFAFA;">
     </div>
     <div class="form-group">
-      <label class="form-label">🔒 密码</label>
-      <input type="password" class="form-input" id="loginPassword" placeholder="请输入密码" autocomplete="current-password">
+      <label class="form-label" style="font-size:14px;font-weight:600;color:#333;">🔒 密码</label>
+      <input type="password" class="form-input" id="loginPassword" placeholder="请输入密码" autocomplete="current-password" style="padding:14px 16px;font-size:15px;border-radius:12px;border:2px solid #E0E0E0;transition:all 0.3s;background:#FAFAFA;">
     </div>
     <div class="login-options">
       <label class="login-remember">
         <input type="checkbox" id="rememberMe"> 记住密码
       </label>
-      <span class="login-forgot" onclick="showToast('请联系科主任重置密码')">忘记密码？</span>
+      <span class="login-forgot" onclick="showToast('📞 请联系科主任重置密码，或拨打技术支持：0527-80525126')">忘记密码？</span>
     </div>
-    <button class="btn btn-primary" onclick="handleLogin()">登 录</button>
+    <button class="btn btn-primary" onclick="handleLogin()" id="loginBtn" style="padding:14px;font-size:16px;letter-spacing:4px;border-radius:12px;background:linear-gradient(135deg,var(--primary),#1565C0);box-shadow:0 4px 15px rgba(33,150,243,0.4);">登 录</button>
   </div>
   <div class="login-footer">
     <div class="copyright">版权所有 © 裴兵（江苏省人民医院宿迁医院医学检验科）</div>
@@ -2656,18 +2656,47 @@ let currentUser = null;
 let currentTab = 'home';
 // ===== 登录逻辑 =====
 function handleLogin() {
-  const username = document.getElementById('loginUsername').value;
+  const username = document.getElementById('loginUsername').value.trim();
   const password = document.getElementById('loginPassword').value;
+  const loginBtn = document.getElementById('loginBtn');
   if (!username || !password) {
-    showToast('请输入工号和密码');
+    showToast('⚠️ 请输入工号和密码');
+    // 输入框抖动效果
+    if (!username) document.getElementById('loginUsername').style.borderColor = '#f44336';
+    if (!password) document.getElementById('loginPassword').style.borderColor = '#f44336';
+    setTimeout(() => {
+      document.getElementById('loginUsername').style.borderColor = '#E0E0E0';
+      document.getElementById('loginPassword').style.borderColor = '#E0E0E0';
+    }, 1000);
     return;
   }
-  const found = USER_DB.find(u => u.id === username && u.password === password);
-  if (found) {
-    loginSuccess(found);
-  } else {
-    showToast('工号或密码错误');
-  }
+  // 按钮加载状态
+  loginBtn.disabled = true;
+  loginBtn.innerHTML = '⏳ 登录中...';
+  loginBtn.style.opacity = '0.7';
+  // 模拟网络延迟（实际使用时可以去掉延迟）
+  setTimeout(() => {
+    const found = USER_DB.find(u => u.id === username && u.password === password);
+    if (found) {
+      loginBtn.innerHTML = '✅ 登录成功';
+      loginBtn.style.background = 'linear-gradient(135deg,#4CAF50,#388E3C)';
+      setTimeout(() => {
+        loginSuccess(found);
+      }, 300);
+    } else {
+      loginBtn.disabled = false;
+      loginBtn.innerHTML = '登 录';
+      loginBtn.style.opacity = '1';
+      showToast('❌ 工号或密码错误，请重试');
+      // 输入框抖动
+      document.getElementById('loginPassword').style.borderColor = '#f44336';
+      document.getElementById('loginUsername').style.borderColor = '#f44336';
+      setTimeout(() => {
+        document.getElementById('loginUsername').style.borderColor = '#E0E0E0';
+        document.getElementById('loginPassword').style.borderColor = '#E0E0E0';
+      }, 1000);
+    }
+  }, 800);
 }
 function loginSuccess(user) {
   currentUser = user;
