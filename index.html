@@ -189,10 +189,11 @@ tr:nth-child(even){background:#fafafa;}
         <div class="menu-card" onclick="showPage('maintenance')"><div class="icon">🔧</div><div class="name">仪器保养</div></div>
         <div class="menu-card" onclick="showPage('quality')"><div class="icon">📊</div><div class="name">质控管理</div></div>
         <div class="menu-card" onclick="showPage('workload')"><div class="icon">📝</div><div class="name">工作量</div></div>
-        <div class="menu-card" onclick="showPage('sop')"><div class="icon">📚</div><div class="name">SOP学习</div></div>
+        <div class="menu-card" onclick="showPage('sop')"><div class="icon">📚</div><div class="name">检验知识</div></div>
         <div class="menu-card" onclick="showPage('critical')"><div class="icon">⚠️</div><div class="name">危急值</div></div>
         <div class="menu-card" onclick="showPage('reagent')"><div class="icon">🧪</div><div class="name">试剂管理</div></div>
         <div class="menu-card" onclick="showPage('handover')"><div class="icon">🔄</div><div class="name">交接班</div></div>
+        <div class="menu-card" onclick="openAiChat()"><div class="icon">🤖</div><div class="name">AI助手</div></div>
         <div class="menu-card" onclick="showPage('performance')"><div class="icon">🏆</div><div class="name">绩效积分</div></div>
         <div class="menu-card" onclick="showPage('settings')"><div class="icon">⚙️</div><div class="name">系统设置</div></div>
       </div>
@@ -200,13 +201,18 @@ tr:nth-child(even){background:#fafafa;}
     <div class="page" id="page-maintenance"><div class="page-title">🔧 仪器保养 <span class="sub">每日保养打卡</span></div><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openMaintenanceModal()">➕ 新增保养</button></div><div id="maintenanceList"></div></div>
     <div class="page" id="page-quality"><div class="page-title">📊 质控管理 <span class="sub">室内质控 · 室间质评</span></div><div class="tabs"><div class="tab active" onclick="switchQcTab('daily',this)">每日质控</div><div class="tab" onclick="switchQcTab('eqa',this)">室间质评</div><div class="tab" onclick="switchQcTab('trend',this)">趋势分析</div></div><div id="qcDaily"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openQcModal()">➕ 录入质控</button></div><div id="qcList"></div></div><div id="qcEqa" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openEqaModal()">➕ 新增EQA</button></div><div id="eqaList"></div></div><div id="qcTrend" style="display:none;"><div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon">📈</div><div><div class="item-title">质控CV趋势</div><div class="item-desc">点击查看详细趋势分析</div></div></div><div class="item-right"><span class="badge badge-blue">正常</span></div></div></div></div></div>
     <div class="page" id="page-workload"><div class="page-title">📝 工作量 <span class="sub">今日检测统计</span></div><div class="stats-grid"><div class="stat-card"><div class="label">今日样本量</div><div class="value" id="wlToday">0</div></div><div class="stat-card"><div class="label">本周样本量</div><div class="value" id="wlWeek">0</div></div><div class="stat-card"><div class="label">本月样本量</div><div class="value" id="wlMonth">0</div></div><div class="stat-card"><div class="label">TAT达标率</div><div class="value" id="wlTat">0%</div></div></div><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openWorkloadModal()">➕ 录入工作量</button></div><div id="workloadList"></div></div>
-    <div class="page" id="page-sop"><div class="page-title">📚 SOP学习 <span class="sub">在线阅读 · 在线考试</span></div><div class="tabs"><div class="tab active" onclick="switchSopTab('list',this)">SOP列表</div><div class="tab" onclick="switchSopTab('exam',this)">在线考试</div><div class="tab" onclick="switchSopTab('progress',this)">学习进度</div></div><div id="sopList"></div><div id="sopExam" style="display:none;">
+    <div class="page" id="page-sop"><div class="page-title">📚 检验知识学习 <span class="sub">学习知识 · 📝 在线考试</span></div><div class="tabs"><div class="tab active" onclick="switchSopTab('list',this)">📖 学习资料</div><div class="tab" onclick="switchSopTab('exam',this)">📝 在线考试</div><div class="tab" onclick="switchSopTab('progress',this)">📊 学习进度</div></div><div id="sopList"></div><div id="sopExam" style="display:none;">
   <div class="action-bar">
     <button class="action-btn action-btn-blue" onclick="startExam()">📝 开始考试</button>
     <button class="action-btn action-btn-green" onclick="showExamResult()">📊 考试成绩</button>
   </div>
   <div id="examContent"></div>
-</div><div id="sopProgress" style="display:none;"></div></div>
+</div><div id="sopProgress" style="display:none;">
+  <div class="list-card" style="padding:20px;">
+    <h3 style="color:var(--primary);margin-bottom:15px;">📊 我的学习进度</h3>
+    <div id="learningProgressList"></div>
+  </div>
+</div></div>
     <div class="page" id="page-critical"><div class="page-title">⚠️ 危急值报告 <span class="sub">及时报告 · 保障安全</span></div><div class="action-bar"><button class="action-btn action-btn-red" onclick="openCriticalModal()">➕ 新增危急值</button></div><div id="criticalList"></div></div>
     <div class="page" id="page-reagent"><div class="page-title">🧪 试剂管理 <span class="sub">库存 · 出入库 · 效期</span></div><div class="tabs"><div class="tab active" onclick="switchReagentTab('inventory',this)">库存管理</div><div class="tab" onclick="switchReagentTab('inout',this)">出入库记录</div><div class="tab" onclick="switchReagentTab('expiry',this)">效期预警</div></div><div id="reagentInventory"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openReagentModal()">➕ 新增试剂</button><button class="action-btn action-btn-green" onclick="openReagentInOutModal()">📦 出入库</button></div><div id="reagentList"></div></div><div id="reagentInout" style="display:none;"><div id="reagentInoutList"></div></div><div id="reagentExpiry" style="display:none;"><div id="reagentExpiryList"></div></div></div>
     <div class="page" id="page-handover"><div class="page-title">🔄 交接班记录 <span class="sub">白班 · 夜班</span></div><div class="tabs"><div class="tab active" onclick="switchHandoverTab('list',this)">交接记录</div><div class="tab" onclick="switchHandoverTab('add',this)">填写交接</div></div><div id="handoverList"></div><div id="handoverAdd" style="display:none;"><div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e8f5e9;">📝</div><div><div class="item-title">填写交接班记录</div><div class="item-desc">记录白班/夜班交接内容</div></div></div><div class="item-right"><button class="btn btn-primary btn-sm" onclick="openHandoverModal()">填写</button></div></div></div></div></div>
@@ -1280,13 +1286,20 @@ function saveSopManage(){
 }
 function viewSopPdf(id){
   var s = null;
-  for(var i=0;i<appData.sopList.length;i++){ if(appData.sopList[i].id === id){ s = appData.sopList[i]; break; } }
-  if(!s){ showToast('文档不存在'); return; }
+  for(var i=0;i<appData.sops.length;i++){ if(appData.sops[i].id === id){ s = appData.sops[i]; break; } }
+  if(!s){ showToast('资料不存在'); return; }
   if(s.pdfData){
-    var pdfUrl = 'data:application/pdf;base64,' + s.pdfData;
-    window.open(pdfUrl, '_blank');
+    var modal = document.getElementById('modalContent');
+    modal.innerHTML = '<div class="modal-header"><h3>📖 ' + s.title + '</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body" style="max-height:70vh;overflow-y:auto;"><div style="margin-bottom:10px;font-size:13px;color:var(--text-light);">' + s.group + ' · 版本:' + s.version + '</div><iframe src="' + s.pdfData + '" style="width:100%;height:500px;border:none;border-radius:8px;"></iframe></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">关闭</button></div>';
+    document.getElementById('modalOverlay').classList.add('active');
+    // 记录学习进度
+    if(!appData.sopProgress) appData.sopProgress = [];
+    var found = false;
+    for(var p=0;p<appData.sopProgress.length;p++){ if(appData.sopProgress[p].sopId === s.id && appData.sopProgress[p].user === currentUser.name){ found = true; appData.sopProgress[p].count = (appData.sopProgress[p].count || 0) + 1; break; } }
+    if(!found) appData.sopProgress.push({sopId:s.id,title:s.title,user:currentUser.name,count:1,date:new Date().toISOString().split('T')[0]});
+    saveData();
   } else {
-    showToast('该文档暂无PDF附件');
+    viewSopDetail(id);
   }
 }
 function switchExamSubTab(tab, el){
@@ -1434,7 +1447,7 @@ function saveResetPwd(id){
   showToast('✅ 密码已恢复为：' + newPwd);
 }
 
-// ===== 在线考试功能 =====
+// ===== 📝 在线考试功能 =====
 var currentExam = null;
 var examAnswers = {};
 function startExam(){
@@ -1447,7 +1460,7 @@ function startExam(){
   examAnswers = {};
   var totalScore = 0;
   for(var s=0;s<selected.length;s++){ totalScore += (selected[s].score || 5); }
-  var html = '<div class="list-card" style="padding:20px;"><h3 style="color:var(--primary);margin-bottom:15px;">📝 在线考试</h3><p style="color:var(--text-light);margin-bottom:15px;">共' + selected.length + '题，满分' + totalScore + '分</p>';
+  var html = '<div class="list-card" style="padding:20px;"><h3 style="color:var(--primary);margin-bottom:15px;">📝 📝 在线考试</h3><p style="color:var(--text-light);margin-bottom:15px;">共' + selected.length + '题，满分' + totalScore + '分</p>';
   for(var i=0;i<selected.length;i++){
     var q = selected[i];
     var qScore = q.score || 5;
@@ -1526,6 +1539,24 @@ function switchSopTab(tab, el){
   document.getElementById('sopExam').style.display = tab === 'exam' ? 'block' : 'none';
   document.getElementById('sopProgress').style.display = tab === 'progress' ? 'block' : 'none';
   if(tab === 'exam') document.getElementById('examContent').innerHTML = '';
+  if(tab === 'progress') loadLearningProgress();
+}
+function loadLearningProgress(){
+  var list = document.getElementById('learningProgressList');
+  if(!list) return;
+  var progress = appData.sopProgress || [];
+  var myProgress = [];
+  for(var i=0;i<progress.length;i++){ if(progress[i].user === currentUser.name) myProgress.push(progress[i]); }
+  if(myProgress.length === 0){
+    list.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-light);">📖 还没有学习记录，快去学习吧！</div>';
+    return;
+  }
+  var html = '';
+  for(var i=myProgress.length-1;i>=0;i--){
+    var p = myProgress[i];
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);"><div><div style="font-weight:500;">' + p.title + '</div><div style="font-size:12px;color:var(--text-light);">学习' + p.count + '次 · ' + p.date + '</div></div><span class="badge badge-blue">已学' + p.count + '次</span></div>';
+  }
+  list.innerHTML = html;
 }
 // ===== 试题管理（系统设置中） =====
 function openExamQuestionModal(){
@@ -1673,6 +1704,77 @@ function deletePdfQuestion(id){
     loadPdfQuestions();
     showToast('✅ PDF试题已删除');
   }
+}
+
+// ===== AI助手功能 =====
+function openAiChat(){
+  var modal = document.getElementById('modalContent');
+  modal.innerHTML = '<div class="modal-header"><h3>🤖 AI助手</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body" style="padding:0;"><div id="aiChatMessages" style="height:350px;overflow-y:auto;padding:15px;background:#f8f9fa;"></div><div style="display:flex;padding:10px;border-top:1px solid var(--border);background:#fff;"><input type="text" class="form-input" id="aiChatInput" placeholder="请输入您的问题..." style="flex:1;margin-right:8px;" onkeydown="if(event.key==='Enter') sendAiMessage()"><button class="btn btn-primary" onclick="sendAiMessage()">发送</button></div></div>';
+  document.getElementById('modalOverlay').classList.add('active');
+  // 添加欢迎消息
+  var msgBox = document.getElementById('aiChatMessages');
+  msgBox.innerHTML = '<div style="margin-bottom:10px;display:flex;"><div style="background:#e3f2fd;padding:10px 14px;border-radius:12px 12px 12px 0;max-width:80%;font-size:14px;line-height:1.6;">🤖 您好！我是检验科AI助手，可以帮您：<br>📖 解答检验知识问题<br>🔬 解释检验指标含义<br>📊 分析质控数据<br>💊 查询试剂信息<br>📋 解读SOP规范<br>请告诉我您想了解什么？</div></div>';
+  document.getElementById('aiChatInput').focus();
+}
+function sendAiMessage(){
+  var input = document.getElementById('aiChatInput');
+  var msg = input.value.trim();
+  if(!msg){ showToast('请输入问题'); return; }
+  var msgBox = document.getElementById('aiChatMessages');
+  // 添加用户消息
+  msgBox.innerHTML += '<div style="margin-bottom:10px;display:flex;justify-content:flex-end;"><div style="background:var(--primary);color:#fff;padding:10px 14px;border-radius:12px 12px 0 12px;max-width:80%;font-size:14px;line-height:1.6;">' + msg + '</div></div>';
+  input.value = '';
+  msgBox.scrollTop = msgBox.scrollHeight;
+  // 模拟AI回复
+  setTimeout(function(){
+    var reply = getAiReply(msg);
+    msgBox.innerHTML += '<div style="margin-bottom:10px;display:flex;"><div style="background:#e3f2fd;padding:10px 14px;border-radius:12px 12px 12px 0;max-width:80%;font-size:14px;line-height:1.6;">🤖 ' + reply + '</div></div>';
+    msgBox.scrollTop = msgBox.scrollHeight;
+  }, 500);
+}
+function getAiReply(msg){
+  var m = msg.toLowerCase();
+  // 检验知识相关
+  if(m.indexOf('白细胞') > -1 || m.indexOf('wbc') > -1){
+    return '📊 <b>白细胞（WBC）</b><br>正常参考值：成人 (4.0-10.0)×10⁹/L<br>🔺 升高：感染、炎症、应激、白血病等<br>🔻 降低：病毒感染、骨髓抑制、药物等<br>💡 建议结合临床症状和分类计数综合判断。';
+  }
+  if(m.indexOf('红细胞') > -1 || m.indexOf('rbc') > -1){
+    return '📊 <b>红细胞（RBC）</b><br>正常参考值：男 (4.0-5.5)×10¹²/L，女 (3.5-5.0)×10¹²/L<br>🔺 升高：脱水、慢性缺氧、真性红细胞增多症<br>🔻 降低：贫血、失血、溶血等<br>💡 结合血红蛋白、红细胞比容综合评估。';
+  }
+  if(m.indexOf('血红蛋白') > -1 || m.indexOf('hb') > -1 || m.indexOf('hgb') > -1){
+    return '📊 <b>血红蛋白（Hb/HGB）</b><br>正常参考值：男 120-160g/L，女 110-150g/L<br>🔺 升高：脱水、慢性阻塞性肺病、真性红细胞增多症<br>🔻 降低：各类贫血（缺铁性、巨幼细胞性、溶血性等）<br>💡 是诊断贫血的重要指标。';
+  }
+  if(m.indexOf('血小板') > -1 || m.indexOf('plt') > -1){
+    return '📊 <b>血小板（PLT）</b><br>正常参考值：(100-300)×10⁹/L<br>🔺 升高：感染、缺铁性贫血、原发性血小板增多症<br>🔻 降低：ITP、DIC、骨髓抑制、药物等<br>💡 低于50×10⁹/L有出血风险，需警惕。';
+  }
+  if(m.indexOf('肝功能') > -1 || m.indexOf('alt') > -1 || m.indexOf('ast') > -1){
+    return '📊 <b>肝功能指标</b><br>🔹 ALT（谷丙转氨酶）：正常 0-40U/L，肝细胞损伤时升高<br>🔹 AST（谷草转氨酶）：正常 0-40U/L，心肌和肝损伤时升高<br>🔹 总胆红素（TBIL）：正常 3.4-17.1μmol/L<br>💡 ALT/AST比值有助于判断肝损伤类型。';
+  }
+  if(m.indexOf('肾功能') > -1 || m.indexOf('肌酐') > -1 || m.indexOf('尿素') > -1){
+    return '📊 <b>肾功能指标</b><br>🔹 肌酐（Cr）：正常 44-133μmol/L，反映肾小球滤过功能<br>🔹 尿素氮（BUN）：正常 2.9-8.2mmol/L<br>🔹 尿酸（UA）：男 208-428μmol/L，女 155-357μmol/L<br>💡 肌酐是评估肾功能的更敏感指标。';
+  }
+  if(m.indexOf('血糖') > -1 || m.indexOf('glu') > -1){
+    return '📊 <b>血糖（GLU）</b><br>正常参考值：空腹 3.9-6.1mmol/L<br>🔺 升高：糖尿病、应激、库欣综合征<br>🔻 降低：胰岛素瘤、肝病、饥饿<br>💡 空腹血糖≥7.0mmol/L需警惕糖尿病。';
+  }
+  if(m.indexOf('血脂') > -1 || m.indexOf('胆固醇') > -1 || m.indexOf('甘油三酯') > -1){
+    return '📊 <b>血脂指标</b><br>🔹 总胆固醇（TC）：正常 3.1-5.7mmol/L<br>🔹 甘油三酯（TG）：正常 0.56-1.7mmol/L<br>🔹 HDL-C：正常 1.0-1.6mmol/L（好胆固醇）<br>🔹 LDL-C：正常 0-3.4mmol/L（坏胆固醇）<br>💡 控制饮食、适量运动有助于改善血脂。';
+  }
+  if(m.indexOf('你好') > -1 || m.indexOf('您好') > -1 || m.indexOf('hi') > -1 || m.indexOf('hello') > -1){
+    return '您好！我是检验科AI助手，有什么可以帮您的吗？您可以问我关于检验指标、质控管理、试剂信息等方面的问题。';
+  }
+  if(m.indexOf('质控') > -1 || m.indexOf('westgard') > -1 || m.indexOf('west') > -1){
+    return '📊 <b>室内质控规则（Westgard规则）</b><br>🔹 1-2s：一个质控值超过2s，警告<br>🔹 1-3s：一个质控值超过3s，失控<br>🔹 2-2s：两个连续质控值超过2s，失控<br>🔹 R-4s：两个质控值之差超过4s，失控<br>🔹 4-1s：四个连续质控值超过1s，失控<br>🔹 10x：十个连续质控值在均值同侧，失控<br>💡 出现失控需立即查找原因并纠正。';
+  }
+  if(m.indexOf('试剂') > -1 || m.indexOf('库存') > -1){
+    return '🧪 <b>试剂管理建议</b><br>1️⃣ 定期检查试剂有效期，过期试剂不得使用<br>2️⃣ 试剂储存需按说明书要求（温度、避光等）<br>3️⃣ 出入库记录需及时更新，保持账实相符<br>4️⃣ 库存低于安全库存时及时申请采购<br>5️⃣ 不同批号试剂使用前需进行比对验证';
+  }
+  if(m.indexOf('sop') > -1 || m.indexOf('规范') > -1 || m.indexOf('操作') > -1){
+    return '📋 <b>SOP学习建议</b><br>1️⃣ 定期学习各专业组SOP文件，掌握标准操作流程<br>2️⃣ 重点关注新版本SOP的变更内容<br>3️⃣ 实际操作中严格遵循SOP要求<br>4️⃣ 遇到问题及时查阅SOP或请教上级<br>5️⃣ 建议每月至少学习2-3个SOP文件';
+  }
+  if(m.indexOf('危急值') > -1){
+    return '⚠️ <b>危急值管理</b><br>1️⃣ 发现危急值立即复检确认<br>2️⃣ 确认后15分钟内通知临床医生<br>3️⃣ 详细记录报告时间、接收人、处理措施<br>4️⃣ 定期统计分析危急值分布和响应时间<br>5️⃣ 持续改进危急值报告流程';
+  }
+  return '感谢您的提问！关于"' + msg + '"，建议您：<br>1️⃣ 查阅相关SOP文件和检验标准<br>2️⃣ 咨询专业组组长或科室主任<br>3️⃣ 在系统知识库中搜索相关资料<br>📌 如需更专业的解答，请提供更详细的信息。';
 }
 </script>
 </body>
