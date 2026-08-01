@@ -8,21 +8,10 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <style>
-/* ===== 全局样式 ===== */
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-:root{
-  --primary:#1a237e;--primary-light:#3949ab;--primary-dark:#0d1559;
-  --accent:#ff6f00;--success:#2e7d32;--danger:#c62828;--warning:#f9a825;
-  --bg:#f5f5f5;--card:#ffffff;--text:#212121;--text-light:#757575;
-  --border:#e0e0e0;--shadow:0 2px 8px rgba(0,0,0,0.1);
-}
+:root{--primary:#1a237e;--primary-light:#3949ab;--primary-dark:#0d1559;--accent:#ff6f00;--success:#2e7d32;--danger:#c62828;--warning:#f9a825;--bg:#f5f5f5;--card:#ffffff;--text:#212121;--text-light:#757575;--border:#e0e0e0;--shadow:0 2px 8px rgba(0,0,0,0.1);}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
-/* ===== 登录页 ===== */
-.login-page{display:flex;flex-direction:column;align-items:center;justify-content:center;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  min-height:100vh;padding:20px;
-  background:linear-gradient(135deg,#1a237e 0%,#283593 30%,#3949ab 60%,#5c6bc0 100%);
-}
+.login-page{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:20px;background:linear-gradient(135deg,#1a237e 0%,#283593 30%,#3949ab 60%,#5c6bc0 100%);}
 .login-logo{width:80px;height:80px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:bold;color:var(--primary);margin-bottom:15px;box-shadow:0 4px 15px rgba(0,0,0,0.3);}
 .login-hospital{color:#e8eaf6;font-size:14px;letter-spacing:1px;margin-bottom:5px;}
 .login-title{color:#fff;font-size:26px;font-weight:bold;margin-bottom:5px;letter-spacing:3px;}
@@ -39,21 +28,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hira
 .btn{display:block;width:100%;padding:13px;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s;text-align:center;}
 .btn:active{transform:scale(0.98);}
 .btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;box-shadow:0 4px 12px rgba(26,35,126,0.3);}
-.btn-primary:hover{box-shadow:0 6px 18px rgba(26,35,126,0.4);}
 .btn-success{background:linear-gradient(135deg,#2e7d32,#43a047);color:#fff;}
 .btn-danger{background:linear-gradient(135deg,#c62828,#e53935);color:#fff;}
 .btn-outline{background:#fff;border:1.5px solid var(--primary);color:var(--primary);}
 .btn-sm{padding:8px 14px;font-size:13px;width:auto;display:inline-block;border-radius:6px;}
 .login-footer{margin-top:25px;text-align:center;color:#c5cae9;font-size:12px;}
 .login-footer .copyright{margin-bottom:5px;}
-/* ===== 主界面 ===== */
-#appPage{display:none;display:none;}
+#appPage{display:none;}
 .app-header{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,0.2);}
 .app-header .header-left{display:flex;align-items:center;gap:10px;}
 .app-header .header-title{font-size:17px;font-weight:600;letter-spacing:1px;}
 .app-header .header-user{font-size:13px;opacity:0.9;}
 .hamburger{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;padding:5px;display:flex;align-items:center;}
-/* ===== 侧边栏 ===== */
 .sidebar-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:200;display:none;opacity:0;transition:opacity 0.3s;}
 .sidebar-overlay.active{display:block;opacity:1;}
 .sidebar{position:fixed;top:0;left:-280px;width:280px;height:100%;background:#fff;z-index:300;transition:left 0.3s ease;box-shadow:2px 0 15px rgba(0,0,0,0.2);display:flex;flex-direction:column;}
@@ -71,26 +57,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hira
 .sidebar-footer{padding:15px 20px;border-top:1px solid var(--border);}
 .sidebar-footer .logout-btn{display:flex;align-items:center;gap:10px;color:var(--danger);cursor:pointer;font-size:14px;padding:10px;border-radius:6px;transition:background 0.2s;}
 .sidebar-footer .logout-btn:hover{background:#ffebee;}
-/* ===== 内容区 ===== */
 .content{padding:15px;padding-bottom:80px;}
 .page{display:none;}
 .page.active{display:block;}
 .page-title{font-size:20px;font-weight:700;color:var(--primary);margin-bottom:15px;display:flex;justify-content:space-between;align-items:center;}
 .page-title .sub{font-size:13px;color:var(--text-light);font-weight:400;}
-/* ===== 统计卡片 ===== */
 .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:15px;}
 .stat-card{background:var(--card);border-radius:10px;padding:15px;box-shadow:var(--shadow);}
 .stat-card .label{font-size:12px;color:var(--text-light);margin-bottom:5px;}
 .stat-card .value{font-size:24px;font-weight:700;color:var(--primary);}
-.stat-card .value small{font-size:13px;color:var(--text-light);font-weight:400;}
-.stat-card .trend{font-size:11px;color:var(--success);margin-top:3px;}
-/* ===== 功能卡片 ===== */
 .menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
 .menu-card{background:var(--card);border-radius:10px;padding:18px 10px;text-align:center;box-shadow:var(--shadow);cursor:pointer;transition:transform 0.2s;}
 .menu-card:active{transform:scale(0.95);}
 .menu-card .icon{font-size:28px;margin-bottom:8px;}
 .menu-card .name{font-size:13px;font-weight:500;}
-/* ===== 列表 ===== */
 .list-card{background:var(--card);border-radius:10px;box-shadow:var(--shadow);margin-bottom:12px;overflow:hidden;}
 .list-item{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.2s;}
 .list-item:last-child{border-bottom:none;}
@@ -106,14 +86,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hira
 .badge-orange{background:#fff3e0;color:#e65100;}
 .badge-red{background:#ffebee;color:#c62828;}
 .badge-gray{background:#f5f5f5;color:#616161;}
-/* ===== 表格 ===== */
 .table-wrap{overflow-x:auto;background:var(--card);border-radius:10px;box-shadow:var(--shadow);}
 table{width:100%;border-collapse:collapse;font-size:13px;}
 th{background:var(--primary);color:#fff;padding:10px 12px;text-align:left;font-weight:500;white-space:nowrap;}
 td{padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap;}
 tr:last-child td{border-bottom:none;}
 tr:nth-child(even){background:#fafafa;}
-/* ===== 模态框 ===== */
 .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:400;display:none;align-items:flex-end;justify-content:center;}
 .modal-overlay.active{display:flex;}
 .modal{background:#fff;border-radius:16px 16px 0 0;width:100%;max-width:500px;max-height:85vh;overflow-y:auto;animation:slideUp 0.3s ease;}
@@ -123,18 +101,14 @@ tr:nth-child(even){background:#fafafa;}
 .modal-close{background:none;border:none;font-size:22px;color:var(--text-light);cursor:pointer;padding:5px;}
 .modal-body{padding:20px;}
 .modal-footer{padding:15px 20px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;}
-/* ===== Toast ===== */
 #toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.9);background:rgba(0,0,0,0.8);color:#fff;padding:12px 25px;border-radius:8px;font-size:14px;z-index:1000;opacity:0;transition:all 0.3s;pointer-events:none;text-align:center;max-width:80%;}
 #toast.show{opacity:1;transform:translate(-50%,-50%) scale(1);}
-/* ===== 搜索栏 ===== */
 .search-bar{display:flex;gap:8px;margin-bottom:15px;}
 .search-bar input{flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;outline:none;}
 .search-bar input:focus{border-color:var(--primary);}
-/* ===== 标签页 ===== */
 .tabs{display:flex;background:var(--card);border-radius:10px;box-shadow:var(--shadow);margin-bottom:15px;overflow:hidden;}
 .tab{flex:1;padding:12px;text-align:center;font-size:13px;cursor:pointer;color:var(--text-light);border-bottom:2px solid transparent;transition:all 0.3s;}
 .tab.active{color:var(--primary);font-weight:600;border-bottom-color:var(--primary);background:#e8eaf6;}
-/* ===== 操作按钮 ===== */
 .action-bar{display:flex;gap:8px;margin-bottom:15px;}
 .action-btn{flex:1;padding:10px;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all 0.2s;}
 .action-btn:active{transform:scale(0.97);}
@@ -143,30 +117,19 @@ tr:nth-child(even){background:#fafafa;}
 .action-btn-orange{background:#fff3e0;color:#e65100;}
 .action-btn-red{background:#ffebee;color:#c62828;}
 .action-btn-purple{background:#f3e5f5;color:#6a1b9a;}
-/* ===== 详情页 ===== */
 .detail-card{background:var(--card);border-radius:10px;box-shadow:var(--shadow);padding:20px;margin-bottom:15px;}
 .detail-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px;}
 .detail-row:last-child{border-bottom:none;}
 .detail-row .label{color:var(--text-light);}
 .detail-row .value{font-weight:500;text-align:right;}
-/* ===== 权限标记 ===== */
-.permission-tag{display:inline-block;padding:2px 6px;border-radius:4px;font-size:10px;margin-right:3px;}
-/* ===== 设备状态 ===== */
 .status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;}
 .status-normal{background:#4caf50;}
 .status-warning{background:#ff9800;}
 .status-error{background:#f44336;}
-/* ===== 响应式 ===== */
-@media(min-width:768px){
-  .modal-overlay{align-items:center;}
-  .modal{border-radius:12px;}
-  .stats-grid{grid-template-columns:repeat(4,1fr);}
-  .menu-grid{grid-template-columns:repeat(6,1fr);}
-}
+@media(min-width:768px){.modal-overlay{align-items:center;}.modal{border-radius:12px;}.stats-grid{grid-template-columns:repeat(4,1fr);}.menu-grid{grid-template-columns:repeat(6,1fr);}}
 </style>
 </head>
 <body>
-<!-- ===== 登录页 ===== -->
 <div id="loginPage" class="login-page">
   <div class="login-logo">PB</div>
   <div class="login-hospital">江苏省人民医院宿迁医院</div>
@@ -192,9 +155,7 @@ tr:nth-child(even){background:#fafafa;}
     <div class="phone">📞 技术支持：0527-80525126</div>
   </div>
 </div>
-<!-- ===== APP主界面 ===== -->
 <div id="appPage">
-  <!-- 顶部导航 -->
   <div class="app-header">
     <div class="header-left">
       <button class="hamburger" onclick="toggleSidebar()">☰</button>
@@ -202,7 +163,6 @@ tr:nth-child(even){background:#fafafa;}
     </div>
     <div class="header-user" id="headerUserName">用户</div>
   </div>
-  <!-- 侧边栏 -->
   <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
@@ -215,10 +175,8 @@ tr:nth-child(even){background:#fafafa;}
       <div class="logout-btn" onclick="handleLogout()">🚪 退出登录</div>
     </div>
   </div>
-  <!-- 内容区 -->
   <div class="content" id="contentArea">
-    <!-- 首页 -->
-    <div class="page" id="page-home">
+    <div class="page active" id="page-home">
       <div class="page-title">工作台 <span class="sub" id="todayDate"></span></div>
       <div class="stats-grid">
         <div class="stat-card"><div class="label">今日积分</div><div class="value" id="statScore">0</div></div>
@@ -237,174 +195,24 @@ tr:nth-child(even){background:#fafafa;}
         <div class="menu-card" onclick="showPage('settings')"><div class="icon">⚙️</div><div class="name">系统设置</div></div>
       </div>
     </div>
-    <!-- 仪器保养 -->
-    <div class="page" id="page-maintenance">
-      <div class="page-title">🔧 仪器保养 <span class="sub">每日保养打卡</span></div>
-      <div class="action-bar">
-        <button class="action-btn action-btn-blue" onclick="openMaintenanceModal()">➕ 新增保养</button>
-        <button class="action-btn action-btn-green" onclick="showToast('保养记录已同步')">📋 查看记录</button>
-      </div>
-      <div id="maintenanceList"></div>
-    </div>
-    <!-- 质控管理 -->
-    <div class="page" id="page-quality">
-      <div class="page-title">📊 质控管理 <span class="sub">室内质控 · 室间质评</span></div>
-      <div class="tabs">
-        <div class="tab active" onclick="switchQcTab('daily',this)">每日质控</div>
-        <div class="tab" onclick="switchQcTab('eqa',this)">室间质评</div>
-        <div class="tab" onclick="switchQcTab('trend',this)">趋势分析</div>
-      </div>
-      <div id="qcDaily">
-        <div class="action-bar">
-          <button class="action-btn action-btn-blue" onclick="openQcModal()">➕ 录入质控</button>
-        </div>
-        <div id="qcList"></div>
-      </div>
-      <div id="qcEqa" style="display:none;">
-        <div class="action-bar">
-          <button class="action-btn action-btn-blue" onclick="openEqaModal()">➕ 新增EQA</button>
-        </div>
-        <div id="eqaList"></div>
-      </div>
-      <div id="qcTrend" style="display:none;">
-        <div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon">📈</div><div><div class="item-title">质控CV趋势</div><div class="item-desc">点击查看详细趋势分析</div></div></div><div class="item-right"><span class="badge badge-blue">正常</span></div></div></div>
-      </div>
-    </div>
-    <!-- 工作量 -->
-    <div class="page" id="page-workload">
-      <div class="page-title">📝 工作量 <span class="sub">今日检测统计</span></div>
-      <div class="stats-grid">
-        <div class="stat-card"><div class="label">今日样本量</div><div class="value" id="wlToday">0</div></div>
-        <div class="stat-card"><div class="label">本周样本量</div><div class="value" id="wlWeek">0</div></div>
-        <div class="stat-card"><div class="label">本月样本量</div><div class="value" id="wlMonth">0</div></div>
-        <div class="stat-card"><div class="label">TAT达标率</div><div class="value" id="wlTat">0%</div></div>
-      </div>
-      <div class="action-bar">
-        <button class="action-btn action-btn-blue" onclick="openWorkloadModal()">➕ 录入工作量</button>
-      </div>
-      <div id="workloadList"></div>
-    </div>
-    <!-- SOP学习 -->
-    <div class="page" id="page-sop">
-      <div class="page-title">📚 SOP学习 <span class="sub">在线阅读 · 在线考试</span></div>
-      <div class="tabs">
-        <div class="tab active" onclick="switchSopTab('list',this)">SOP列表</div>
-        <div class="tab" onclick="switchSopTab('exam',this)">在线考试</div>
-        <div class="tab" onclick="switchSopTab('progress',this)">学习进度</div>
-      </div>
-      <div id="sopList"></div>
-      <div id="sopExam" style="display:none;"></div>
-      <div id="sopProgress" style="display:none;"></div>
-    </div>
-    <!-- 危急值 -->
-    <div class="page" id="page-critical">
-      <div class="page-title">⚠️ 危急值报告 <span class="sub">及时报告 · 保障安全</span></div>
-      <div class="action-bar">
-        <button class="action-btn action-btn-red" onclick="openCriticalModal()">➕ 新增危急值</button>
-      </div>
-      <div id="criticalList"></div>
-    </div>
-    <!-- 试剂管理 -->
-    <div class="page" id="page-reagent">
-      <div class="page-title">🧪 试剂管理 <span class="sub">库存 · 出入库 · 效期</span></div>
-      <div class="tabs">
-        <div class="tab active" onclick="switchReagentTab('inventory',this)">库存管理</div>
-        <div class="tab" onclick="switchReagentTab('inout',this)">出入库记录</div>
-        <div class="tab" onclick="switchReagentTab('expiry',this)">效期预警</div>
-      </div>
-      <div id="reagentInventory">
-        <div class="action-bar">
-          <button class="action-btn action-btn-blue" onclick="openReagentModal()">➕ 新增试剂</button>
-          <button class="action-btn action-btn-green" onclick="openReagentInOutModal()">📦 出入库</button>
-        </div>
-        <div id="reagentList"></div>
-      </div>
-      <div id="reagentInout" style="display:none;">
-        <div id="reagentInoutList"></div>
-      </div>
-      <div id="reagentExpiry" style="display:none;">
-        <div id="reagentExpiryList"></div>
-      </div>
-    </div>
-    <!-- 绩效积分 -->
-    <div class="page" id="page-performance">
-      <div class="page-title">🏆 绩效积分 <span class="sub">量化考核 · 公平透明</span></div>
-      <div class="stats-grid">
-        <div class="stat-card"><div class="label">本月总积分</div><div class="value" id="perfTotal">0</div></div>
-        <div class="stat-card"><div class="label">科室排名</div><div class="value" id="perfRank">-</div></div>
-        <div class="stat-card"><div class="label">达标率</div><div class="value" id="perfRate">0%</div></div>
-        <div class="stat-card"><div class="label">评级</div><div class="value" id="perfGrade">-</div></div>
-      </div>
-      <div class="tabs">
-        <div class="tab active" onclick="switchPerfTab('detail',this)">积分明细</div>
-        <div class="tab" onclick="switchPerfTab('rank',this)">科室排名</div>
-        <div class="tab" onclick="switchPerfTab('rules',this)">积分规则</div>
-      </div>
-      <div id="perfDetail"></div>
-      <div id="perfRank" style="display:none;"></div>
-      <div id="perfRules" style="display:none;"></div>
-    </div>
-    <!-- 系统设置 -->
-    <div class="page" id="page-settings">
-      <div class="page-title">⚙️ 系统设置 <span class="sub">管理配置中心</span></div>
-      <div class="tabs">
-        <div class="tab active" onclick="switchSettingsTab('staff',this)">员工管理</div>
-        <div class="tab" onclick="switchSettingsTab('device',this)">设备管理</div>
-        <div class="tab" onclick="switchSettingsTab('reagent',this)">试剂管理</div>
-        <div class="tab" onclick="switchSettingsTab('sop',this)">SOP管理</div>
-      </div>
-      <!-- 员工管理 -->
-      <div id="settingsStaff">
-        <div class="action-bar">
-          <button class="action-btn action-btn-blue" onclick="openStaffModal()">➕ 新增员工</button>
-          <button class="action-btn action-btn-purple" onclick="showToast('权限配置功能开发中')">🔐 权限配置</button>
-        </div>
-        <div class="search-bar">
-          <input type="text" placeholder="搜索员工姓名/工号..." id="staffSearch" oninput="filterStaff()">
-        </div>
-        <div id="staffList"></div>
-      </div>
-      <!-- 设备管理 -->
-      <div id="settingsDevice" style="display:none;">
-        <div class="action-bar">
-          <button class="action-btn action-btn-blue" onclick="openDeviceModal()">➕ 新增设备</button>
-          <button class="action-btn action-btn-green" onclick="showToast('保养计划管理')">📅 保养计划</button>
-        </div>
-        <div id="deviceList"></div>
-      </div>
-      <!-- 试剂管理设置 -->
-      <div id="settingsReagent" style="display:none;">
-        <div class="action-bar">
-          <button class="action-btn action-btn-blue" onclick="openReagentModal()">➕ 新增试剂</button>
-          <button class="action-btn action-btn-green" onclick="openReagentInOutModal()">📦 出入库</button>
-        </div>
-        <div id="settingsReagentList"></div>
-      </div>
-      <!-- SOP管理 -->
-      <div id="settingsSop" style="display:none;">
-        <div class="action-bar">
-          <button class="action-btn action-btn-blue" onclick="openSopManageModal()">➕ 新增SOP</button>
-          <button class="action-btn action-btn-green" onclick="showToast('批量上传功能开发中')">📤 批量上传</button>
-        </div>
-        <div id="sopManageList"></div>
-      </div>
-    </div>
+    <div class="page" id="page-maintenance"><div class="page-title">🔧 仪器保养 <span class="sub">每日保养打卡</span></div><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openMaintenanceModal()">➕ 新增保养</button></div><div id="maintenanceList"></div></div>
+    <div class="page" id="page-quality"><div class="page-title">📊 质控管理 <span class="sub">室内质控 · 室间质评</span></div><div class="tabs"><div class="tab active" onclick="switchQcTab('daily',this)">每日质控</div><div class="tab" onclick="switchQcTab('eqa',this)">室间质评</div><div class="tab" onclick="switchQcTab('trend',this)">趋势分析</div></div><div id="qcDaily"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openQcModal()">➕ 录入质控</button></div><div id="qcList"></div></div><div id="qcEqa" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openEqaModal()">➕ 新增EQA</button></div><div id="eqaList"></div></div><div id="qcTrend" style="display:none;"><div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon">📈</div><div><div class="item-title">质控CV趋势</div><div class="item-desc">点击查看详细趋势分析</div></div></div><div class="item-right"><span class="badge badge-blue">正常</span></div></div></div></div></div>
+    <div class="page" id="page-workload"><div class="page-title">📝 工作量 <span class="sub">今日检测统计</span></div><div class="stats-grid"><div class="stat-card"><div class="label">今日样本量</div><div class="value" id="wlToday">0</div></div><div class="stat-card"><div class="label">本周样本量</div><div class="value" id="wlWeek">0</div></div><div class="stat-card"><div class="label">本月样本量</div><div class="value" id="wlMonth">0</div></div><div class="stat-card"><div class="label">TAT达标率</div><div class="value" id="wlTat">0%</div></div></div><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openWorkloadModal()">➕ 录入工作量</button></div><div id="workloadList"></div></div>
+    <div class="page" id="page-sop"><div class="page-title">📚 SOP学习 <span class="sub">在线阅读 · 在线考试</span></div><div class="tabs"><div class="tab active" onclick="switchSopTab('list',this)">SOP列表</div><div class="tab" onclick="switchSopTab('exam',this)">在线考试</div><div class="tab" onclick="switchSopTab('progress',this)">学习进度</div></div><div id="sopList"></div><div id="sopExam" style="display:none;"></div><div id="sopProgress" style="display:none;"></div></div>
+    <div class="page" id="page-critical"><div class="page-title">⚠️ 危急值报告 <span class="sub">及时报告 · 保障安全</span></div><div class="action-bar"><button class="action-btn action-btn-red" onclick="openCriticalModal()">➕ 新增危急值</button></div><div id="criticalList"></div></div>
+    <div class="page" id="page-reagent"><div class="page-title">🧪 试剂管理 <span class="sub">库存 · 出入库 · 效期</span></div><div class="tabs"><div class="tab active" onclick="switchReagentTab('inventory',this)">库存管理</div><div class="tab" onclick="switchReagentTab('inout',this)">出入库记录</div><div class="tab" onclick="switchReagentTab('expiry',this)">效期预警</div></div><div id="reagentInventory"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openReagentModal()">➕ 新增试剂</button><button class="action-btn action-btn-green" onclick="openReagentInOutModal()">📦 出入库</button></div><div id="reagentList"></div></div><div id="reagentInout" style="display:none;"><div id="reagentInoutList"></div></div><div id="reagentExpiry" style="display:none;"><div id="reagentExpiryList"></div></div></div>
+    <div class="page" id="page-performance"><div class="page-title">🏆 绩效积分 <span class="sub">量化考核 · 公平透明</span></div><div class="stats-grid"><div class="stat-card"><div class="label">本月总积分</div><div class="value" id="perfTotal">0</div></div><div class="stat-card"><div class="label">科室排名</div><div class="value" id="perfRank">-</div></div><div class="stat-card"><div class="label">达标率</div><div class="value" id="perfRate">0%</div></div><div class="stat-card"><div class="label">评级</div><div class="value" id="perfGrade">-</div></div></div><div class="tabs"><div class="tab active" onclick="switchPerfTab('detail',this)">积分明细</div><div class="tab" onclick="switchPerfTab('rank',this)">科室排名</div><div class="tab" onclick="switchPerfTab('rules',this)">积分规则</div></div><div id="perfDetail"></div><div id="perfRank" style="display:none;"></div><div id="perfRules" style="display:none;"></div></div>
+    <div class="page" id="page-settings"><div class="page-title">⚙️ 系统设置 <span class="sub">管理配置中心</span></div><div class="tabs"><div class="tab active" onclick="switchSettingsTab('staff',this)">员工管理</div><div class="tab" onclick="switchSettingsTab('device',this)">设备管理</div><div class="tab" onclick="switchSettingsTab('reagent',this)">试剂管理</div><div class="tab" onclick="switchSettingsTab('sop',this)">SOP管理</div></div><div id="settingsStaff"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openStaffModal()">➕ 新增员工</button><button class="action-btn action-btn-purple" onclick="showToast('权限配置功能开发中')">🔐 权限配置</button></div><div class="search-bar"><input type="text" placeholder="搜索员工姓名/工号..." id="staffSearch" oninput="filterStaff()"></div><div id="staffList"></div></div><div id="settingsDevice" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openDeviceModal()">➕ 新增设备</button></div><div id="deviceList"></div></div><div id="settingsReagent" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openReagentModal()">➕ 新增试剂</button><button class="action-btn action-btn-green" onclick="openReagentInOutModal()">📦 出入库</button></div><div id="settingsReagentList"></div></div><div id="settingsSop" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openSopManageModal()">➕ 新增SOP</button></div><div id="sopManageList"></div></div></div>
   </div>
 </div>
-<!-- ===== 模态框容器 ===== -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
-  <div class="modal" id="modalContent"></div>
-</div>
-<!-- ===== Toast ===== -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)"><div class="modal" id="modalContent"></div></div>
 <div id="toast"></div>
 <script>
-// ===== 数据存储 =====
-const DB_KEY = 'labAppData_v1';
-let currentUser = null;
-let appData = null;
-// 初始化数据
+var DB_KEY = 'labAppData_v2';
+var currentUser = null;
+var appData = null;
 function initData(){
-  const defaultData = {
+  var defaultData = {
     users: [
       {id:'admin',name:'系统管理员',password:'admin123',role:'系统管理员',group:'管理层',phone:'13800000000',status:'active'},
       {id:'peibing',name:'裴兵',password:'123456',role:'科主任',group:'管理层',phone:'13800000001',status:'active'},
@@ -460,10 +268,7 @@ function initData(){
       {id:'C001',patient:'张三',item:'GLU',value:'28.5mmol/L',criticalValue:'>22.2',date:'2025-01-15',time:'14:30',reporter:'张伟',status:'reported'},
       {id:'C002',patient:'李四',item:'K+',value:'6.8mmol/L',criticalValue:'>6.5',date:'2025-01-16',time:'09:15',reporter:'陈静',status:'reported'}
     ],
-    sopProgress: {
-      'peibing': {S001:true,S002:true,S003:true,S004:false,S005:false,S006:false},
-      'zhangwei': {S001:true,S002:true,S003:false,S004:false,S005:false,S006:false}
-    },
+    sopProgress: {},
     permissions: {
       '系统管理员': ['staff','device','reagent','sop','settings','all'],
       '科主任': ['staff','device','reagent','sop','settings','all'],
@@ -473,20 +278,16 @@ function initData(){
       '检验人员': ['maintenance','quality','workload','sop','critical']
     }
   };
-  const saved = localStorage.getItem(DB_KEY);
+  var saved = localStorage.getItem(DB_KEY);
   if(saved){ appData = JSON.parse(saved); }
   else{ appData = defaultData; localStorage.setItem(DB_KEY, JSON.stringify(defaultData)); }
 }
-// 保存数据
-function saveData(){
-  localStorage.setItem(DB_KEY, JSON.stringify(appData));
-}
-// ===== 登录 =====
+function saveData(){ localStorage.setItem(DB_KEY, JSON.stringify(appData)); }
 function handleLogin(){
-  const username = document.getElementById('loginUsername').value.trim();
-  const password = document.getElementById('loginPassword').value.trim();
+  var username = document.getElementById('loginUsername').value.trim();
+  var password = document.getElementById('loginPassword').value.trim();
   if(!username || !password){ showToast('请输入用户名和密码'); return; }
-  const user = appData.users.find(u => u.id === username && u.password === password);
+  var user = appData.users.find(function(u){ return u.id === username && u.password === password; });
   if(!user){ showToast('用户名或密码错误'); return; }
   if(user.status !== 'active'){ showToast('账号已停用，请联系管理员'); return; }
   currentUser = user;
@@ -515,46 +316,44 @@ function handleLogout(){
   closeSidebar();
   showToast('已退出登录');
 }
-// ===== 侧边栏 =====
 function buildSidebar(){
-  const nav = document.getElementById('sidebarNav');
-  const perms = appData.permissions[currentUser.role] || [];
-  let html = '';
+  var nav = document.getElementById('sidebarNav');
+  var perms = appData.permissions[currentUser.role] || [];
+  var html = '';
   html += '<div class="nav-group">工作</div>';
-  html += '<div class="nav-item" onclick="showPage('home')"><span class="icon">🏠</span>工作台</div>';
-  if(perms.includes('maintenance') || perms.includes('device') || perms.includes('all')){
-    html += '<div class="nav-item" onclick="showPage('maintenance')"><span class="icon">🔧</span>仪器保养</div>';
+  html += '<div class="nav-item" onclick="showPage(\'home\')"><span class="icon">🏠</span>工作台</div>';
+  if(perms.indexOf('maintenance') >= 0 || perms.indexOf('device') >= 0 || perms.indexOf('all') >= 0){
+    html += '<div class="nav-item" onclick="showPage(\'maintenance\')"><span class="icon">🔧</span>仪器保养</div>';
   }
-  if(perms.includes('quality') || perms.includes('all')){
-    html += '<div class="nav-item" onclick="showPage('quality')"><span class="icon">📊</span>质控管理</div>';
+  if(perms.indexOf('quality') >= 0 || perms.indexOf('all') >= 0){
+    html += '<div class="nav-item" onclick="showPage(\'quality\')"><span class="icon">📊</span>质控管理</div>';
   }
-  if(perms.includes('workload') || perms.includes('all')){
-    html += '<div class="nav-item" onclick="showPage('workload')"><span class="icon">📝</span>工作量</div>';
+  if(perms.indexOf('workload') >= 0 || perms.indexOf('all') >= 0){
+    html += '<div class="nav-item" onclick="showPage(\'workload\')"><span class="icon">📝</span>工作量</div>';
   }
-  if(perms.includes('sop') || perms.includes('all')){
-    html += '<div class="nav-item" onclick="showPage('sop')"><span class="icon">📚</span>SOP学习</div>';
+  if(perms.indexOf('sop') >= 0 || perms.indexOf('all') >= 0){
+    html += '<div class="nav-item" onclick="showPage(\'sop\')"><span class="icon">📚</span>SOP学习</div>';
   }
-  if(perms.includes('critical') || perms.includes('all')){
-    html += '<div class="nav-item" onclick="showPage('critical')"><span class="icon">⚠️</span>危急值</div>';
+  if(perms.indexOf('critical') >= 0 || perms.indexOf('all') >= 0){
+    html += '<div class="nav-item" onclick="showPage(\'critical\')"><span class="icon">⚠️</span>危急值</div>';
   }
-  if(perms.includes('reagent') || perms.includes('all')){
-    html += '<div class="nav-item" onclick="showPage('reagent')"><span class="icon">🧪</span>试剂管理</div>';
+  if(perms.indexOf('reagent') >= 0 || perms.indexOf('all') >= 0){
+    html += '<div class="nav-item" onclick="showPage(\'reagent\')"><span class="icon">🧪</span>试剂管理</div>';
   }
   html += '<div class="nav-group">考核</div>';
-  html += '<div class="nav-item" onclick="showPage('performance')"><span class="icon">🏆</span>绩效积分</div>';
-  if(perms.includes('settings') || perms.includes('all')){
+  html += '<div class="nav-item" onclick="showPage(\'performance\')"><span class="icon">🏆</span>绩效积分</div>';
+  if(perms.indexOf('settings') >= 0 || perms.indexOf('all') >= 0){
     html += '<div class="nav-group">管理</div>';
-    html += '<div class="nav-item" onclick="showPage('settings')"><span class="icon">⚙️</span>系统设置</div>';
+    html += '<div class="nav-item" onclick="showPage(\'settings\')"><span class="icon">⚙️</span>系统设置</div>';
   }
   nav.innerHTML = html;
 }
-// ===== 页面切换 =====
 function showPage(pageId){
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  const page = document.getElementById('page-' + pageId);
+  var pages = document.querySelectorAll('.page');
+  for(var i=0;i<pages.length;i++){ pages[i].classList.remove('active'); }
+  var page = document.getElementById('page-' + pageId);
   if(page) page.classList.add('active');
   closeSidebar();
-  // 加载对应数据
   if(pageId === 'home') loadDashboard();
   if(pageId === 'maintenance') loadMaintenance();
   if(pageId === 'quality') loadQc();
@@ -565,383 +364,242 @@ function showPage(pageId){
   if(pageId === 'performance') loadPerformance();
   if(pageId === 'settings') loadSettings();
 }
-// ===== 侧边栏控制 =====
 function toggleSidebar(){
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.getElementById('sidebarOverlay');
-  sidebar.classList.toggle('active');
-  overlay.classList.toggle('active');
+  document.getElementById('sidebar').classList.toggle('active');
+  document.getElementById('sidebarOverlay').classList.toggle('active');
 }
 function closeSidebar(){
   document.getElementById('sidebar').classList.remove('active');
   document.getElementById('sidebarOverlay').classList.remove('active');
 }
-// ===== 工作台 =====
 function loadDashboard(){
-  const today = new Date();
+  var today = new Date();
   document.getElementById('todayDate').textContent = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
-  // 计算积分
-  let todayScore = 0, monthScore = 0;
-  const monthPrefix = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0');
-  appData.maintenanceRecords.forEach(r => {
+  var todayScore = 0, monthScore = 0;
+  var monthPrefix = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0');
+  for(var i=0;i<appData.maintenanceRecords.length;i++){
+    var r = appData.maintenanceRecords[i];
     if(r.operator === currentUser.name && r.date === document.getElementById('todayDate').textContent) todayScore += r.score;
-    if(r.operator === currentUser.name && r.date.startsWith(monthPrefix)) monthScore += r.score;
-  });
-  appData.workloadRecords.forEach(r => {
+    if(r.operator === currentUser.name && r.date.indexOf(monthPrefix) === 0) monthScore += r.score;
+  }
+  for(var i=0;i<appData.workloadRecords.length;i++){
+    var r = appData.workloadRecords[i];
     if(r.operator === currentUser.name && r.date === document.getElementById('todayDate').textContent) todayScore += r.score;
-    if(r.operator === currentUser.name && r.date.startsWith(monthPrefix)) monthScore += r.score;
-  });
+    if(r.operator === currentUser.name && r.date.indexOf(monthPrefix) === 0) monthScore += r.score;
+  }
   document.getElementById('statScore').textContent = todayScore;
   document.getElementById('statMonthScore').textContent = monthScore;
-  // 待办
-  let todo = 0;
-  appData.devices.forEach(d => {
-    if(d.nextMaintenance === document.getElementById('todayDate').textContent) todo++;
-  });
+  var todo = 0;
+  for(var i=0;i<appData.devices.length;i++){
+    if(appData.devices[i].nextMaintenance === document.getElementById('todayDate').textContent) todo++;
+  }
   document.getElementById('statTodo').textContent = todo;
 }
-// ===== 仪器保养 =====
 function loadMaintenance(){
-  const list = document.getElementById('maintenanceList');
-  let html = '';
-  appData.maintenanceRecords.slice().reverse().forEach(r => {
-    const statusBadge = r.status === 'completed' ? '<span class="badge badge-green">已完成</span>' : '<span class="badge badge-orange">待完成</span>';
-    html += '<div class="list-card"><div class="list-item">';
-    html += '<div class="item-left"><div class="item-icon" style="background:#e3f2fd;">🔧</div>';
-    html += '<div><div class="item-title">' + r.device + '</div><div class="item-desc">' + r.type + ' · ' + r.date + ' · ' + r.operator + '</div></div></div>';
-    html += '<div class="item-right">' + statusBadge + '<span class="badge badge-blue">+' + r.score + '分</span></div></div></div>';
-  });
-  if(!appData.maintenanceRecords.length) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无保养记录</div></div></div>';
+  var list = document.getElementById('maintenanceList');
+  var html = '';
+  for(var i=appData.maintenanceRecords.length-1;i>=0;i--){
+    var r = appData.maintenanceRecords[i];
+    var statusBadge = r.status === 'completed' ? '<span class="badge badge-green">已完成</span>' : '<span class="badge badge-orange">待完成</span>';
+    html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e3f2fd;">🔧</div><div><div class="item-title">' + r.device + '</div><div class="item-desc">' + r.type + ' · ' + r.date + ' · ' + r.operator + '</div></div></div><div class="item-right">' + statusBadge + '<span class="badge badge-blue">+' + r.score + '分</span></div></div></div>';
+  }
+  if(appData.maintenanceRecords.length === 0) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无保养记录</div></div></div>';
   list.innerHTML = html;
 }
 function openMaintenanceModal(){
-  const modal = document.getElementById('modalContent');
-  let deviceOptions = '';
-  appData.devices.forEach(d => { deviceOptions += '<option value="' + d.name + '">' + d.name + '</option>'; });
-  modal.innerHTML = '<div class="modal-header"><h3>新增保养记录</h3><button class="modal-close" onclick="closeModal()">×</button></div>' +
-    '<div class="modal-body">' +
-    '<div class="form-group"><label class="form-label">设备</label><select class="form-select" id="mDevice">' + deviceOptions + '</select></div>' +
-    '<div class="form-group"><label class="form-label">保养类型</label><select class="form-select" id="mType"><option value="日常保养">日常保养</option><option value="周保养">周保养</option><option value="月保养">月保养</option><option value="季度保养">季度保养</option></select></div>' +
-    '<div class="form-group"><label class="form-label">保养日期</label><input type="date" class="form-input" id="mDate" value="' + new Date().toISOString().split('T')[0] + '"></div>' +
-    '<div class="form-group"><label class="form-label">备注</label><input type="text" class="form-input" id="mNote" placeholder="保养情况说明"></div>' +
-    '</div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveMaintenance()">保存</button></div>';
+  var modal = document.getElementById('modalContent');
+  var deviceOptions = '';
+  for(var i=0;i<appData.devices.length;i++){ deviceOptions += '<option value="' + appData.devices[i].name + '">' + appData.devices[i].name + '</option>'; }
+  modal.innerHTML = '<div class="modal-header"><h3>新增保养记录</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">设备</label><select class="form-select" id="mDevice">' + deviceOptions + '</select></div><div class="form-group"><label class="form-label">保养类型</label><select class="form-select" id="mType"><option value="日常保养">日常保养</option><option value="周保养">周保养</option><option value="月保养">月保养</option><option value="季度保养">季度保养</option></select></div><div class="form-group"><label class="form-label">保养日期</label><input type="date" class="form-input" id="mDate" value="' + new Date().toISOString().split('T')[0] + '"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveMaintenance()">保存</button></div>';
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveMaintenance(){
-  const device = document.getElementById('mDevice').value;
-  const type = document.getElementById('mType').value;
-  const date = document.getElementById('mDate').value;
-  const note = document.getElementById('mNote').value;
-  const score = type === '日常保养' ? 2 : type === '周保养' ? 3 : type === '月保养' ? 5 : 8;
-  appData.maintenanceRecords.push({id:'M'+Date.now(),device,type,date,operator:currentUser.name,note,status:'completed',score});
+  var device = document.getElementById('mDevice').value;
+  var type = document.getElementById('mType').value;
+  var date = document.getElementById('mDate').value;
+  var score = type === '日常保养' ? 2 : type === '周保养' ? 3 : type === '月保养' ? 5 : 8;
+  appData.maintenanceRecords.push({id:'M'+Date.now(),device,type,date,operator:currentUser.name,status:'completed',score:score});
   saveData();
   closeModal();
   loadMaintenance();
   showToast('✅ 保养记录已保存，+' + score + '分');
 }
-// ===== 质控管理 =====
-function switchQcTab(tab, el){
-  document.querySelectorAll('#page-quality .tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('qcDaily').style.display = tab === 'daily' ? 'block' : 'none';
-  document.getElementById('qcEqa').style.display = tab === 'eqa' ? 'block' : 'none';
-  document.getElementById('qcTrend').style.display = tab === 'trend' ? 'block' : 'none';
-}
 function loadQc(){
-  const list = document.getElementById('qcList');
-  let html = '';
-  appData.qcRecords.slice().reverse().forEach(r => {
-    const statusBadge = r.status === 'in-control' ? '<span class="badge badge-green">在控</span>' : '<span class="badge badge-red">失控</span>';
-    html += '<div class="list-card"><div class="list-item">';
-    html += '<div class="item-left"><div class="item-icon" style="background:#e8f5e9;">📊</div>';
-    html += '<div><div class="item-title">' + r.project + ' (' + r.level + ')</div><div class="item-desc">' + r.value + ' · 靶值:' + r.target + ' · ' + r.date + '</div></div></div>';
-    html += '<div class="item-right">' + statusBadge + '</div></div></div>';
-  });
-  if(!appData.qcRecords.length) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无质控记录</div></div></div>';
+  var list = document.getElementById('qcList');
+  var html = '';
+  for(var i=appData.qcRecords.length-1;i>=0;i--){
+    var r = appData.qcRecords[i];
+    var statusBadge = r.status === 'in-control' ? '<span class="badge badge-green">在控</span>' : '<span class="badge badge-red">失控</span>';
+    html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e8f5e9;">📊</div><div><div class="item-title">' + r.project + ' (' + r.level + ')</div><div class="item-desc">' + r.value + ' · 靶值:' + r.target + ' · ' + r.date + '</div></div></div><div class="item-right">' + statusBadge + '</div></div></div>';
+  }
+  if(appData.qcRecords.length === 0) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无质控记录</div></div></div>';
   list.innerHTML = html;
-  // EQA列表
-  const eqaList = document.getElementById('eqaList');
-  html = '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#fff3e0;">🏅</div><div><div class="item-title">2025年全国室间质评</div><div class="item-desc">生化 · 免疫 · 临检</div></div></div><div class="item-right"><span class="badge badge-green">优秀</span></div></div></div>';
-  eqaList.innerHTML = html;
 }
 function openQcModal(){
-  const modal = document.getElementById('modalContent');
-  modal.innerHTML = '<div class="modal-header"><h3>录入质控数据</h3><button class="modal-close" onclick="closeModal()">×</button></div>' +
-    '<div class="modal-body">' +
-    '<div class="form-group"><label class="form-label">检测项目</label><input type="text" class="form-input" id="qProject" placeholder="如：ALT"></div>' +
-    '<div class="form-group"><label class="form-label">质控品水平</label><select class="form-select" id="qLevel"><option value="L1">L1</option><option value="L2">L2</option><option value="L3">L3</option></select></div>' +
-    '<div class="form-group"><label class="form-label">测定值</label><input type="number" class="form-input" id="qValue" placeholder="请输入测定值"></div>' +
-    '<div class="form-group"><label class="form-label">靶值</label><input type="number" class="form-input" id="qTarget" placeholder="请输入靶值"></div>' +
-    '<div class="form-group"><label class="form-label">日期</label><input type="date" class="form-input" id="qDate" value="' + new Date().toISOString().split('T')[0] + '"></div>' +
-    '</div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveQc()">保存</button></div>';
+  var modal = document.getElementById('modalContent');
+  modal.innerHTML = '<div class="modal-header"><h3>录入质控数据</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">检测项目</label><input type="text" class="form-input" id="qProject" placeholder="如：ALT"></div><div class="form-group"><label class="form-label">质控品水平</label><select class="form-select" id="qLevel"><option value="L1">L1</option><option value="L2">L2</option><option value="L3">L3</option></select></div><div class="form-group"><label class="form-label">测定值</label><input type="number" class="form-input" id="qValue" placeholder="请输入测定值"></div><div class="form-group"><label class="form-label">靶值</label><input type="number" class="form-input" id="qTarget" placeholder="请输入靶值"></div><div class="form-group"><label class="form-label">日期</label><input type="date" class="form-input" id="qDate" value="' + new Date().toISOString().split('T')[0] + '"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveQc()">保存</button></div>';
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveQc(){
-  const project = document.getElementById('qProject').value;
-  const level = document.getElementById('qLevel').value;
-  const value = parseFloat(document.getElementById('qValue').value);
-  const target = parseFloat(document.getElementById('qTarget').value);
-  const date = document.getElementById('qDate').value;
+  var project = document.getElementById('qProject').value;
+  var level = document.getElementById('qLevel').value;
+  var value = parseFloat(document.getElementById('qValue').value);
+  var target = parseFloat(document.getElementById('qTarget').value);
+  var date = document.getElementById('qDate').value;
   if(!project || !value || !target){ showToast('请填写完整信息'); return; }
-  const range = (target*0.95).toFixed(1) + '-' + (target*1.05).toFixed(1);
-  const inControl = Math.abs(value-target)/target <= 0.05;
-  appData.qcRecords.push({id:'Q'+Date.now(),project,level,value,target,range,date,operator:currentUser.name,status:inControl?'in-control':'out-control'});
+  var inControl = Math.abs(value-target)/target <= 0.05;
+  appData.qcRecords.push({id:'Q'+Date.now(),project,level,value,target,range:'',date,operator:currentUser.name,status:inControl?'in-control':'out-control'});
   saveData();
   closeModal();
   loadQc();
   showToast(inControl ? '✅ 质控数据已保存，在控' : '⚠️ 质控数据失控，请处理！');
 }
+function switchQcTab(tab, el){
+  var tabs = document.querySelectorAll('#page-quality .tab');
+  for(var i=0;i<tabs.length;i++){ tabs[i].classList.remove('active'); }
+  el.classList.add('active');
+  document.getElementById('qcDaily').style.display = tab === 'daily' ? 'block' : 'none';
+  document.getElementById('qcEqa').style.display = tab === 'eqa' ? 'block' : 'none';
+  document.getElementById('qcTrend').style.display = tab === 'trend' ? 'block' : 'none';
+}
 function openEqaModal(){
-  const modal = document.getElementById('modalContent');
-  modal.innerHTML = '<div class="modal-header"><h3>新增室间质评</h3><button class="modal-close" onclick="closeModal()">×</button></div>' +
-    '<div class="modal-body">' +
-    '<div class="form-group"><label class="form-label">质评项目</label><input type="text" class="form-input" id="eProject" placeholder="如：全国生化EQA"></div>' +
-    '<div class="form-group"><label class="form-label">成绩</label><select class="form-select" id="eGrade"><option value="优秀">优秀</option><option value="合格">合格</option><option value="不合格">不合格</option></select></div>' +
-    '<div class="form-group"><label class="form-label">日期</label><input type="date" class="form-input" id="eDate" value="' + new Date().toISOString().split('T')[0] + '"></div>' +
-    '</div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveEqa()">保存</button></div>';
+  var modal = document.getElementById('modalContent');
+  modal.innerHTML = '<div class="modal-header"><h3>新增室间质评</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">质评项目</label><input type="text" class="form-input" id="eProject" placeholder="如：全国生化EQA"></div><div class="form-group"><label class="form-label">成绩</label><select class="form-select" id="eGrade"><option value="优秀">优秀</option><option value="合格">合格</option><option value="不合格">不合格</option></select></div><div class="form-group"><label class="form-label">日期</label><input type="date" class="form-input" id="eDate" value="' + new Date().toISOString().split('T')[0] + '"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveEqa()">保存</button></div>';
   document.getElementById('modalOverlay').classList.add('active');
 }
-function saveEqa(){
-  const project = document.getElementById('eProject').value;
-  const grade = document.getElementById('eGrade').value;
-  const date = document.getElementById('eDate').value;
-  if(!project){ showToast('请输入质评项目'); return; }
-  showToast('✅ EQA记录已保存');
-  closeModal();
-}
-// ===== 工作量 =====
+function saveEqa(){ closeModal(); showToast('✅ EQA记录已保存'); }
 function loadWorkload(){
-  const today = new Date().toISOString().split('T')[0];
-  let todayCount = 0, weekCount = 0, monthCount = 0;
-  const now = new Date();
-  const weekStart = new Date(now); weekStart.setDate(now.getDate() - now.getDay());
-  const monthPrefix = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
-  appData.workloadRecords.forEach(r => {
+  var today = new Date().toISOString().split('T')[0];
+  var todayCount = 0, weekCount = 0, monthCount = 0;
+  var now = new Date();
+  var weekStart = new Date(now); weekStart.setDate(now.getDate() - now.getDay());
+  var monthPrefix = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+  for(var i=0;i<appData.workloadRecords.length;i++){
+    var r = appData.workloadRecords[i];
     if(r.operator === currentUser.name){
       if(r.date === today) todayCount += r.samples;
-      const d = new Date(r.date);
+      var d = new Date(r.date);
       if(d >= weekStart) weekCount += r.samples;
-      if(r.date.startsWith(monthPrefix)) monthCount += r.samples;
+      if(r.date.indexOf(monthPrefix) === 0) monthCount += r.samples;
     }
-  });
+  }
   document.getElementById('wlToday').textContent = todayCount;
   document.getElementById('wlWeek').textContent = weekCount;
   document.getElementById('wlMonth').textContent = monthCount;
   document.getElementById('wlTat').textContent = '98%';
-  const list = document.getElementById('workloadList');
-  let html = '';
-  appData.workloadRecords.slice().reverse().forEach(r => {
-    html += '<div class="list-card"><div class="list-item">';
-    html += '<div class="item-left"><div class="item-icon" style="background:#e3f2fd;">📝</div>';
-    html += '<div><div class="item-title">' + r.type + ' · ' + r.samples + '样本</div><div class="item-desc">' + r.date + ' · ' + r.operator + '</div></div></div>';
-    html += '<div class="item-right"><span class="badge badge-blue">+' + r.score + '分</span></div></div></div>';
-  });
-  if(!appData.workloadRecords.length) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无工作量记录</div></div></div>';
+  var list = document.getElementById('workloadList');
+  var html = '';
+  for(var i=appData.workloadRecords.length-1;i>=0;i--){
+    var r = appData.workloadRecords[i];
+    html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e3f2fd;">📝</div><div><div class="item-title">' + r.type + ' · ' + r.samples + '样本</div><div class="item-desc">' + r.date + ' · ' + r.operator + '</div></div></div><div class="item-right"><span class="badge badge-blue">+' + r.score + '分</span></div></div></div>';
+  }
+  if(appData.workloadRecords.length === 0) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无工作量记录</div></div></div>';
   list.innerHTML = html;
 }
 function openWorkloadModal(){
-  const modal = document.getElementById('modalContent');
-  modal.innerHTML = '<div class="modal-header"><h3>录入工作量</h3><button class="modal-close" onclick="closeModal()">×</button></div>' +
-    '<div class="modal-body">' +
-    '<div class="form-group"><label class="form-label">检验类型</label><select class="form-select" id="wType"><option value="生化">生化</option><option value="临检">临检</option><option value="免疫">免疫</option><option value="微生物">微生物</option><option value="分子">分子</option><option value="输血">输血</option></select></div>' +
-    '<div class="form-group"><label class="form-label">样本数量</label><input type="number" class="form-input" id="wSamples" placeholder="请输入样本数量"></div>' +
-    '<div class="form-group"><label class="form-label">日期</label><input type="date" class="form-input" id="wDate" value="' + new Date().toISOString().split('T')[0] + '"></div>' +
-    '</div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveWorkload()">保存</button></div>';
+  var modal = document.getElementById('modalContent');
+  modal.innerHTML = '<div class="modal-header"><h3>录入工作量</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">检验类型</label><select class="form-select" id="wType"><option value="生化">生化</option><option value="临检">临检</option><option value="免疫">免疫</option><option value="微生物">微生物</option><option value="分子">分子</option><option value="输血">输血</option></select></div><div class="form-group"><label class="form-label">样本数量</label><input type="number" class="form-input" id="wSamples" placeholder="请输入样本数量"></div><div class="form-group"><label class="form-label">日期</label><input type="date" class="form-input" id="wDate" value="' + new Date().toISOString().split('T')[0] + '"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveWorkload()">保存</button></div>';
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveWorkload(){
-  const type = document.getElementById('wType').value;
-  const samples = parseInt(document.getElementById('wSamples').value);
-  const date = document.getElementById('wDate').value;
+  var type = document.getElementById('wType').value;
+  var samples = parseInt(document.getElementById('wSamples').value);
+  var date = document.getElementById('wDate').value;
   if(!samples){ showToast('请输入样本数量'); return; }
-  const score = samples * 0.1;
-  appData.workloadRecords.push({id:'W'+Date.now(),date,samples,type,operator:currentUser.name,score:Math.round(score*10)/10});
+  var score = Math.round(samples * 0.1 * 10) / 10;
+  appData.workloadRecords.push({id:'W'+Date.now(),date,samples,type,operator:currentUser.name,score:score});
   saveData();
   closeModal();
   loadWorkload();
-  showToast('✅ 工作量已保存，+' + Math.round(score*10)/10 + '分');
+  showToast('✅ 工作量已保存，+' + score + '分');
 }
-// ===== SOP学习 =====
+function loadSop(){
+  var list = document.getElementById('sopList');
+  var html = '';
+  for(var i=0;i<appData.sopList.length;i++){
+    var s = appData.sopList[i];
+    var statusBadge = s.status === 'published' ? '<span class="badge badge-green">已发布</span>' : '<span class="badge badge-orange">草稿</span>';
+    html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#f3e5f5;">📚</div><div><div class="item-title">' + s.name + '</div><div class="item-desc">' + s.group + ' · ' + s.version + ' · ' + s.pages + '页</div></div></div><div class="item-right">' + statusBadge + '</div></div></div>';
+  }
+  list.innerHTML = html;
+}
 function switchSopTab(tab, el){
-  document.querySelectorAll('#page-sop .tab').forEach(t => t.classList.remove('active'));
+  var tabs = document.querySelectorAll('#page-sop .tab');
+  for(var i=0;i<tabs.length;i++){ tabs[i].classList.remove('active'); }
   el.classList.add('active');
   document.getElementById('sopList').style.display = tab === 'list' ? 'block' : 'none';
   document.getElementById('sopExam').style.display = tab === 'exam' ? 'block' : 'none';
   document.getElementById('sopProgress').style.display = tab === 'progress' ? 'block' : 'none';
 }
-function loadSop(){
-  const list = document.getElementById('sopList');
-  let html = '';
-  appData.sopList.forEach(s => {
-    const statusBadge = s.status === 'published' ? '<span class="badge badge-green">已发布</span>' : '<span class="badge badge-orange">草稿</span>';
-    html += '<div class="list-card"><div class="list-item" onclick="readSop('' + s.id + '')">';
-    html += '<div class="item-left"><div class="item-icon" style="background:#f3e5f5;">📚</div>';
-    html += '<div><div class="item-title">' + s.name + '</div><div class="item-desc">' + s.group + ' · ' + s.version + ' · ' + s.pages + '页</div></div></div>';
-    html += '<div class="item-right">' + statusBadge + '</div></div></div>';
-  });
-  list.innerHTML = html;
-  // 考试列表
-  const exam = document.getElementById('sopExam');
-  html = '<div class="list-card"><div class="list-item" onclick="startExam()">';
-  html += '<div class="item-left"><div class="item-icon" style="background:#fff3e0;">📝</div>';
-  html += '<div><div class="item-title">SOP知识考试</div><div class="item-desc">10题 · 满分100分 · 60分及格</div></div></div>';
-  html += '<div class="item-right"><span class="badge badge-blue">开始考试</span></div></div></div>';
-  exam.innerHTML = html;
-  // 学习进度
-  const progress = document.getElementById('sopProgress');
-  const myProgress = appData.sopProgress[currentUser.id] || {};
-  const total = appData.sopList.length;
-  let done = 0;
-  appData.sopList.forEach(s => { if(myProgress[s.id]) done++; });
-  const pct = total > 0 ? Math.round(done/total*100) : 0;
-  html = '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e8f5e9;">📈</div><div><div class="item-title">我的学习进度</div><div class="item-desc">已完成 ' + done + '/' + total + ' 份SOP</div></div></div><div class="item-right"><span class="badge badge-green">' + pct + '%</span></div></div></div>';
-  progress.innerHTML = html;
-}
-function readSop(id){
-  const sop = appData.sopList.find(s => s.id === id);
-  if(!sop) return;
-  // 记录学习进度
-  if(!appData.sopProgress[currentUser.id]) appData.sopProgress[currentUser.id] = {};
-  appData.sopProgress[currentUser.id][id] = true;
-  saveData();
-  const modal = document.getElementById('modalContent');
-  modal.innerHTML = '<div class="modal-header"><h3>' + sop.name + '</h3><button class="modal-close" onclick="closeModal()">×</button></div>' +
-    '<div class="modal-body">' +
-    '<div class="detail-card"><div class="detail-row"><span class="label">版本</span><span class="value">' + sop.version + '</span></div>' +
-    '<div class="detail-row"><span class="label">专业组</span><span class="value">' + sop.group + '</span></div>' +
-    '<div class="detail-row"><span class="label">页数</span><span class="value">' + sop.pages + '页</span></div>' +
-    '<div class="detail-row"><span class="label">发布日期</span><span class="value">' + sop.date + '</span></div></div>' +
-    '<div style="background:#f5f5f5;border-radius:8px;padding:20px;text-align:center;color:var(--text-light);font-size:14px;">📄 SOP文档预览区域<br><br><span style="font-size:12px;">（完整PDF文档请点击下方按钮查看）</span></div>' +
-    '</div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">关闭</button><button class="btn btn-primary btn-sm" onclick="showToast('✅ 学习完成，+2分')">完成学习</button></div>';
-  document.getElementById('modalOverlay').classList.add('active');
-}
-function startExam(){
-  const modal = document.getElementById('modalContent');
-  modal.innerHTML = '<div class="modal-header"><h3>SOP知识考试</h3><button class="modal-close" onclick="closeModal()">×</button></div>' +
-    '<div class="modal-body">' +
-    '<div class="detail-card"><div class="detail-row"><span class="label">题目数量</span><span class="value">10题</span></div>' +
-    '<div class="detail-row"><span class="label">考试时间</span><span class="value">15分钟</span></div>' +
-    '<div class="detail-row"><span class="label">及格分数</span><span class="value">60分</span></div>' +
-    '<div class="detail-row"><span class="label">考试次数</span><span class="value">不限（取最高分）</span></div></div>' +
-    '<p style="font-size:13px;color:var(--text-light);text-align:center;margin:10px 0;">考试内容涵盖各专业组SOP核心知识点</p>' +
-    '</div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="showToast('考试功能即将上线，敬请期待！')">开始考试</button></div>';
-  document.getElementById('modalOverlay').classList.add('active');
-}
-// ===== 危急值 =====
 function loadCritical(){
-  const list = document.getElementById('criticalList');
-  let html = '';
-  appData.criticalRecords.slice().reverse().forEach(r => {
-    const statusBadge = r.status === 'reported' ? '<span class="badge badge-green">已报告</span>' : '<span class="badge badge-red">待报告</span>';
-    html += '<div class="list-card"><div class="list-item">';
-    html += '<div class="item-left"><div class="item-icon" style="background:#ffebee;">⚠️</div>';
-    html += '<div><div class="item-title">' + r.patient + ' · ' + r.item + '=' + r.value + '</div><div class="item-desc">' + r.date + ' ' + r.time + ' · ' + r.reporter + '</div></div></div>';
-    html += '<div class="item-right">' + statusBadge + '</div></div></div>';
-  });
-  if(!appData.criticalRecords.length) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无危急值记录</div></div></div>';
+  var list = document.getElementById('criticalList');
+  var html = '';
+  for(var i=appData.criticalRecords.length-1;i>=0;i--){
+    var r = appData.criticalRecords[i];
+    var statusBadge = r.status === 'reported' ? '<span class="badge badge-green">已报告</span>' : '<span class="badge badge-red">待报告</span>';
+    html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#ffebee;">⚠️</div><div><div class="item-title">' + r.patient + ' · ' + r.item + '=' + r.value + '</div><div class="item-desc">' + r.date + ' ' + r.time + ' · ' + r.reporter + '</div></div></div><div class="item-right">' + statusBadge + '</div></div></div>';
+  }
+  if(appData.criticalRecords.length === 0) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无危急值记录</div></div></div>';
   list.innerHTML = html;
 }
 function openCriticalModal(){
-  const modal = document.getElementById('modalContent');
-  modal.innerHTML = '<div class="modal-header"><h3>新增危急值报告</h3><button class="modal-close" onclick="closeModal()">×</button></div>' +
-    '<div class="modal-body">' +
-    '<div class="form-group"><label class="form-label">患者姓名</label><input type="text" class="form-input" id="cPatient" placeholder="请输入患者姓名"></div>' +
-    '<div class="form-group"><label class="form-label">检验项目</label><input type="text" class="form-input" id="cItem" placeholder="如：GLU"></div>' +
-    '<div class="form-group"><label class="form-label">危急值</label><input type="text" class="form-input" id="cValue" placeholder="如：28.5mmol/L"></div>' +
-    '<div class="form-group"><label class="form-label">危急值范围</label><input type="text" class="form-input" id="cRange" placeholder="如：>22.2"></div>' +
-    '<div class="form-group"><label class="form-label">日期</label><input type="date" class="form-input" id="cDate" value="' + new Date().toISOString().split('T')[0] + '"></div>' +
-    '<div class="form-group"><label class="form-label">时间</label><input type="time" class="form-input" id="cTime" value="' + new Date().toTimeString().slice(0,5) + '"></div>' +
-    '</div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-danger btn-sm" onclick="saveCritical()">保存报告</button></div>';
+  var modal = document.getElementById('modalContent');
+  modal.innerHTML = '<div class="modal-header"><h3>新增危急值报告</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">患者姓名</label><input type="text" class="form-input" id="cPatient" placeholder="请输入患者姓名"></div><div class="form-group"><label class="form-label">检验项目</label><input type="text" class="form-input" id="cItem" placeholder="如：GLU"></div><div class="form-group"><label class="form-label">危急值</label><input type="text" class="form-input" id="cValue" placeholder="如：28.5mmol/L"></div><div class="form-group"><label class="form-label">日期</label><input type="date" class="form-input" id="cDate" value="' + new Date().toISOString().split('T')[0] + '"></div><div class="form-group"><label class="form-label">时间</label><input type="time" class="form-input" id="cTime" value="' + new Date().toTimeString().slice(0,5) + '"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-danger btn-sm" onclick="saveCritical()">保存报告</button></div>';
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveCritical(){
-  const patient = document.getElementById('cPatient').value;
-  const item = document.getElementById('cItem').value;
-  const value = document.getElementById('cValue').value;
-  const range = document.getElementById('cRange').value;
-  const date = document.getElementById('cDate').value;
-  const time = document.getElementById('cTime').value;
+  var patient = document.getElementById('cPatient').value;
+  var item = document.getElementById('cItem').value;
+  var value = document.getElementById('cValue').value;
+  var date = document.getElementById('cDate').value;
+  var time = document.getElementById('cTime').value;
   if(!patient || !item || !value){ showToast('请填写完整信息'); return; }
-  appData.criticalRecords.push({id:'C'+Date.now(),patient,item,value,criticalValue:range,date,time,reporter:currentUser.name,status:'reported'});
+  appData.criticalRecords.push({id:'C'+Date.now(),patient,item,value,criticalValue:'',date,time,reporter:currentUser.name,status:'reported'});
   saveData();
   closeModal();
   loadCritical();
   showToast('✅ 危急值已报告，+5分');
 }
-// ===== 试剂管理 =====
+function loadReagent(){
+  var list = document.getElementById('reagentList');
+  var html = '';
+  for(var i=0;i<appData.reagents.length;i++){
+    var r = appData.reagents[i];
+    var today = new Date();
+    var expiry = new Date(r.expiry);
+    var daysLeft = Math.ceil((expiry - today) / (1000*60*60*24));
+    var expiryBadge = '';
+    if(daysLeft < 30) expiryBadge = '<span class="badge badge-red">' + daysLeft + '天到期</span>';
+    else if(daysLeft < 90) expiryBadge = '<span class="badge badge-orange">' + daysLeft + '天到期</span>';
+    else expiryBadge = '<span class="badge badge-green">' + daysLeft + '天</span>';
+    html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e8f5e9;">🧪</div><div><div class="item-title">' + r.name + '</div><div class="item-desc">' + r.spec + ' · 库存:' + r.stock + r.unit + ' · ' + r.group + '</div></div></div><div class="item-right">' + expiryBadge + '</div></div></div>';
+  }
+  if(appData.reagents.length === 0) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无试剂</div></div></div>';
+  list.innerHTML = html;
+}
 function switchReagentTab(tab, el){
-  document.querySelectorAll('#page-reagent .tab').forEach(t => t.classList.remove('active'));
+  var tabs = document.querySelectorAll('#page-reagent .tab');
+  for(var i=0;i<tabs.length;i++){ tabs[i].classList.remove('active'); }
   el.classList.add('active');
   document.getElementById('reagentInventory').style.display = tab === 'inventory' ? 'block' : 'none';
   document.getElementById('reagentInout').style.display = tab === 'inout' ? 'block' : 'none';
   document.getElementById('reagentExpiry').style.display = tab === 'expiry' ? 'block' : 'none';
 }
-function loadReagent(){
-  // 库存列表
-  const list = document.getElementById('reagentList');
-  let html = '';
-  appData.reagents.forEach(r => {
-    const today = new Date();
-    const expiry = new Date(r.expiry);
-    const daysLeft = Math.ceil((expiry - today) / (1000*60*60*24));
-    let expiryBadge = '';
-    if(daysLeft < 30) expiryBadge = '<span class="badge badge-red">' + daysLeft + '天到期</span>';
-    else if(daysLeft < 90) expiryBadge = '<span class="badge badge-orange">' + daysLeft + '天到期</span>';
-    else expiryBadge = '<span class="badge badge-green">' + daysLeft + '天</span>';
-    html += '<div class="list-card"><div class="list-item">';
-    html += '<div class="item-left"><div class="item-icon" style="background:#e8f5e9;">🧪</div>';
-    html += '<div><div class="item-title">' + r.name + '</div><div class="item-desc">' + r.spec + ' · 库存:' + r.stock + r.unit + ' · ' + r.group + '</div></div></div>';
-    html += '<div class="item-right">' + expiryBadge + '</div></div></div>';
-  });
-  if(!appData.reagents.length) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无试剂</div></div></div>';
-  list.innerHTML = html;
-  // 出入库记录
-  const inoutList = document.getElementById('reagentInoutList');
-  html = '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon">📦</div><div><div class="item-title">入库记录</div><div class="item-desc">2025-01-15 · ALT试剂盒 +10盒</div></div></div><div class="item-right"><span class="badge badge-green">入库</span></div></div></div>';
-  html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon">📦</div><div><div class="item-title">出库记录</div><div class="item-desc">2025-01-16 · WBC溶血剂 -2瓶</div></div></div><div class="item-right"><span class="badge badge-blue">出库</span></div></div></div>';
-  inoutList.innerHTML = html;
-  // 效期预警
-  const expiryList = document.getElementById('reagentExpiryList');
-  html = '';
-  appData.reagents.forEach(r => {
-    const today = new Date();
-    const expiry = new Date(r.expiry);
-    const daysLeft = Math.ceil((expiry - today) / (1000*60*60*24));
-    if(daysLeft < 90){
-      const badge = daysLeft < 30 ? '<span class="badge badge-red">紧急</span>' : '<span class="badge badge-orange">预警</span>';
-      html += '<div class="list-card"><div class="list-item">';
-      html += '<div class="item-left"><div class="item-icon" style="background:#ffebee;">⏰</div>';
-      html += '<div><div class="item-title">' + r.name + '</div><div class="item-desc">效期至 ' + r.expiry + ' · 剩余' + daysLeft + '天</div></div></div>';
-      html += '<div class="item-right">' + badge + '</div></div></div>';
-    }
-  });
-  if(!html) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无近效期试剂</div></div></div>';
-  expiryList.innerHTML = html;
-}
 function openReagentModal(){
-  const modal = document.getElementById('modalContent');
-  modal.innerHTML = '<div class="modal-header"><h3>新增试剂</h3><button class="modal-close" onclick="closeModal()">×</button></div>' +
-    '<div class="modal-body">' +
-    '<div class="form-group"><label class="form-label">试剂名称</label><input type="text" class="form-input" id="rName" placeholder="如：ALT检测试剂盒"></div>' +
-    '<div class="form-group"><label class="form-label">规格</label><input type="text" class="form-input" id="rSpec" placeholder="如：200ml/盒"></div>' +
-    '<div class="form-group"><label class="form-label">专业组</label><select class="form-select" id="rGroup"><option value="生化组">生化组</option><option value="临检组">临检组</option><option value="免疫组">免疫组</option><option value="微生物组">微生物组</option><option value="分子组">分子组</option><option value="输血组">输血组</option></select></div>' +
-    '<div class="form-group"><label class="form-label">库存数量</label><input type="number" class="form-input" id="rStock" placeholder="请输入库存"></div>' +
-    '<div class="form-group"><label class="form-label">单位</label><input type="text" class="form-input" id="rUnit" placeholder="如：盒/瓶"></div>' +
-    '<div class="form-group"><label class="form-label">有效期至</label><input type="date" class="form-input" id="rExpiry"></div>' +
-    '<div class="form-group"><label class="form-label">供应商</label><input type="text" class="form-input" id="rSupplier" placeholder="供应商名称"></div>' +
-    '</div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveReagent()">保存</button></div>';
+  var modal = document.getElementById('modalContent');
+  modal.innerHTML = '<div class="modal-header"><h3>新增试剂</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">试剂名称</label><input type="text" class="form-input" id="rName" placeholder="如：ALT检测试剂盒"></div><div class="form-group"><label class="form-label">规格</label><input type="text" class="form-input" id="rSpec" placeholder="如：200ml/盒"></div><div class="form-group"><label class="form-label">专业组</label><select class="form-select" id="rGroup"><option value="生化组">生化组</option><option value="临检组">临检组</option><option value="免疫组">免疫组</option><option value="微生物组">微生物组</option><option value="分子组">分子组</option><option value="输血组">输血组</option></select></div><div class="form-group"><label class="form-label">库存数量</label><input type="number" class="form-input" id="rStock" placeholder="请输入库存"></div><div class="form-group"><label class="form-label">单位</label><input type="text" class="form-input" id="rUnit" placeholder="如：盒/瓶"></div><div class="form-group"><label class="form-label">有效期至</label><input type="date" class="form-input" id="rExpiry"></div><div class="form-group"><label class="form-label">供应商</label><input type="text" class="form-input" id="rSupplier" placeholder="供应商名称"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveReagent()">保存</button></div>';
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveReagent(){
-  const name = document.getElementById('rName').value;
-  const spec = document.getElementById('rSpec').value;
-  const group = document.getElementById('rGroup').value;
-  const stock = parseInt(document.getElementById('rStock').value);
-  const unit = document.getElementById('rUnit').value;
-  const expiry = document.getElementById('rExpiry').value;
-  const supplier = document.getElementById('rSupplier').value;
+  var name = document.getElementById('rName').value;
+  var spec = document.getElementById('rSpec').value;
+  var group = document.getElementById('rGroup').value;
+  var stock = parseInt(document.getElementById('rStock').value);
+  var unit = document.getElementById('rUnit').value;
+  var expiry = document.getElementById('rExpiry').value;
+  var supplier = document.getElementById('rSupplier').value;
   if(!name || !stock){ showToast('请填写试剂名称和库存'); return; }
-  appData.reagents.push({id:'R'+Date.now(),name,spec,batch:'',expiry,stock,unit,price:0,group,supplier});
+  appData.reagents.push({id:'R'+Date.now(),name,spec,batch:'',expiry,stock,unit,price:0,group,supplier:supplier});
   saveData();
   closeModal();
   loadReagent();
@@ -949,402 +607,223 @@ function saveReagent(){
   showToast('✅ 试剂已添加');
 }
 function openReagentInOutModal(){
-  const modal = document.getElementById('modalContent');
-  let options = '';
-  appData.reagents.forEach(r => { options += '<option value="' + r.name + '">' + r.name + '</option>'; });
-  modal.innerHTML = '<div class="modal-header"><h3>试剂出入库</h3><button class="modal-close" onclick="closeModal()">×</button></div>' +
-    '<div class="modal-body">' +
-    '<div class="form-group"><label class="form-label">试剂</label><select class="form-select" id="ioReagent">' + options + '</select></div>' +
-    '<div class="form-group"><label class="form-label">操作类型</label><select class="form-select" id="ioType"><option value="in">入库</option><option value="out">出库</option></select></div>' +
-    '<div class="form-group"><label class="form-label">数量</label><input type="number" class="form-input" id="ioQty" placeholder="请输入数量"></div>' +
-    '<div class="form-group"><label class="form-label">日期</label><input type="date" class="form-input" id="ioDate" value="' + new Date().toISOString().split('T')[0] + '"></div>' +
-    '</div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveReagentInOut()">确认</button></div>';
+  var modal = document.getElementById('modalContent');
+  var options = '';
+  for(var i=0;i<appData.reagents.length;i++){ options += '<option value="' + appData.reagents[i].name + '">' + appData.reagents[i].name + '</option>'; }
+  modal.innerHTML = '<div class="modal-header"><h3>试剂出入库</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">试剂</label><select class="form-select" id="ioReagent">' + options + '</select></div><div class="form-group"><label class="form-label">操作类型</label><select class="form-select" id="ioType"><option value="in">入库</option><option value="out">出库</option></select></div><div class="form-group"><label class="form-label">数量</label><input type="number" class="form-input" id="ioQty" placeholder="请输入数量"></div><div class="form-group"><label class="form-label">日期</label><input type="date" class="form-input" id="ioDate" value="' + new Date().toISOString().split('T')[0] + '"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveReagentInOut()">确认</button></div>';
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveReagentInOut(){
-  const name = document.getElementById('ioReagent').value;
-  const type = document.getElementById('ioType').value;
-  const qty = parseInt(document.getElementById('ioQty').value);
-  const date = document.getElementById('ioDate').value;
+  var name = document.getElementById('ioReagent').value;
+  var type = document.getElementById('ioType').value;
+  var qty = parseInt(document.getElementById('ioQty').value);
   if(!qty){ showToast('请输入数量'); return; }
-  const reagent = appData.reagents.find(r => r.name === name);
-  if(reagent){
-    if(type === 'in') reagent.stock += qty;
-    else reagent.stock = Math.max(0, reagent.stock - qty);
-    saveData();
+  for(var i=0;i<appData.reagents.length;i++){
+    if(appData.reagents[i].name === name){
+      if(type === 'in') appData.reagents[i].stock += qty;
+      else appData.reagents[i].stock = Math.max(0, appData.reagents[i].stock - qty);
+      break;
+    }
   }
+  saveData();
   closeModal();
   loadReagent();
   loadSettings();
   showToast(type === 'in' ? '✅ 入库成功' : '✅ 出库成功');
 }
-// ===== 绩效积分 =====
+function loadPerformance(){
+  var now = new Date();
+  var monthPrefix = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+  var total = 0;
+  for(var i=0;i<appData.maintenanceRecords.length;i++){
+    var r = appData.maintenanceRecords[i];
+    if(r.operator === currentUser.name && r.date.indexOf(monthPrefix) === 0) total += r.score;
+  }
+  for(var i=0;i<appData.workloadRecords.length;i++){
+    var r = appData.workloadRecords[i];
+    if(r.operator === currentUser.name && r.date.indexOf(monthPrefix) === 0) total += r.score;
+  }
+  document.getElementById('perfTotal').textContent = total;
+  document.getElementById('perfRank').textContent = '3/10';
+  document.getElementById('perfRate').textContent = '85%';
+  document.getElementById('perfGrade').textContent = 'A';
+  var detail = document.getElementById('perfDetail');
+  var html = '';
+  for(var i=appData.maintenanceRecords.length-1;i>=0;i--){
+    var r = appData.maintenanceRecords[i];
+    if(r.operator === currentUser.name){
+      html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e3f2fd;">🔧</div><div><div class="item-title">仪器保养 · ' + r.device + '</div><div class="item-desc">' + r.date + '</div></div></div><div class="item-right"><span class="badge badge-green">+' + r.score + '</span></div></div></div>';
+    }
+  }
+  for(var i=appData.workloadRecords.length-1;i>=0;i--){
+    var r = appData.workloadRecords[i];
+    if(r.operator === currentUser.name){
+      html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e8f5e9;">📝</div><div><div class="item-title">工作量 · ' + r.type + ' ' + r.samples + '样本</div><div class="item-desc">' + r.date + '</div></div></div><div class="item-right"><span class="badge badge-green">+' + r.score + '</span></div></div></div>';
+    }
+  }
+  if(!html) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">本月暂无积分记录</div></div></div>';
+  detail.innerHTML = html;
+}
 function switchPerfTab(tab, el){
-  document.querySelectorAll('#page-performance .tab').forEach(t => t.classList.remove('active'));
+  var tabs = document.querySelectorAll('#page-performance .tab');
+  for(var i=0;i<tabs.length;i++){ tabs[i].classList.remove('active'); }
   el.classList.add('active');
   document.getElementById('perfDetail').style.display = tab === 'detail' ? 'block' : 'none';
   document.getElementById('perfRank').style.display = tab === 'rank' ? 'block' : 'none';
   document.getElementById('perfRules').style.display = tab === 'rules' ? 'block' : 'none';
 }
-function loadPerformance(){
-  // 计算本月积分
-  const now = new Date();
-  const monthPrefix = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
-  let total = 0;
-  appData.maintenanceRecords.forEach(r => { if(r.operator === currentUser.name && r.date.startsWith(monthPrefix)) total += r.score; });
-  appData.workloadRecords.forEach(r => { if(r.operator === currentUser.name && r.date.startsWith(monthPrefix)) total += r.score; });
-  document.getElementById('perfTotal').textContent = total;
-  document.getElementById('perfRank').textContent = '3/10';
-  document.getElementById('perfRate').textContent = '85%';
-  document.getElementById('perfGrade').textContent = 'A';
-  // 积分明细
-  const detail = document.getElementById('perfDetail');
-  let html = '';
-  appData.maintenanceRecords.slice().reverse().forEach(r => {
-    if(r.operator === currentUser.name){
-      html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e3f2fd;">🔧</div><div><div class="item-title">仪器保养 · ' + r.device + '</div><div class="item-desc">' + r.date + '</div></div></div><div class="item-right"><span class="badge badge-green">+' + r.score + '</span></div></div></div>';
-    }
-  });
-  appData.workloadRecords.slice().reverse().forEach(r => {
-    if(r.operator === currentUser.name){
-      html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e8f5e9;">📝</div><div><div class="item-title">工作量 · ' + r.type + ' ' + r.samples + '样本</div><div class="item-desc">' + r.date + '</div></div></div><div class="item-right"><span class="badge badge-green">+' + r.score + '</span></div></div></div>';
-    }
-  });
-  if(!html) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">本月暂无积分记录</div></div></div>';
-  detail.innerHTML = html;
-  // 排名
-  const rank = document.getElementById('perfRank');
-  let rankHtml = '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#ffd700;">🥇</div><div><div class="item-title">张伟</div><div class="item-desc">生化组 · 128分</div></div></div><div class="item-right"><span class="badge badge-blue">第1名</span></div></div></div>';
-  rankHtml += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#c0c0c0;">🥈</div><div><div class="item-title">陈静</div><div class="item-desc">临检组 · 115分</div></div></div><div class="item-right"><span class="badge badge-blue">第2名</span></div></div></div>';
-  rankHtml += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#cd7f32;">🥉</div><div><div class="item-title">' + currentUser.name + '</div><div class="item-desc">' + currentUser.group + ' · ' + total + '分</div></div></div><div class="item-right"><span class="badge badge-blue">第3名</span></div></div></div>';
-  rank.innerHTML = rankHtml;
-  // 积分规则
-  const rules = document.getElementById('perfRules');
-  rules.innerHTML = '<div class="table-wrap"><table><thead><tr><th>项目</th><th>积分标准</th><th>说明</th></tr></thead><tbody>' +
-    '<tr><td>仪器保养</td><td>+2~8分/次</td><td>日常+2，周+3，月+5，季度+8</td></tr>' +
-    '<tr><td>质控录入</td><td>+1分/次</td><td>在控+1，失控处理+3</td></tr>' +
-    '<tr><td>工作量</td><td>+0.1分/样本</td><td>按实际检测样本量计算</td></tr>' +
-    '<tr><td>SOP学习</td><td>+2分/份</td><td>完成在线阅读+2，考试及格+5</td></tr>' +
-    '<tr><td>危急值报告</td><td>+5分/次</td><td>及时报告+5</td></tr>' +
-    '<tr><td>漏保养</td><td>-10分/次</td><td>导致设备故障</td></tr>' +
-    '<tr><td>质控失控</td><td>-3分/次</td><td>未及时处理</td></tr>' +
-    '</tbody></table></div>';
-}
-// ===== 系统设置 =====
-function switchSettingsTab(tab, el){
-  document.querySelectorAll('#page-settings .tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('settingsStaff').style.display = tab === 'staff' ? 'block' : 'none';
-  document.getElementById('settingsDevice').style.display = tab === 'device' ? 'block' : 'none';
-  document.getElementById('settingsReagent').style.display = tab === 'reagent' ? 'block' : 'none';
-  document.getElementById('settingsSop').style.display = tab === 'sop' ? 'block' : 'none';
-}
-function loadSettings(){
-  loadStaff();
-  loadDevice();
-  loadSettingsReagent();
-  loadSopManage();
-}
-// 员工管理
+function loadSettings(){ loadStaff(); loadDevice(); loadSettingsReagent(); loadSopManage(); }
 function loadStaff(){
-  const list = document.getElementById('staffList');
-  let html = '';
-  appData.users.forEach(u => {
-    const statusBadge = u.status === 'active' ? '<span class="badge badge-green">在职</span>' : '<span class="badge badge-gray">停用</span>';
-    const roleBadge = '<span class="badge badge-blue">' + u.role + '</span>';
-    html += '<div class="list-card"><div class="list-item" onclick="editStaff('' + u.id + '')">';
-    html += '<div class="item-left"><div class="item-icon" style="background:#e8eaf6;">👤</div>';
-    html += '<div><div class="item-title">' + u.name + ' <span style="font-size:11px;color:var(--text-light);">' + u.id + '</span></div><div class="item-desc">' + u.group + ' · ' + u.phone + '</div></div></div>';
-    html += '<div class="item-right">' + roleBadge + ' ' + statusBadge + '</div></div></div>';
-  });
-  if(!appData.users.length) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无员工</div></div></div>';
+  var list = document.getElementById('staffList');
+  var html = '';
+  for(var i=0;i<appData.users.length;i++){
+    var u = appData.users[i];
+    var statusBadge = u.status === 'active' ? '<span class="badge badge-green">在职</span>' : '<span class="badge badge-gray">停用</span>';
+    var roleBadge = '<span class="badge badge-blue">' + u.role + '</span>';
+    html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e8eaf6;">👤</div><div><div class="item-title">' + u.name + ' <span style="font-size:11px;color:var(--text-light);">' + u.id + '</span></div><div class="item-desc">' + u.group + ' · ' + u.phone + '</div></div></div><div class="item-right">' + roleBadge + ' ' + statusBadge + '</div></div></div>';
+  }
+  if(appData.users.length === 0) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无员工</div></div></div>';
   list.innerHTML = html;
 }
 function filterStaff(){
-  const keyword = document.getElementById('staffSearch').value.toLowerCase();
-  const list = document.getElementById('staffList');
-  let html = '';
-  appData.users.filter(u => u.name.toLowerCase().includes(keyword) || u.id.toLowerCase().includes(keyword)).forEach(u => {
-    const statusBadge = u.status === 'active' ? '<span class="badge badge-green">在职</span>' : '<span class="badge badge-gray">停用</span>';
-    const roleBadge = '<span class="badge badge-blue">' + u.role + '</span>';
-    html += '<div class="list-card"><div class="list-item" onclick="editStaff('' + u.id + '')">';
-    html += '<div class="item-left"><div class="item-icon" style="background:#e8eaf6;">👤</div>';
-    html += '<div><div class="item-title">' + u.name + ' <span style="font-size:11px;color:var(--text-light);">' + u.id + '</span></div><div class="item-desc">' + u.group + ' · ' + u.phone + '</div></div></div>';
-    html += '<div class="item-right">' + roleBadge + ' ' + statusBadge + '</div></div></div>';
-  });
+  var keyword = document.getElementById('staffSearch').value.toLowerCase();
+  var list = document.getElementById('staffList');
+  var html = '';
+  for(var i=0;i<appData.users.length;i++){
+    var u = appData.users[i];
+    if(u.name.toLowerCase().indexOf(keyword) >= 0 || u.id.toLowerCase().indexOf(keyword) >= 0){
+      var statusBadge = u.status === 'active' ? '<span class="badge badge-green">在职</span>' : '<span class="badge badge-gray">停用</span>';
+      var roleBadge = '<span class="badge badge-blue">' + u.role + '</span>';
+      html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e8eaf6;">👤</div><div><div class="item-title">' + u.name + ' <span style="font-size:11px;color:var(--text-light);">' + u.id + '</span></div><div class="item-desc">' + u.group + ' · ' + u.phone + '</div></div></div><div class="item-right">' + roleBadge + ' ' + statusBadge + '</div></div></div>';
+    }
+  }
   if(!html) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">未找到匹配员工</div></div></div>';
   list.innerHTML = html;
 }
 function openStaffModal(){
-  const modal = document.getElementById('modalContent');
-  modal.innerHTML = '<div class="modal-header"><h3>新增员工</h3><button class="modal-close" onclick="closeModal()">×</button></div>' +
-    '<div class="modal-body">' +
-    '<div class="form-group"><label class="form-label">工号</label><input type="text" class="form-input" id="sId" placeholder="如：zhangsan"></div>' +
-    '<div class="form-group"><label class="form-label">姓名</label><input type="text" class="form-input" id="sName" placeholder="请输入姓名"></div>' +
-    '<div class="form-group"><label class="form-label">密码</label><input type="password" class="form-input" id="sPassword" placeholder="默认123456" value="123456"></div>' +
-    '<div class="form-group"><label class="form-label">角色</label><select class="form-select" id="sRole"><option value="检验人员">检验人员</option><option value="专业组组长">专业组组长</option><option value="质控员">质控员</option><option value="设备管理员">设备管理员</option><option value="科主任">科主任</option><option value="系统管理员">系统管理员</option></select></div>' +
-    '<div class="form-group"><label class="form-label">专业组</label><select class="form-select" id="sGroup"><option value="临检组">临检组</option><option value="生化组">生化组</option><option value="免疫组">免疫组</option><option value="微生物组">微生物组</option><option value="分子组">分子组</option><option value="输血组">输血组</option><option value="管理层">管理层</option></select></div>' +
-    '<div class="form-group"><label class="form-label">联系电话</label><input type="tel" class="form-input" id="sPhone" placeholder="请输入手机号"></div>' +
-    '</div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveStaff()">保存</button></div>';
+  var modal = document.getElementById('modalContent');
+  modal.innerHTML = '<div class="modal-header"><h3>新增员工</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">工号</label><input type="text" class="form-input" id="sId" placeholder="如：zhangsan"></div><div class="form-group"><label class="form-label">姓名</label><input type="text" class="form-input" id="sName" placeholder="请输入姓名"></div><div class="form-group"><label class="form-label">密码</label><input type="password" class="form-input" id="sPassword" placeholder="默认123456" value="123456"></div><div class="form-group"><label class="form-label">角色</label><select class="form-select" id="sRole"><option value="检验人员">检验人员</option><option value="专业组组长">专业组组长</option><option value="质控员">质控员</option><option value="设备管理员">设备管理员</option><option value="科主任">科主任</option><option value="系统管理员">系统管理员</option></select></div><div class="form-group"><label class="form-label">专业组</label><select class="form-select" id="sGroup"><option value="临检组">临检组</option><option value="生化组">生化组</option><option value="免疫组">免疫组</option><option value="微生物组">微生物组</option><option value="分子组">分子组</option><option value="输血组">输血组</option><option value="管理层">管理层</option></select></div><div class="form-group"><label class="form-label">联系电话</label><input type="tel" class="form-input" id="sPhone" placeholder="请输入手机号"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveStaff()">保存</button></div>';
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveStaff(){
-  const id = document.getElementById('sId').value.trim();
-  const name = document.getElementById('sName').value.trim();
-  const password = document.getElementById('sPassword').value;
-  const role = document.getElementById('sRole').value;
-  const group = document.getElementById('sGroup').value;
-  const phone = document.getElementById('sPhone').value.trim();
+  var id = document.getElementById('sId').value.trim();
+  var name = document.getElementById('sName').value.trim();
+  var password = document.getElementById('sPassword').value;
+  var role = document.getElementById('sRole').value;
+  var group = document.getElementById('sGroup').value;
+  var phone = document.getElementById('sPhone').value.trim();
   if(!id || !name){ showToast('请填写工号和姓名'); return; }
-  if(appData.users.find(u => u.id === id)){ showToast('工号已存在'); return; }
-  appData.users.push({id,name,password,role,group,phone,status:'active'});
+  for(var i=0;i<appData.users.length;i++){ if(appData.users[i].id === id){ showToast('工号已存在'); return; } }
+  appData.users.push({id:id,name:name,password:password,role:role,group:group,phone:phone,status:'active'});
   saveData();
   closeModal();
   loadStaff();
   showToast('✅ 员工 ' + name + ' 已添加');
 }
-function editStaff(id){
-  const user = appData.users.find(u => u.id === id);
-  if(!user) return;
-  const modal = document.getElementById('modalContent');
-  modal.innerHTML = '<div class="modal-header"><h3>编辑员工 - ' + user.name + '</h3><button class="modal-close" onclick="closeModal()">×</button></div>' +
-    '<div class="modal-body">' +
-    '<div class="form-group"><label class="form-label">姓名</label><input type="text" class="form-input" id="eName" value="' + user.name + '"></div>' +
-    '<div class="form-group"><label class="form-label">角色</label><select class="form-select" id="eRole">' +
-    '<option value="检验人员"' + (user.role==='检验人员'?' selected':'') + '>检验人员</option>' +
-    '<option value="专业组组长"' + (user.role==='专业组组长'?' selected':'') + '>专业组组长</option>' +
-    '<option value="质控员"' + (user.role==='质控员'?' selected':'') + '>质控员</option>' +
-    '<option value="设备管理员"' + (user.role==='设备管理员'?' selected':'') + '>设备管理员</option>' +
-    '<option value="科主任"' + (user.role==='科主任'?' selected':'') + '>科主任</option>' +
-    '<option value="系统管理员"' + (user.role==='系统管理员'?' selected':'') + '>系统管理员</option></select></div>' +
-    '<div class="form-group"><label class="form-label">专业组</label><select class="form-select" id="eGroup">' +
-    '<option value="临检组"' + (user.group==='临检组'?' selected':'') + '>临检组</option>' +
-    '<option value="生化组"' + (user.group==='生化组'?' selected':'') + '>生化组</option>' +
-    '<option value="免疫组"' + (user.group==='免疫组'?' selected':'') + '>免疫组</option>' +
-    '<option value="微生物组"' + (user.group==='微生物组'?' selected':'') + '>微生物组</option>' +
-    '<option value="分子组"' + (user.group==='分子组'?' selected':'') + '>分子组</option>' +
-    '<option value="输血组"' + (user.group==='输血组'?' selected':'') + '>输血组</option>' +
-    '<option value="管理层"' + (user.group==='管理层'?' selected':'') + '>管理层</option></select></div>' +
-    '<div class="form-group"><label class="form-label">联系电话</label><input type="tel" class="form-input" id="ePhone" value="' + user.phone + '"></div>' +
-    '<div class="form-group"><label class="form-label">账号状态</label><select class="form-select" id="eStatus">' +
-    '<option value="active"' + (user.status==='active'?' selected':'') + '>在职</option>' +
-    '<option value="disabled"' + (user.status==='disabled'?' selected':'') + '>停用</option></select></div>' +
-    '</div><div class="modal-footer">' +
-    '<button class="btn btn-danger btn-sm" onclick="deleteStaff('' + user.id + '')">删除</button>' +
-    '<button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button>' +
-    '<button class="btn btn-primary btn-sm" onclick="updateStaff('' + user.id + '')">保存</button></div>';
-  document.getElementById('modalOverlay').classList.add('active');
-}
-function updateStaff(id){
-  const user = appData.users.find(u => u.id === id);
-  if(!user) return;
-  user.name = document.getElementById('eName').value;
-  user.role = document.getElementById('eRole').value;
-  user.group = document.getElementById('eGroup').value;
-  user.phone = document.getElementById('ePhone').value;
-  user.status = document.getElementById('eStatus').value;
-  saveData();
-  closeModal();
-  loadStaff();
-  showToast('✅ 员工信息已更新');
-}
-function deleteStaff(id){
-  if(id === 'admin'){ showToast('系统管理员不能删除'); return; }
-  if(confirm('确定删除该员工？')){
-    appData.users = appData.users.filter(u => u.id !== id);
-    saveData();
-    closeModal();
-    loadStaff();
-    showToast('✅ 员工已删除');
-  }
-}
-// 设备管理
 function loadDevice(){
-  const list = document.getElementById('deviceList');
-  let html = '';
-  appData.devices.forEach(d => {
-    const statusDot = d.status === 'normal' ? '<span class="status-dot status-normal"></span>正常' : d.status === 'warning' ? '<span class="status-dot status-warning"></span>需保养' : '<span class="status-dot status-error"></span>故障';
-    const statusBadge = d.status === 'normal' ? '<span class="badge badge-green">正常</span>' : d.status === 'warning' ? '<span class="badge badge-orange">需保养</span>' : '<span class="badge badge-red">故障</span>';
-    html += '<div class="list-card"><div class="list-item" onclick="editDevice('' + d.id + '')">';
-    html += '<div class="item-left"><div class="item-icon" style="background:#e3f2fd;">🔬</div>';
-    html += '<div><div class="item-title">' + d.name + '</div><div class="item-desc">' + d.model + ' · ' + d.group + ' · 责任人:' + d.responsible + '</div></div></div>';
-    html += '<div class="item-right">' + statusBadge + '</div></div></div>';
-  });
-  if(!appData.devices.length) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无设备</div></div></div>';
+  var list = document.getElementById('deviceList');
+  var html = '';
+  for(var i=0;i<appData.devices.length;i++){
+    var d = appData.devices[i];
+    var statusBadge = d.status === 'normal' ? '<span class="badge badge-green">正常</span>' : d.status === 'warning' ? '<span class="badge badge-orange">需保养</span>' : '<span class="badge badge-red">故障</span>';
+    html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e3f2fd;">🔬</div><div><div class="item-title">' + d.name + '</div><div class="item-desc">' + d.model + ' · ' + d.group + ' · 责任人:' + d.responsible + '</div></div></div><div class="item-right">' + statusBadge + '</div></div></div>';
+  }
+  if(appData.devices.length === 0) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无设备</div></div></div>';
   list.innerHTML = html;
 }
 function openDeviceModal(){
-  const modal = document.getElementById('modalContent');
-  modal.innerHTML = '<div class="modal-header"><h3>新增设备</h3><button class="modal-close" onclick="closeModal()">×</button></div>' +
-    '<div class="modal-body">' +
-    '<div class="form-group"><label class="form-label">设备编号</label><input type="text" class="form-input" id="dId" placeholder="如：D007"></div>' +
-    '<div class="form-group"><label class="form-label">设备名称</label><input type="text" class="form-input" id="dName" placeholder="如：全自动尿液分析仪"></div>' +
-    '<div class="form-group"><label class="form-label">型号</label><input type="text" class="form-input" id="dModel" placeholder="如：UF-1000"></div>' +
-    '<div class="form-group"><label class="form-label">厂商</label><input type="text" class="form-input" id="dVendor" placeholder="厂商名称"></div>' +
-    '<div class="form-group"><label class="form-label">专业组</label><select class="form-select" id="dGroup"><option value="临检组">临检组</option><option value="生化组">生化组</option><option value="免疫组">免疫组</option><option value="微生物组">微生物组</option><option value="分子组">分子组</option><option value="输血组">输血组</option></select></div>' +
-    '<div class="form-group"><label class="form-label">责任人</label><input type="text" class="form-input" id="dResponsible" placeholder="责任人姓名"></div>' +
-    '<div class="form-group"><label class="form-label">下次保养日期</label><input type="date" class="form-input" id="dNextMaint"></div>' +
-    '</div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveDevice()">保存</button></div>';
+  var modal = document.getElementById('modalContent');
+  modal.innerHTML = '<div class="modal-header"><h3>新增设备</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">设备编号</label><input type="text" class="form-input" id="dId" placeholder="如：D007"></div><div class="form-group"><label class="form-label">设备名称</label><input type="text" class="form-input" id="dName" placeholder="如：全自动尿液分析仪"></div><div class="form-group"><label class="form-label">型号</label><input type="text" class="form-input" id="dModel" placeholder="如：UF-1000"></div><div class="form-group"><label class="form-label">厂商</label><input type="text" class="form-input" id="dVendor" placeholder="厂商名称"></div><div class="form-group"><label class="form-label">专业组</label><select class="form-select" id="dGroup"><option value="临检组">临检组</option><option value="生化组">生化组</option><option value="免疫组">免疫组</option><option value="微生物组">微生物组</option><option value="分子组">分子组</option><option value="输血组">输血组</option></select></div><div class="form-group"><label class="form-label">责任人</label><input type="text" class="form-input" id="dResponsible" placeholder="责任人姓名"></div><div class="form-group"><label class="form-label">下次保养日期</label><input type="date" class="form-input" id="dNextMaint"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveDevice()">保存</button></div>';
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveDevice(){
-  const id = document.getElementById('dId').value.trim();
-  const name = document.getElementById('dName').value.trim();
-  const model = document.getElementById('dModel').value.trim();
-  const vendor = document.getElementById('dVendor').value.trim();
-  const group = document.getElementById('dGroup').value;
-  const responsible = document.getElementById('dResponsible').value.trim();
-  const nextMaintenance = document.getElementById('dNextMaint').value;
+  var id = document.getElementById('dId').value.trim();
+  var name = document.getElementById('dName').value.trim();
+  var model = document.getElementById('dModel').value.trim();
+  var vendor = document.getElementById('dVendor').value.trim();
+  var group = document.getElementById('dGroup').value;
+  var responsible = document.getElementById('dResponsible').value.trim();
+  var nextMaintenance = document.getElementById('dNextMaint').value;
   if(!id || !name){ showToast('请填写设备编号和名称'); return; }
-  appData.devices.push({id,name,model,vendor,group,status:'normal',lastMaintenance:'',nextMaintenance,responsible});
+  appData.devices.push({id:id,name:name,model:model,vendor:vendor,group:group,status:'normal',lastMaintenance:'',nextMaintenance:nextMaintenance,responsible:responsible});
   saveData();
   closeModal();
   loadDevice();
   showToast('✅ 设备已添加');
 }
-function editDevice(id){
-  const device = appData.devices.find(d => d.id === id);
-  if(!device) return;
-  const modal = document.getElementById('modalContent');
-  modal.innerHTML = '<div class="modal-header"><h3>设备详情 - ' + device.name + '</h3><button class="modal-close" onclick="closeModal()">×</button></div>' +
-    '<div class="modal-body">' +
-    '<div class="detail-card">' +
-    '<div class="detail-row"><span class="label">设备编号</span><span class="value">' + device.id + '</span></div>' +
-    '<div class="detail-row"><span class="label">型号</span><span class="value">' + device.model + '</span></div>' +
-    '<div class="detail-row"><span class="label">厂商</span><span class="value">' + device.vendor + '</span></div>' +
-    '<div class="detail-row"><span class="label">专业组</span><span class="value">' + device.group + '</span></div>' +
-    '<div class="detail-row"><span class="label">责任人</span><span class="value">' + device.responsible + '</span></div>' +
-    '<div class="detail-row"><span class="label">上次保养</span><span class="value">' + device.lastMaintenance + '</span></div>' +
-    '<div class="detail-row"><span class="label">下次保养</span><span class="value">' + device.nextMaintenance + '</span></div>' +
-    '<div class="detail-row"><span class="label">状态</span><span class="value">' + device.status + '</span></div></div>' +
-    '</div><div class="modal-footer">' +
-    '<button class="btn btn-danger btn-sm" onclick="deleteDevice('' + device.id + '')">删除</button>' +
-    '<button class="btn btn-outline btn-sm" onclick="closeModal()">关闭</button>' +
-    '<button class="btn btn-primary btn-sm" onclick="showToast('设备信息编辑功能开发中')">编辑</button></div>';
-  document.getElementById('modalOverlay').classList.add('active');
-}
-function deleteDevice(id){
-  if(confirm('确定删除该设备？')){
-    appData.devices = appData.devices.filter(d => d.id !== id);
-    saveData();
-    closeModal();
-    loadDevice();
-    showToast('✅ 设备已删除');
-  }
-}
-// 试剂管理设置
 function loadSettingsReagent(){
-  const list = document.getElementById('settingsReagentList');
-  let html = '';
-  appData.reagents.forEach(r => {
-    html += '<div class="list-card"><div class="list-item">';
-    html += '<div class="item-left"><div class="item-icon" style="background:#e8f5e9;">🧪</div>';
-    html += '<div><div class="item-title">' + r.name + '</div><div class="item-desc">' + r.spec + ' · 库存:' + r.stock + r.unit + ' · 效期:' + r.expiry + '</div></div></div>';
-    html += '<div class="item-right"><span class="badge badge-blue">' + r.group + '</span></div></div></div>';
-  });
-  if(!appData.reagents.length) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无试剂</div></div></div>';
+  var list = document.getElementById('settingsReagentList');
+  var html = '';
+  for(var i=0;i<appData.reagents.length;i++){
+    var r = appData.reagents[i];
+    html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e8f5e9;">🧪</div><div><div class="item-title">' + r.name + '</div><div class="item-desc">' + r.spec + ' · 库存:' + r.stock + r.unit + ' · 效期:' + r.expiry + '</div></div></div><div class="item-right"><span class="badge badge-blue">' + r.group + '</span></div></div></div>';
+  }
+  if(appData.reagents.length === 0) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无试剂</div></div></div>';
   list.innerHTML = html;
 }
-// SOP管理
 function loadSopManage(){
-  const list = document.getElementById('sopManageList');
-  let html = '';
-  appData.sopList.forEach(s => {
-    const statusBadge = s.status === 'published' ? '<span class="badge badge-green">已发布</span>' : '<span class="badge badge-orange">草稿</span>';
-    html += '<div class="list-card"><div class="list-item" onclick="editSop('' + s.id + '')">';
-    html += '<div class="item-left"><div class="item-icon" style="background:#f3e5f5;">📄</div>';
-    html += '<div><div class="item-title">' + s.name + '</div><div class="item-desc">' + s.group + ' · ' + s.version + ' · ' + s.pages + '页 · ' + s.date + '</div></div></div>';
-    html += '<div class="item-right">' + statusBadge + '</div></div></div>';
-  });
-  if(!appData.sopList.length) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无SOP文档</div></div></div>';
+  var list = document.getElementById('sopManageList');
+  var html = '';
+  for(var i=0;i<appData.sopList.length;i++){
+    var s = appData.sopList[i];
+    var statusBadge = s.status === 'published' ? '<span class="badge badge-green">已发布</span>' : '<span class="badge badge-orange">草稿</span>';
+    html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#f3e5f5;">📄</div><div><div class="item-title">' + s.name + '</div><div class="item-desc">' + s.group + ' · ' + s.version + ' · ' + s.pages + '页 · ' + s.date + '</div></div></div><div class="item-right">' + statusBadge + '</div></div></div>';
+  }
+  if(appData.sopList.length === 0) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无SOP文档</div></div></div>';
   list.innerHTML = html;
 }
 function openSopManageModal(){
-  const modal = document.getElementById('modalContent');
-  modal.innerHTML = '<div class="modal-header"><h3>新增SOP文档</h3><button class="modal-close" onclick="closeModal()">×</button></div>' +
-    '<div class="modal-body">' +
-    '<div class="form-group"><label class="form-label">SOP名称</label><input type="text" class="form-input" id="spName" placeholder="如：全自动生化分析仪SOP"></div>' +
-    '<div class="form-group"><label class="form-label">专业组</label><select class="form-select" id="spGroup"><option value="临检组">临检组</option><option value="生化组">生化组</option><option value="免疫组">免疫组</option><option value="微生物组">微生物组</option><option value="分子组">分子组</option><option value="输血组">输血组</option></select></div>' +
-    '<div class="form-group"><label class="form-label">版本号</label><input type="text" class="form-input" id="spVersion" placeholder="如：V1.0" value="V1.0"></div>' +
-    '<div class="form-group"><label class="form-label">页数</label><input type="number" class="form-input" id="spPages" placeholder="页数"></div>' +
-    '<div class="form-group"><label class="form-label">状态</label><select class="form-select" id="spStatus"><option value="published">已发布</option><option value="draft">草稿</option></select></div>' +
-    '<div class="form-group"><label class="form-label">发布日期</label><input type="date" class="form-input" id="spDate" value="' + new Date().toISOString().split('T')[0] + '"></div>' +
-    '</div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveSopManage()">保存</button></div>';
+  var modal = document.getElementById('modalContent');
+  modal.innerHTML = '<div class="modal-header"><h3>新增SOP文档</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">SOP名称</label><input type="text" class="form-input" id="spName" placeholder="如：全自动生化分析仪SOP"></div><div class="form-group"><label class="form-label">专业组</label><select class="form-select" id="spGroup"><option value="临检组">临检组</option><option value="生化组">生化组</option><option value="免疫组">免疫组</option><option value="微生物组">微生物组</option><option value="分子组">分子组</option><option value="输血组">输血组</option></select></div><div class="form-group"><label class="form-label">版本号</label><input type="text" class="form-input" id="spVersion" placeholder="如：V1.0" value="V1.0"></div><div class="form-group"><label class="form-label">页数</label><input type="number" class="form-input" id="spPages" placeholder="页数"></div><div class="form-group"><label class="form-label">状态</label><select class="form-select" id="spStatus"><option value="published">已发布</option><option value="draft">草稿</option></select></div><div class="form-group"><label class="form-label">发布日期</label><input type="date" class="form-input" id="spDate" value="' + new Date().toISOString().split('T')[0] + '"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveSopManage()">保存</button></div>';
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveSopManage(){
-  const name = document.getElementById('spName').value.trim();
-  const group = document.getElementById('spGroup').value;
-  const version = document.getElementById('spVersion').value.trim();
-  const pages = parseInt(document.getElementById('spPages').value) || 0;
-  const status = document.getElementById('spStatus').value;
-  const date = document.getElementById('spDate').value;
+  var name = document.getElementById('spName').value.trim();
+  var group = document.getElementById('spGroup').value;
+  var version = document.getElementById('spVersion').value.trim();
+  var pages = parseInt(document.getElementById('spPages').value) || 0;
+  var status = document.getElementById('spStatus').value;
+  var date = document.getElementById('spDate').value;
   if(!name){ showToast('请输入SOP名称'); return; }
-  appData.sopList.push({id:'S'+Date.now(),name,group,version,status,pages,date});
+  appData.sopList.push({id:'S'+Date.now(),name:name,group:group,version:version,status:status,pages:pages,date:date});
   saveData();
   closeModal();
   loadSopManage();
   loadSop();
   showToast('✅ SOP文档已添加');
 }
-function editSop(id){
-  const sop = appData.sopList.find(s => s.id === id);
-  if(!sop) return;
-  const modal = document.getElementById('modalContent');
-  modal.innerHTML = '<div class="modal-header"><h3>SOP详情</h3><button class="modal-close" onclick="closeModal()">×</button></div>' +
-    '<div class="modal-body">' +
-    '<div class="detail-card">' +
-    '<div class="detail-row"><span class="label">名称</span><span class="value">' + sop.name + '</span></div>' +
-    '<div class="detail-row"><span class="label">专业组</span><span class="value">' + sop.group + '</span></div>' +
-    '<div class="detail-row"><span class="label">版本</span><span class="value">' + sop.version + '</span></div>' +
-    '<div class="detail-row"><span class="label">页数</span><span class="value">' + sop.pages + '页</span></div>' +
-    '<div class="detail-row"><span class="label">状态</span><span class="value">' + (sop.status === 'published' ? '已发布' : '草稿') + '</span></div>' +
-    '<div class="detail-row"><span class="label">发布日期</span><span class="value">' + sop.date + '</span></div></div>' +
-    '</div><div class="modal-footer">' +
-    '<button class="btn btn-danger btn-sm" onclick="deleteSop('' + sop.id + '')">删除</button>' +
-    '<button class="btn btn-outline btn-sm" onclick="closeModal()">关闭</button>' +
-    '<button class="btn btn-primary btn-sm" onclick="showToast('SOP编辑功能开发中')">编辑</button></div>';
-  document.getElementById('modalOverlay').classList.add('active');
+function switchSettingsTab(tab, el){
+  var tabs = document.querySelectorAll('#page-settings .tab');
+  for(var i=0;i<tabs.length;i++){ tabs[i].classList.remove('active'); }
+  el.classList.add('active');
+  document.getElementById('settingsStaff').style.display = tab === 'staff' ? 'block' : 'none';
+  document.getElementById('settingsDevice').style.display = tab === 'device' ? 'block' : 'none';
+  document.getElementById('settingsReagent').style.display = tab === 'reagent' ? 'block' : 'none';
+  document.getElementById('settingsSop').style.display = tab === 'sop' ? 'block' : 'none';
 }
-function deleteSop(id){
-  if(confirm('确定删除该SOP？')){
-    appData.sopList = appData.sopList.filter(s => s.id !== id);
-    saveData();
-    closeModal();
-    loadSopManage();
-    loadSop();
-    showToast('✅ SOP已删除');
-  }
-}
-// ===== 模态框 =====
-function openModal(html){
-  document.getElementById('modalContent').innerHTML = html;
-  document.getElementById('modalOverlay').classList.add('active');
-}
-function closeModal(event){
-  if(event && event.target !== document.getElementById('modalOverlay')) return;
+function closeModal(e){
+  if(e && e.target !== document.getElementById('modalOverlay')) return;
   document.getElementById('modalOverlay').classList.remove('active');
 }
-// ===== Toast =====
 function showToast(msg){
-  const toast = document.getElementById('toast');
+  var toast = document.getElementById('toast');
   toast.textContent = msg;
   toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2500);
+  setTimeout(function(){ toast.classList.remove('show'); }, 2500);
 }
-// ===== 初始化 =====
 document.addEventListener('DOMContentLoaded', function(){
   initData();
-  // 确保登录页显示
   document.getElementById('loginPage').style.display = 'flex';
   document.getElementById('appPage').style.display = 'none';
-  const remembered = localStorage.getItem('rememberedUser');
+  var remembered = localStorage.getItem('rememberedUser');
   if(remembered){
-    const user = appData.users.find(u => u.id === remembered);
-    if(user){
-      document.getElementById('loginUsername').value = user.id;
-      document.getElementById('loginPassword').value = user.password;
-      document.getElementById('rememberMe').checked = true;
+    for(var i=0;i<appData.users.length;i++){
+      if(appData.users[i].id === remembered){
+        document.getElementById('loginUsername').value = appData.users[i].id;
+        document.getElementById('loginPassword').value = appData.users[i].password;
+        document.getElementById('rememberMe').checked = true;
+        break;
+      }
     }
   }
 });
