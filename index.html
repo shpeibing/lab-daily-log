@@ -761,6 +761,7 @@ input:checked + .slider:before { transform:translateX(20px); }
     <div class="copyright">版权所有 © 裴兵（江苏省人民医院宿迁医院医学检验科）</div>
     <div class="phone">📞 技术支持：0527-80525126</div>
   </div>
+</div>
 <!-- 消息通知设置弹窗 -->
 <div id="notificationModal" class="modal">
   <div class="modal-content" style="max-height:90vh;overflow-y:auto;">
@@ -908,7 +909,7 @@ input:checked + .slider:before { transform:translateX(20px); }
         </div>
       </div>
       <div style="padding:10px;background:#FFF8E1;border-radius:8px;margin-bottom:8px;border-left:3px solid #FF9800;">
-        <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">🔬 保养数据缺失</span><span style="color:#FF9800;">待审核</span></div>
+        <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">PB 保养数据缺失</span><span style="color:#FF9800;">待审核</span></div>
         <div style="font-size:12px;color:#666;margin-top:4px;">李四 - 2026-08-14 血球仪日保养未打卡</div>
         <div style="display:flex;gap:8px;margin-top:8px;">
           <button class="btn btn-primary" style="flex:1;padding:6px;font-size:12px;" onclick="showToast('✅ 已审核通过')">✅ 通过</button>
@@ -1030,7 +1031,7 @@ input:checked + .slider:before { transform:translateX(20px); }
       <span class="modal-close" onclick="closeModal('aboutModal')">&times;</span>
     </div>
     <div class="modal-body" style="text-align:center;">
-      <div style="font-size:48px;margin:16px 0;">🔬</div>
+      <div style="font-size:48px;margin:16px 0;">PB</div>
       <div style="font-size:20px;font-weight:700;color:var(--primary);">检验科工作日志与绩效考核系统</div>
       <div style="font-size:13px;color:var(--text-light);margin:8px 0;">版本 V2.0.0</div>
       <div style="font-size:13px;color:var(--text-light);margin:4px 0;">构建日期：2026年8月</div>
@@ -1488,7 +1489,7 @@ input:checked + .slider:before { transform:translateX(20px); }
         <div class="item-right"><span style="color:var(--text-light);font-size:18px;">›</span></div>
       </div>
       <div class="list-item" style="padding:14px 16px;cursor:pointer;" onclick="showSysMgmt('instrument')">
-        <div class="item-icon" style="background:#FCE4EC;width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">🔬</div>
+        <div class="item-icon" style="background:#FCE4EC;width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">PB</div>
         <div class="item-info"><div class="title">仪器管理</div><div class="subtitle">检验仪器设备档案管理</div></div>
         <div class="item-right"><span style="color:var(--text-light);font-size:18px;">›</span></div>
       </div>
@@ -1635,16 +1636,16 @@ input:checked + .slider:before { transform:translateX(20px); }
       </div>
       <div style="font-size:12px;">
         <div style="display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid #eee;">
-          <span>🔬 生化分析仪 - 日保养</span><span style="color:#999;">2026-08-15 张三</span>
+          <span>PB 生化分析仪 - 日保养</span><span style="color:#999;">2026-08-15 张三</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid #eee;">
-          <span>🔬 血球仪 - 日保养</span><span style="color:#999;">2026-08-15 李四</span>
+          <span>PB 血球仪 - 日保养</span><span style="color:#999;">2026-08-15 李四</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid #eee;">
-          <span>🔬 凝血仪 - 周保养</span><span style="color:#999;">2026-08-14 王五</span>
+          <span>PB 凝血仪 - 周保养</span><span style="color:#999;">2026-08-14 王五</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:8px;">
-          <span>🔬 免疫分析仪 - 月保养</span><span style="color:#999;">2026-08-13 赵六</span>
+          <span>PB 免疫分析仪 - 月保养</span><span style="color:#999;">2026-08-13 赵六</span>
         </div>
       </div>
     </div>
@@ -2698,6 +2699,7 @@ function handleLogin() {
     }
   }, 800);
 }
+
 function loginSuccess(user) {
   currentUser = user;
   document.getElementById('loginPage').style.display = 'none';
@@ -2711,11 +2713,11 @@ function loginSuccess(user) {
   // 首次登录强制修改密码
   if (user.defaultPwd) {
     setTimeout(function() {
-      showToast('🔒 首次登录，请先修改默认密码');
+      showToast('首次登录，请先修改默认密码');
       setTimeout(function() {
         openModal('passwordModal');
         // 修改弹窗标题提示
-        document.querySelector('#passwordModal .modal-header h3').textContent = '🔒 首次登录 · 请修改默认密码';
+        document.querySelector('#passwordModal .modal-header h3').textContent = '首次登录 · 请修改默认密码';
         // 清空输入框
         document.getElementById('oldPassword').value = '';
         document.getElementById('newPassword').value = '';
@@ -2798,7 +2800,7 @@ const SYSTEM_DATA = {
     ]
   },
   instrument: {
-    title: '🔬 仪器管理',
+    title: 'PB 仪器管理',
     fields: ['仪器编号', '仪器名称', '型号', '所属组别', '状态'],
     items: [
       { id: 'I01', name: '全自动生化分析仪', model: 'AU5800', group: '生化组', status: '正常' },
