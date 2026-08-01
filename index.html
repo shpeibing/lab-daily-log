@@ -742,8 +742,8 @@ input:checked + .slider:before { transform:translateX(20px); }
   <div class="login-subtitle">工作日志 · 绩效考核 · 积分管理</div>
   <div class="login-card">
     <div class="form-group">
-      <label class="form-label" style="font-size:14px;font-weight:600;color:#333;">👤 工号</label>
-      <input type="text" class="form-input" id="loginUsername" placeholder="请输入工号" autocomplete="username" style="padding:14px 16px;font-size:15px;border-radius:12px;border:2px solid #E0E0E0;transition:all 0.3s;background:#FAFAFA;">
+      <label class="form-label" style="font-size:14px;font-weight:600;color:#333;">👤 用户名</label>
+      <input type="text" class="form-input" id="loginUsername" placeholder="请输入用户名" autocomplete="username" style="padding:14px 16px;font-size:15px;border-radius:12px;border:2px solid #E0E0E0;transition:all 0.3s;background:#FAFAFA;">
     </div>
     <div class="form-group">
       <label class="form-label" style="font-size:14px;font-weight:600;color:#333;">🔒 密码</label>
@@ -2661,7 +2661,7 @@ function handleLogin() {
   const password = document.getElementById('loginPassword').value;
   const loginBtn = document.getElementById('loginBtn');
   if (!username || !password) {
-    showToast('⚠️ 请输入工号和密码');
+    showToast('⚠️ 请输入用户名和密码');
     // 输入框抖动效果
     if (!username) document.getElementById('loginUsername').style.borderColor = '#f44336';
     if (!password) document.getElementById('loginPassword').style.borderColor = '#f44336';
@@ -2688,7 +2688,7 @@ function handleLogin() {
       loginBtn.disabled = false;
       loginBtn.innerHTML = '登 录';
       loginBtn.style.opacity = '1';
-      showToast('❌ 工号或密码错误，请重试');
+      showToast('❌ 用户名或密码错误，请重试');
       // 输入框抖动
       document.getElementById('loginPassword').style.borderColor = '#f44336';
       document.getElementById('loginUsername').style.borderColor = '#f44336';
@@ -2768,7 +2768,7 @@ function hasPermission(perm) {
 const SYSTEM_DATA = {
   personnel: {
     title: '👥 人员管理',
-    fields: ['工号', '姓名', '岗位', '职称', '组别', '状态'],
+    fields: ['用户名', '姓名', '岗位', '职称', '组别', '状态'],
     items: [
       { id: '001', name: '张三', post: '检验师', title: '主管技师', group: '生化组', status: '在职' },
       { id: '002', name: '李四', post: '检验师', title: '技师', group: '临检组', status: '在职' },
@@ -2852,7 +2852,7 @@ function showSysMgmt(type) {
   data.items.forEach((item, i) => {
     html += '<tr style="border-bottom:1px solid #eee;' + (i % 2 === 0 ? 'background:#FAFAFA;' : '') + '">';
     data.fields.forEach(f => {
-      const keyMap = { '工号': 'id', '姓名': 'name', '岗位': 'post', '职称': 'title', '组别': 'group', '状态': 'status', '组别编号': 'id', '组别名称': 'name', '组长': 'leader', '成员数': 'count', '编号': 'id', '名称': 'name', '类别': 'type', '说明': 'desc', '仪器编号': 'id', '仪器名称': 'name', '型号': 'model', '所属组别': 'group', '试剂编号': 'id', '试剂名称': 'name', '规格': 'spec', '库存': 'stock', '有效期': 'expire', '质控编号': 'id', '质控品名称': 'name', '项目': 'project', '批号': 'batch', '水平': 'level' };
+      const keyMap = { '用户名': 'id', '姓名': 'name', '岗位': 'post', '职称': 'title', '组别': 'group', '状态': 'status', '组别编号': 'id', '组别名称': 'name', '组长': 'leader', '成员数': 'count', '编号': 'id', '名称': 'name', '类别': 'type', '说明': 'desc', '仪器编号': 'id', '仪器名称': 'name', '型号': 'model', '所属组别': 'group', '试剂编号': 'id', '试剂名称': 'name', '规格': 'spec', '库存': 'stock', '有效期': 'expire', '质控编号': 'id', '质控品名称': 'name', '项目': 'project', '批号': 'batch', '水平': 'level' };
       const key = keyMap[f] || f.toLowerCase();
       let val = item[key] || '-';
       if (f === '状态') {
@@ -3122,7 +3122,7 @@ function renderUserList(filter) {
             <span style="font-size:11px;padding:1px 6px;border-radius:10px;background:${statusColor}20;color:${statusColor};">${u.status || '在职'}</span>
           </div>
           <div style="font-size:12px;color:var(--text-light);">${u.role} · ${u.group}${u.title ? ' · ' + u.title : ''}</div>
-          <div style="font-size:11px;color:var(--text-light);">工号: ${u.id}${u.phone ? ' | 📞' + u.phone : ''}</div>
+          <div style="font-size:11px;color:var(--text-light);">用户名: ${u.id}${u.phone ? ' | 📞' + u.phone : ''}</div>
         </div>
       </div>
       <div style="display:flex;gap:4px;">
@@ -3220,7 +3220,7 @@ function saveUserEdit() {
   const email = document.getElementById('editUserEmail').value.trim();
   const status = document.getElementById('editUserStatus').value;
   if (!userId || !name) {
-    showToast('⚠️ 工号和姓名不能为空');
+    showToast('⚠️ 用户名和姓名不能为空');
     return;
   }
   // 收集选中的权限
@@ -3231,7 +3231,7 @@ function saveUserEdit() {
   if (isAddingUser) {
     // 新增用户
     if (USER_DB.find(u => u.id === userId)) {
-      showToast('⚠️ 工号已存在');
+      showToast('⚠️ 用户名已存在');
       return;
     }
     USER_DB.push({
@@ -3430,7 +3430,7 @@ handleLogin = function() {
   const username = document.getElementById('loginUsername').value.trim();
   const password = document.getElementById('loginPassword').value;
   if (!username || !password) {
-    showToast('请输入工号和密码');
+    showToast('请输入用户名和密码');
     return;
   }
   // 记住密码
