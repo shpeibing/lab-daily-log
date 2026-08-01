@@ -1082,7 +1082,7 @@ input:checked + .slider:before { transform:translateX(20px); }
       </div>
     </div>
   </div>
-</div>
+
 <!-- APP主界面 -->
 <div id="appPage" style="display:none;">
   <!-- 顶部导航 -->
@@ -3121,14 +3121,14 @@ function renderUserList(filter) {
             <span style="font-weight:600;">${u.name}</span>
             <span style="font-size:11px;padding:1px 6px;border-radius:10px;background:${statusColor}20;color:${statusColor};">${u.status || '在职'}</span>
           </div>
-          <div style="font-size:12px;color:var(--text-light);">${u.role} · ${u.group}${u.title ? ' · ' + u.title : ''}</div>
-          <div style="font-size:11px;color:var(--text-light);">用户名: ${u.id}${u.phone ? ' | 📞' + u.phone : ''}</div>
-        </div>
-      </div>
+          <div style="font-size:12px;color:var(--text-light);">${u.role} · ${u.group}${u.title ? ' · ' + u.title : ''}
+          <div style="font-size:11px;color:var(--text-light);">用户名: ${u.id}${u.phone ? ' | 📞' + u.phone : ''}
+        
+      
       <div style="display:flex;gap:4px;">
         <button class="btn btn-outline btn-sm" onclick="editUser('${u.id}')">编辑</button>
         <button class="btn btn-outline btn-sm" onclick="setUserPerm('${u.id}')">权限</button>
-      </div>
+      
     `;
     list.appendChild(card);
   });
