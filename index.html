@@ -5,670 +5,113 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>检验科工作日志与绩效积分APP</title>
 <style>
-:root{
-  --primary:#1B5E9E;
-  --primary-light:#E8F0FE;
-  --primary-dark:#0D3B66;
-  --accent:#00B4A8;
-  --accent-light:#E6F7F6;
-  --warning:#FF8C42;
-  --danger:#E74C3C;
-  --success:#27AE60;
-  --bg:#F5F7FA;
-  --card:#FFFFFF;
-  --text:#2C3E50;
-  --text-light:#7F8C8D;
-  --border:#E8ECF1;
-  --shadow:0 2px 12px rgba(0,0,0,0.08);
-  --radius:14px;
-}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;}
 body{
   font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  font-size:14px;
-  line-height:1.6;
-  overscroll-behavior:none;
+  background:#F5F7FA;color:#2C3E50;font-size:14px;line-height:1.6;
 }
-/* 顶部导航 */
-.app-header{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  background:linear-gradient(135deg,#1B5E9E,#0D3B66);
-  color:#fff;
-  padding:calc(env(safe-area-inset-top) + 12px) 16px 12px;
-  display:flex;align-items:center;justify-content:space-between;
-  box-shadow:0 2px 10px rgba(0,0,0,0.15);
+:root{
+  --primary:#1B5E9E;--primary-light:#E8F0FE;--primary-dark:#0D3B66;
+  --accent:#00B4A8;--warning:#FF8C42;--danger:#E74C3C;--success:#27AE60;
+  --bg:#F5F7FA;--card:#FFFFFF;--text:#2C3E50;--text-light:#7F8C8D;
+  --border:#E8ECF1;--shadow:0 2px 12px rgba(0,0,0,0.08);--radius:14px;
 }
-.app-header h1{font-size:17px;font-weight:600;letter-spacing:0.5px;display:flex;align-items:center;gap:8px;}
-.app-header h1 .logo{width:28px;height:28px;background:rgba(255,255,255,0.2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;}
-.header-user{font-size:12px;opacity:0.9;display:flex;align-items:center;gap:6px;cursor:pointer;}
-.header-user .avatar{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;font-size:13px;}
-/* 底部导航 */
-.bottom-nav{
-  position:fixed;bottom:0;left:0;right:0;z-index:100;
-  background:#fff;
-  display:flex;
-  padding-bottom:env(safe-area-inset-bottom);
-  border-top:1px solid var(--border);
-  box-shadow:0 -2px 10px rgba(0,0,0,0.05);
+/* ===== 登录页 ===== */
+.login-page{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:100vh;padding:20px;
+  background:linear-gradient(135deg,#1a237e 0%,#283593 30%,#3949ab 60%,#5c6bc0 100%);
 }
-.nav-item{
-  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:8px 0 6px;color:var(--text-light);cursor:pointer;
-  transition:color 0.2s;
-}
-.nav-item.active{color:var(--primary);}
-.nav-item .icon{font-size:22px;margin-bottom:2px;}
-.nav-item .label{font-size:10px;font-weight:500;}
-/* 主内容区 */
-.main-content{
-  padding:calc(env(safe-area-inset-top) + 56px) 14px calc(env(safe-area-inset-bottom) + 65px);
-  max-width:480px;margin:0 auto;
-  min-height:100vh;
-}
-/* 页面切换 */
-.page{display:none;animation:fadeIn 0.3s ease;}
-.page.active{display:block;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-/* 卡片 */
-.card{
-  background:var(--card);border-radius:var(--radius);
-  box-shadow:var(--shadow);margin-bottom:12px;overflow:hidden;
-}
-.card-header{
-  padding:12px 16px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-}
-.card-header h3{font-size:15px;font-weight:600;color:var(--text);}
-.card-header .badge{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--primary-light);color:var(--primary);}
-.card-body{padding:14px 16px;}
-/* 首页数据卡片 */
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;}
-.stat-card{
-  background:var(--card);border-radius:12px;padding:12px 8px;text-align:center;
-  box-shadow:var(--shadow);
-}
-.stat-card .num{font-size:20px;font-weight:700;color:var(--primary);}
-.stat-card .label{font-size:10px;color:var(--text-light);margin-top:2px;}
-.stat-card .trend{font-size:10px;color:var(--success);margin-top:2px;}
-/* 首页快捷入口 */
-.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;}
-.quick-item{
-  background:var(--card);border-radius:12px;padding:14px 8px;text-align:center;
-  box-shadow:var(--shadow);cursor:pointer;transition:transform 0.2s;
-}
-.quick-item:active{transform:scale(0.95);}
-.quick-item .q-icon{font-size:28px;margin-bottom:6px;}
-.quick-item .q-label{font-size:12px;font-weight:500;color:var(--text);}
-.quick-item .q-desc{font-size:10px;color:var(--text-light);margin-top:2px;}
-/* 待办事项 */
-.todo-item{
-  display:flex;align-items:center;padding:10px 0;
-  border-bottom:1px solid var(--border);
-}
-.todo-item:last-child{border-bottom:none;}
-.todo-item .status{
-  width:8px;height:8px;border-radius:50%;margin-right:10px;flex-shrink:0;
-}
-.todo-item .status.urgent{background:var(--danger);}
-.todo-item .status.warning{background:var(--warning);}
-.todo-item .status.normal{background:var(--success);}
-.todo-item .info{flex:1;}
-.todo-item .info .title{font-size:13px;font-weight:500;}
-.todo-item .info .time{font-size:11px;color:var(--text-light);}
-.todo-item .action-btn{
-  padding:5px 12px;border-radius:15px;font-size:11px;font-weight:500;
-  background:var(--primary);color:#fff;border:none;cursor:pointer;
-}
-/* 列表项 */
-.list-item{
-  display:flex;align-items:center;padding:12px 16px;
-  border-bottom:1px solid var(--border);cursor:pointer;
-  transition:background 0.2s;
-}
-.list-item:last-child{border-bottom:none;}
-.list-item:active{background:var(--primary-light);}
-.list-item .item-icon{
-  width:38px;height:38px;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;margin-right:12px;flex-shrink:0;
-}
-.list-item .item-info{flex:1;}
-.list-item .item-info .title{font-size:14px;font-weight:500;}
-.list-item .item-info .subtitle{font-size:11px;color:var(--text-light);}
-.list-item .item-right{text-align:right;}
-.list-item .item-right .score{font-size:14px;font-weight:600;color:var(--primary);}
-.list-item .item-right .score.plus{color:var(--success);}
-.list-item .item-right .score.minus{color:var(--danger);}
-.list-item .item-right .date{font-size:11px;color:var(--text-light);}
-/* 按钮 */
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;
-  padding:10px 20px;border-radius:22px;font-size:14px;font-weight:500;
-  border:none;cursor:pointer;transition:all 0.2s;
-}
-.btn-primary{background:var(--primary);color:#fff;}
-.btn-primary:active{background:var(--primary-dark);}
-.btn-outline{background:transparent;border:1px solid var(--primary);color:var(--primary);}
-.btn-success{background:var(--success);color:#fff;}
-.btn-danger{background:var(--danger);color:#fff;}
-.btn-sm{padding:6px 14px;font-size:12px;}
-.btn-block{width:100%;margin-top:12px;}
-/* 表单 */
+.login-logo{font-size:56px;font-weight:800;margin-bottom:4px;letter-spacing:8px;color:#fff;font-family:'Arial Black',Arial,sans-serif;}
+.login-hospital{font-size:18px;font-weight:600;color:#fff;margin-bottom:4px;}
+.login-title{font-size:28px;font-weight:700;color:#fff;margin-bottom:4px;}
+.login-subtitle{font-size:13px;color:rgba(255,255,255,0.8);margin-bottom:24px;}
+.login-card{width:100%;max-width:360px;background:#fff;border-radius:16px;padding:28px 24px;box-shadow:0 8px 32px rgba(0,0,0,0.2);}
 .form-group{margin-bottom:14px;}
-.form-label{font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px;display:block;}
-.form-input{
-  width:100%;padding:10px 12px;border:1px solid var(--border);
-  border-radius:10px;font-size:14px;color:var(--text);
-  background:#FAFBFC;outline:none;transition:border-color 0.2s;
-}
+.form-label{font-size:13px;font-weight:500;color:#333;margin-bottom:6px;display:block;}
+.form-input{width:100%;padding:12px 14px;border:2px solid #E0E0E0;border-radius:12px;font-size:15px;color:#333;background:#FAFAFA;outline:none;transition:border-color 0.2s;}
 .form-input:focus{border-color:var(--primary);background:#fff;}
-.form-select{
-  width:100%;padding:10px 12px;border:1px solid var(--border);
-  border-radius:10px;font-size:14px;color:var(--text);
-  background:#FAFBFC;outline:none;-webkit-appearance:none;
-}
-textarea.form-input{min-height:80px;resize:vertical;}
-/* 积分展示 */
-.score-display{
-  text-align:center;padding:20px 0;
-}
-.score-display .score-num{
-  font-size:48px;font-weight:700;color:var(--primary);
-  line-height:1.2;
-}
-.score-display .score-label{font-size:13px;color:var(--text-light);}
-.score-display .score-rank{
-  display:inline-block;margin-top:8px;padding:4px 14px;
-  background:var(--accent-light);color:var(--accent);
-  border-radius:15px;font-size:12px;font-weight:500;
-}
-/* 维度进度条 */
-.dim-item{margin-bottom:12px;}
-.dim-header{display:flex;justify-content:space-between;margin-bottom:4px;}
-.dim-header .dim-name{font-size:13px;font-weight:500;}
-.dim-header .dim-val{font-size:12px;color:var(--text-light);}
-.dim-bar{height:8px;background:var(--border);border-radius:4px;overflow:hidden;}
-.dim-fill{height:100%;border-radius:4px;transition:width 0.5s ease;}
-/* 日历 */
-.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;}
-.calendar-grid .cal-header{font-size:11px;color:var(--text-light);padding:4px 0;}
-.calendar-grid .cal-day{
-  padding:8px 0;border-radius:8px;font-size:12px;cursor:pointer;
-  position:relative;
-}
-.calendar-grid .cal-day.today{background:var(--primary);color:#fff;font-weight:600;}
-.calendar-grid .cal-day.has-record{background:var(--primary-light);color:var(--primary);font-weight:500;}
-.calendar-grid .cal-day .dot{
-  width:4px;height:4px;border-radius:50%;background:var(--accent);
-  position:absolute;bottom:3px;left:50%;transform:translateX(-50%);
-}
-/* 标签 */
-.tag{
-  display:inline-block;padding:2px 8px;border-radius:8px;
-  font-size:11px;font-weight:500;margin-right:4px;
-}
-.tag-blue{background:var(--primary-light);color:var(--primary);}
-.tag-green{background:var(--accent-light);color:var(--accent);}
-.tag-orange{background:#FFF3E6;color:var(--warning);}
-.tag-red{background:#FDECEC;color:var(--danger);}
-/* 弹窗 */
-.modal-mask{
-  position:fixed;top:0;left:0;right:0;bottom:0;z-index:200;
-  background:rgba(0,0,0,0.5);display:none;
-  justify-content:center;align-items:flex-end;
-}
-.modal-mask.show{display:flex;}
-.modal{
-  background:#fff;border-radius:16px 16px 0 0;
-  width:100%;max-width:480px;
-  padding:20px 20px calc(env(safe-area-inset-bottom) + 20px);
-  animation:slideUp 0.3s ease;
-  max-height:80vh;overflow-y:auto;
-}
-@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
-.modal-header{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:16px;
-}
-.modal-header h3{font-size:16px;font-weight:600;}
-.modal-close{
-  width:28px;height:28px;border-radius:50%;background:var(--bg);
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;cursor:pointer;color:var(--text-light);border:none;
-}
-/* 通知 */
-.toast{
-  position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.8);
-  background:rgba(0,0,0,0.8);color:#fff;padding:14px 24px;
-  border-radius:12px;font-size:14px;z-index:300;
-  opacity:0;transition:all 0.3s;pointer-events:none;
-  text-align:center;max-width:80%;
-}
-.toast.show{opacity:1;transform:translate(-50%,-50%) scale(1);}
-/* 登录页 */
-.login-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 20px;
-  background: linear-gradient(135deg, #1a237e 0%, #283593 30%, #3949ab 60%, #5c6bc0 100%);
-}
-.login-logo {
-  font-size: 56px;
-  font-weight: 800;
-  margin-bottom: 4px;
-  animation: float 3s ease-in-out infinite;
-  background: linear-gradient(135deg, #fff 0%, #90CAF9 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: 8px;
-  font-family: 'Arial Black', Arial, sans-serif;
-}
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
-.login-hospital {
-  font-size: 18px;
-  font-weight: 600;
-  color: white;
-  margin-bottom: 4px;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-}
-.login-title {
-  font-size: 28px;
-  font-weight: 700;
-  color: white;
-  margin-bottom: 4px;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-}
-.login-subtitle {
-  font-size: 13px;
-  color: rgba(255,255,255,0.8);
-  margin-bottom: 24px;
-  text-shadow: 0 1px 5px rgba(0,0,0,0.2);
-}
-.login-card {
-  width: 100%;
-  max-width: 360px;
-  background: white;
-  border-radius: 16px;
-  padding: 28px 24px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-}
-.login-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-  font-size: 13px;
-}
-.login-remember {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: #666;
-  cursor: pointer;
-}
-.login-forgot {
-  color: var(--primary);
-  cursor: pointer;
-}
-.login-footer {
-  text-align: center;
-  margin-top: 24px;
-  font-size: 12px;
-  color: rgba(255,255,255,0.7);
-}
-.login-footer .copyright {
-  margin-bottom: 4px;
-}
-.login-footer .phone {
-  color: rgba(255,255,255,0.6);
-}
-/* 顶部导航 */
+.login-options{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-size:13px;}
+.login-remember{display:flex;align-items:center;gap:4px;color:#666;cursor:pointer;}
+.login-forgot{color:var(--primary);cursor:pointer;}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 24px;border-radius:12px;font-size:15px;font-weight:500;border:none;cursor:pointer;transition:all 0.2s;width:100%;}
+.btn-primary{background:linear-gradient(135deg,var(--primary),#1565C0);color:#fff;box-shadow:0 4px 15px rgba(33,150,243,0.4);}
+.btn-primary:active{opacity:0.8;}
+.login-footer{text-align:center;margin-top:24px;font-size:12px;color:rgba(255,255,255,0.7);}
+.login-footer .copyright{margin-bottom:4px;}
+.login-footer .phone{color:rgba(255,255,255,0.6);}
+/* ===== APP主界面 ===== */
+#appPage{display:none;}
 .app-header{
   position:fixed;top:0;left:0;right:0;z-index:100;
-  background:linear-gradient(135deg,#1B5E9E,#0D3B66);
-  color:#fff;
-  padding:calc(env(safe-area-inset-top) + 12px) 16px 12px;
-  display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(135deg,#1B5E9E,#0D3B66);color:#fff;
+  padding:12px 16px;display:flex;align-items:center;justify-content:space-between;
   box-shadow:0 2px 10px rgba(0,0,0,0.15);
 }
-.app-header h1{font-size:17px;font-weight:600;letter-spacing:0.5px;display:flex;align-items:center;gap:8px;}
-.app-header h1 .logo{width:28px;height:28px;background:rgba(255,255,255,0.2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;}
-.header-user{font-size:12px;opacity:0.9;display:flex;align-items:center;gap:6px;cursor:pointer;}
+.app-header h1{font-size:17px;font-weight:600;display:flex;align-items:center;gap:8px;}
+.header-user{font-size:12px;display:flex;align-items:center;gap:6px;cursor:pointer;}
 .header-user .avatar{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;font-size:13px;}
-/* 底部导航 */
+.main-content{padding:60px 12px 70px;max-width:600px;margin:0 auto;}
+.page{display:none;}
+.page.active{display:block;}
+/* ===== 底部导航 ===== */
 .bottom-nav{
   position:fixed;bottom:0;left:0;right:0;z-index:100;
-  background:#fff;
-  display:flex;
+  background:#fff;display:flex;
   padding-bottom:env(safe-area-inset-bottom);
   border-top:1px solid var(--border);
   box-shadow:0 -2px 10px rgba(0,0,0,0.05);
 }
-.nav-item{
-  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:8px 0 6px;color:var(--text-light);cursor:pointer;
-  transition:color 0.2s;
-}
+.nav-item{flex:1;text-align:center;padding:8px 0;font-size:11px;color:var(--text-light);cursor:pointer;transition:color 0.2s;}
 .nav-item.active{color:var(--primary);}
-.nav-item .icon{font-size:22px;margin-bottom:2px;}
-.nav-item .label{font-size:10px;font-weight:500;}
-/* 主内容区 */
-.main-content{
-  padding:calc(env(safe-area-inset-top) + 56px) 14px calc(env(safe-area-inset-bottom) + 65px);
-  max-width:480px;margin:0 auto;
-  min-height:100vh;
-}
-/* 页面切换 */
-.page{display:none;animation:fadeIn 0.3s ease;}
-.page.active{display:block;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-/* 卡片 */
-.card{
-  background:var(--card);border-radius:var(--radius);
-  box-shadow:var(--shadow);margin-bottom:12px;overflow:hidden;
-}
-.card-header{
-  padding:12px 16px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-}
-.card-header h3{font-size:15px;font-weight:600;color:var(--text);}
-.card-header .badge{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--primary-light);color:var(--primary);}
-.card-body{padding:14px 16px;}
-/* 首页数据卡片 */
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;}
-.stat-card{
-  background:var(--card);border-radius:12px;padding:12px 8px;text-align:center;
-  box-shadow:var(--shadow);
-}
-.stat-card .num{font-size:20px;font-weight:700;color:var(--primary);}
-.stat-card .label{font-size:10px;color:var(--text-light);margin-top:2px;}
-.stat-card .trend{font-size:10px;color:var(--success);margin-top:2px;}
-/* 首页快捷入口 */
-.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;}
-.quick-item{
-  background:var(--card);border-radius:12px;padding:14px 8px;text-align:center;
-  box-shadow:var(--shadow);cursor:pointer;transition:transform 0.2s;
-}
-.quick-item:active{transform:scale(0.95);}
-.quick-item .q-icon{font-size:28px;margin-bottom:6px;}
-.quick-item .q-label{font-size:12px;font-weight:500;color:var(--text);}
-.quick-item .q-desc{font-size:10px;color:var(--text-light);margin-top:2px;}
-/* 待办事项 */
-.todo-item{
-  display:flex;align-items:center;padding:10px 0;
-  border-bottom:1px solid var(--border);
-}
-.todo-item:last-child{border-bottom:none;}
-.todo-item .status{
-  width:8px;height:8px;border-radius:50%;margin-right:10px;flex-shrink:0;
-}
-.todo-item .status.urgent{background:var(--danger);}
-.todo-item .status.warning{background:var(--warning);}
-.todo-item .status.normal{background:var(--success);}
-.todo-item .info{flex:1;}
-.todo-item .info .title{font-size:13px;font-weight:500;}
-.todo-item .info .time{font-size:11px;color:var(--text-light);}
-.todo-item .action-btn{
-  padding:5px 12px;border-radius:15px;font-size:11px;font-weight:500;
-  background:var(--primary);color:#fff;border:none;cursor:pointer;
-}
-/* 列表项 */
-.list-item{
-  display:flex;align-items:center;padding:12px 16px;
-  border-bottom:1px solid var(--border);cursor:pointer;
-  transition:background 0.2s;
-}
-.list-item:last-child{border-bottom:none;}
-.list-item:active{background:var(--primary-light);}
-.list-item .item-icon{
-  width:38px;height:38px;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;margin-right:12px;flex-shrink:0;
-}
-.list-item .item-info{flex:1;}
-.list-item .item-info .title{font-size:14px;font-weight:500;}
-.list-item .item-info .subtitle{font-size:11px;color:var(--text-light);}
-.list-item .item-right{text-align:right;}
-.list-item .item-right .score{font-size:14px;font-weight:600;color:var(--primary);}
-.list-item .item-right .score.plus{color:var(--success);}
-.list-item .item-right .score.minus{color:var(--danger);}
-.list-item .item-right .date{font-size:11px;color:var(--text-light);}
-/* 按钮 */
-
-
-.btn-primary:active{background:var(--primary-dark);}
-.btn-outline{background:transparent;border:1px solid var(--primary);color:var(--primary);}
-.btn-success{background:var(--success);color:#fff;}
-.btn-danger{background:var(--danger);color:#fff;}
-.btn-sm{padding:6px 14px;font-size:12px;}
-.btn-block{width:100%;margin-top:12px;}
-/* 表单 */
-
-
-
-.form-input:focus{border-color:var(--primary);background:#fff;}
-.form-select{
-  width:100%;padding:10px 12px;border:1px solid var(--border);
-  border-radius:10px;font-size:14px;color:var(--text);
-  background:#FAFBFC;outline:none;-webkit-appearance:none;
-}
-textarea
-/* 积分展示 */
-.score-display{
-  text-align:center;padding:20px 0;
-}
-.score-display .score-num{
-  font-size:48px;font-weight:700;color:var(--primary);
-  line-height:1.2;
-}
-.score-display .score-label{font-size:13px;color:var(--text-light);}
-.score-display .score-rank{
-  display:inline-block;margin-top:8px;padding:4px 14px;
-  background:var(--accent-light);color:var(--accent);
-  border-radius:15px;font-size:12px;font-weight:500;
-}
-/* 维度进度条 */
-.dim-item{margin-bottom:12px;}
-.dim-header{display:flex;justify-content:space-between;margin-bottom:4px;}
-.dim-header .dim-name{font-size:13px;font-weight:500;}
-.dim-header .dim-val{font-size:12px;color:var(--text-light);}
-.dim-bar{height:8px;background:var(--border);border-radius:4px;overflow:hidden;}
-.dim-fill{height:100%;border-radius:4px;transition:width 0.5s ease;}
-/* 日历 */
-.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;}
-.calendar-grid .cal-header{font-size:11px;color:var(--text-light);padding:4px 0;}
-.calendar-grid .cal-day{
-  padding:8px 0;border-radius:8px;font-size:12px;cursor:pointer;
-  position:relative;
-}
-.calendar-grid .cal-day.today{background:var(--primary);color:#fff;font-weight:600;}
-.calendar-grid .cal-day.has-record{background:var(--primary-light);color:var(--primary);font-weight:500;}
-.calendar-grid .cal-day .dot{
-  width:4px;height:4px;border-radius:50%;background:var(--accent);
-  position:absolute;bottom:3px;left:50%;transform:translateX(-50%);
-}
-/* 标签 */
-.tag{
-  display:inline-block;padding:2px 8px;border-radius:8px;
-  font-size:11px;font-weight:500;margin-right:4px;
-}
-.tag-blue{background:var(--primary-light);color:var(--primary);}
-.tag-green{background:var(--accent-light);color:var(--accent);}
-.tag-orange{background:#FFF3E6;color:var(--warning);}
-.tag-red{background:#FDECEC;color:var(--danger);}
-/* 弹窗 */
-.modal-mask{
-  position:fixed;top:0;left:0;right:0;bottom:0;z-index:200;
-  background:rgba(0,0,0,0.5);display:none;
-  justify-content:center;align-items:flex-end;
-}
-.modal-mask.show{display:flex;}
-.modal{
-  background:#fff;border-radius:16px 16px 0 0;
-  width:100%;max-width:480px;
-  padding:20px 20px calc(env(safe-area-inset-bottom) + 20px);
-  animation:slideUp 0.3s ease;
-  max-height:80vh;overflow-y:auto;
-}
-@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
-.modal-header{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:16px;
-}
-.modal-header h3{font-size:16px;font-weight:600;}
-.modal-close{
-  width:28px;height:28px;border-radius:50%;background:var(--bg);
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;cursor:pointer;color:var(--text-light);border:none;
-}
-/* 通知 */
-.toast{
-  position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.8);
-  background:rgba(0,0,0,0.8);color:#fff;padding:14px 24px;
-  border-radius:12px;font-size:14px;z-index:300;
-  opacity:0;transition:all 0.3s;pointer-events:none;
-  text-align:center;max-width:80%;
-}
-.toast.show{opacity:1;transform:translate(-50%,-50%) scale(1);}
-/* 登录页 */
-/* 绩效详情 */
-.rank-list .rank-item{
-  display:flex;align-items:center;padding:10px 0;
-  border-bottom:1px solid var(--border);
-}
-.rank-item:last-child{border-bottom:none;}
-.rank-item .rank-num{
-  width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-size:12px;font-weight:600;margin-right:10px;flex-shrink:0;
-}
-.rank-item .rank-num.top1{background:#FFD700;color:#8B6914;}
-.rank-item .rank-num.top2{background:#C0C0C0;color:#666;}
-.rank-item .rank-num.top3{background:#CD7F32;color:#8B4513;}
-.rank-item .rank-num.other{background:var(--bg);color:var(--text-light);}
-.rank-item .rank-name{flex:1;font-size:13px;font-weight:500;}
-.rank-item .rank-score{font-size:14px;font-weight:600;color:var(--primary);}
-/* 详情页 */
-.detail-header{
-  background:linear-gradient(135deg,#1B5E9E,#0D3B66);
-  color:#fff;padding:20px 16px;border-radius:var(--radius);
-  margin-bottom:12px;position:relative;overflow:hidden;
-}
-.detail-header::after{
-  content:'';position:absolute;right:-20px;top:-20px;
-  width:100px;height:100px;border-radius:50%;
-  background:rgba(255,255,255,0.08);
-}
-.detail-header h2{font-size:18px;font-weight:600;margin-bottom:4px;}
-.detail-header p{font-size:12px;opacity:0.8;}
-/* 分割线 */
-.divider{height:1px;background:var(--border);margin:12px 0;}
-/* 空状态 */
-.empty-state{
-  text-align:center;padding:40px 20px;color:var(--text-light);
-}
-.empty-state .empty-icon{font-size:48px;margin-bottom:12px;opacity:0.5;}
-.empty-state .empty-text{font-size:14px;}
-/* 点状进度 */
-.dot-progress{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 0;}
-.dot-progress .dotp{width:8px;height:8px;border-radius:50%;background:var(--border);}
-.dot-progress .dotp.active{background:var(--primary);}
-.dot-progress .dotp.completed{background:var(--success);}
-/* 步骤 */
-.steps{display:flex;align-items:center;margin-bottom:16px;}
-.step{flex:1;text-align:center;position:relative;}
-.step .step-num{
-  width:28px;height:28px;border-radius:50%;margin:0 auto 6px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:12px;font-weight:600;background:var(--bg);color:var(--text-light);
-  border:2px solid var(--border);
-}
-.step.active .step-num{background:var(--primary);color:#fff;border-color:var(--primary);}
-.step.completed .step-num{background:var(--success);color:#fff;border-color:var(--success);}
-.step .step-label{font-size:10px;color:var(--text-light);}
-.step.active .step-label{color:var(--primary);font-weight:500;}
-/* 检查清单 */
-.check-item{
-  display:flex;align-items:center;padding:10px 0;
-  border-bottom:1px solid var(--border);
-}
-.check-item:last-child{border-bottom:none;}
-.check-item .checkbox{
-  width:20px;height:20px;border-radius:6px;border:2px solid var(--border);
-  margin-right:10px;display:flex;align-items:center;justify-content:center;
-  cursor:pointer;flex-shrink:0;transition:all 0.2s;
-}
-.check-item .checkbox.checked{
-  background:var(--success);border-color:var(--success);color:#fff;
-}
-.check-item .checkbox.checked::after{content:'✓';font-size:12px;font-weight:bold;}
-.check-item .check-text{font-size:13px;flex:1;}
-.check-item .check-text.done{text-decoration:line-through;color:var(--text-light);}
-/* 搜索栏 */
-.search-bar{
-  display:flex;align-items:center;background:var(--card);
-  border-radius:10px;padding:8px 12px;margin-bottom:12px;
-  box-shadow:var(--shadow);border:1px solid var(--border);
-}
-.search-bar .search-icon{font-size:16px;color:var(--text-light);margin-right:8px;}
-.search-bar input{
-  flex:1;border:none;outline:none;font-size:14px;background:transparent;
-  color:var(--text);
-}
-/* 表格 */
-.data-table{width:100%;border-collapse:collapse;font-size:12px;}
-.data-table th{
-  background:var(--primary-light);color:var(--primary);
-  padding:8px 10px;text-align:left;font-weight:600;
-}
-.data-table td{padding:8px 10px;border-bottom:1px solid var(--border);}
-.data-table tr:last-child td{border-bottom:none;}
-/* 底部提示 */
-.footer-note{
-  text-align:center;font-size:10px;color:var(--text-light);
-  padding:16px 0 8px;
-}
-/* 消息列表 */
-.msg-item{
-  display:flex;padding:12px 16px;border-bottom:1px solid var(--border);
-  cursor:pointer;
-}
-.msg-item:last-child{border-bottom:none;}
-.msg-item:active{background:var(--primary-light);}
-.msg-item .msg-icon{
-  width:36px;height:36px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;margin-right:12px;flex-shrink:0;
-}
-.msg-item .msg-content{flex:1;}
-.msg-item .msg-content .msg-title{font-size:13px;font-weight:500;}
-.msg-item .msg-content .msg-desc{font-size:11px;color:var(--text-light);margin-top:2px;}
-.msg-item .msg-time{font-size:10px;color:var(--text-light);flex-shrink:0;}
-/* 响应式 */
-@media (min-width:480px){
-  .main-content{margin:0 auto;}
-  .modal{border-radius:16px;margin-bottom:auto;margin-top:10vh;}
-}
-/* 开关样式 */
-.switch { position:relative; display:inline-block; width:44px; height:24px; }
-.switch input { opacity:0; width:0; height:0; }
-.slider { position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background:#ccc; transition:.3s; border-radius:24px; }
-.slider:before { position:absolute; content:""; height:18px; width:18px; left:3px; bottom:3px; background:white; transition:.3s; border-radius:50%; }
-input:checked + .slider { background:var(--primary); }
-input:checked + .slider:before { transform:translateX(20px); }
+.nav-item .nav-icon{font-size:20px;margin-bottom:2px;}
+.nav-item .nav-label{font-size:10px;}
+/* ===== 卡片 ===== */
+.card{background:#fff;border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow);}
+.card-title{font-size:15px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px;}
+.stat-card{background:#fff;border-radius:var(--radius);padding:16px;text-align:center;box-shadow:var(--shadow);}
+.stat-card .stat-value{font-size:24px;font-weight:700;color:var(--primary);}
+.stat-card .stat-label{font-size:12px;color:var(--text-light);margin-top:4px;}
+.stat-card .stat-icon{font-size:28px;margin-bottom:6px;}
+/* ===== Toast ===== */
+.toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;background:rgba(0,0,0,0.8);color:#fff;padding:14px 24px;border-radius:12px;font-size:14px;max-width:80%;text-align:center;display:none;animation:toastIn 0.3s;}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,-50%) scale(0.8);}to{opacity:1;transform:translate(-50%,-50%) scale(1);}}
+/* ===== 功能列表 ===== */
+.menu-list{list-style:none;}
+.menu-item{display:flex;align-items:center;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;}
+.menu-item:last-child{border-bottom:none;}
+.menu-item .item-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-right:12px;flex-shrink:0;}
+.menu-item .item-text{flex:1;}
+.menu-item .item-text .item-title{font-size:14px;font-weight:500;}
+.menu-item .item-text .item-desc{font-size:12px;color:var(--text-light);margin-top:2px;}
+.menu-item .item-arrow{color:var(--text-light);font-size:16px;}
+/* ===== 用户菜单 ===== */
+.user-menu{position:fixed;top:0;right:0;width:280px;height:100%;z-index:200;background:#fff;box-shadow:-4px 0 20px rgba(0,0,0,0.15);display:none;animation:slideIn 0.3s;}
+@keyframes slideIn{from{transform:translateX(100%);}to{transform:translateX(0);}}
+.user-menu-header{padding:24px 16px;background:linear-gradient(135deg,#1B5E9E,#0D3B66);color:#fff;}
+.user-menu-header .user-name{font-size:18px;font-weight:600;}
+.user-menu-header .user-role{font-size:12px;opacity:0.8;margin-top:4px;}
+.user-menu-body{padding:12px 0;}
+.user-menu-item{display:flex;align-items:center;padding:14px 16px;cursor:pointer;border-bottom:1px solid var(--border);}
+.user-menu-item:last-child{border-bottom:none;}
+.user-menu-item .um-icon{width:32px;font-size:18px;margin-right:12px;}
+.overlay{position:fixed;top:0;left:0;right:0;bottom:0;z-index:150;background:rgba(0,0,0,0.4);display:none;}
+/* ===== 标签 ===== */
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500;}
+.tag-primary{background:var(--primary-light);color:var(--primary);}
+.tag-success{background:#E8F5E9;color:#2E7D32;}
+.tag-warning{background:#FFF3E0;color:#E65100;}
+.tag-danger{background:#FFEBEE;color:#C62828;}
 </style>
 </head>
 <body>
-<!-- 登录页 -->
+<!-- Toast -->
+<div id="toast" class="toast"></div>
+<!-- 遮罩层 -->
+<div id="overlay" class="overlay" onclick="closeUserMenu()"></div>
+<!-- ===== 登录页 ===== -->
 <div id="loginPage" class="login-page">
   <div class="login-logo">PB</div>
   <div class="login-hospital">江苏省人民医院宿迁医院</div>
@@ -684,9 +127,7 @@ input:checked + .slider:before { transform:translateX(20px); }
       <input type="password" class="form-input" id="loginPassword" placeholder="请输入密码" autocomplete="current-password">
     </div>
     <div class="login-options">
-      <label class="login-remember">
-        <input type="checkbox" id="rememberMe"> 记住密码
-      </label>
+      <label class="login-remember"><input type="checkbox" id="rememberMe"> 记住密码</label>
       <span class="login-forgot" onclick="showToast('请联系科主任重置密码')">忘记密码？</span>
     </div>
     <button class="btn btn-primary" onclick="handleLogin()" id="loginBtn">登 录</button>
@@ -695,13 +136,14 @@ input:checked + .slider:before { transform:translateX(20px); }
     <div class="copyright">版权所有 © 裴兵（江苏省人民医院宿迁医院医学检验科）</div>
     <div class="phone">📞 技术支持：0527-80525126</div>
   </div>
-</div><!-- APP主界面 -->
+</div>
+<!-- ===== APP主界面 ===== -->
 <div id="appPage" style="display:none;">
   <!-- 顶部导航 -->
   <header class="app-header">
-    <h1><span class="logo" style="font-size:14px;font-weight:700;">PB</span> 检验科工作日志</h1>
+    <h1><span style="font-size:14px;font-weight:700;">PB</span> 检验科工作日志</h1>
     <div class="header-user" onclick="showUserMenu()">
-      <span id="headerUserName">王小明</span>
+      <span id="headerUserName">用户</span>
       <span class="avatar" id="headerAvatar">👤</span>
     </div>
   </header>
@@ -710,1564 +152,216 @@ input:checked + .slider:before { transform:translateX(20px); }
     <!-- 首页 -->
     <div id="page-home" class="page active">
       <div class="stats-grid">
-        <div class="stat-card">
-          <div class="num" id="homeScore">98</div>
-          <div class="label">本月积分</div>
-          <div class="trend">↑ 12%</div>
-        </div>
-        <div class="stat-card">
-          <div class="num" id="homeRank">3</div>
-          <div class="label">科室排名</div>
-          <div class="trend">TOP 10%</div>
-        </div>
-        <div class="stat-card">
-          <div class="num" id="homeTodo">5</div>
-          <div class="label">待办事项</div>
-          <div class="trend" style="color:var(--warning);">需处理</div>
-        </div>
-        <div class="stat-card">
-          <div class="num" id="homeDays">23</div>
-          <div class="label">出勤天数</div>
-          <div class="trend">✓ 正常</div>
-        </div>
-      </div>
-      <div class="quick-grid">
-        <div class="quick-item" onclick="navigate('maintenance')">
-          <div class="q-icon">🔧</div>
-          <div class="q-label">仪器保养</div>
-          <div class="q-desc">保养打卡</div>
-        </div>
-        <div class="quick-item" onclick="navigate('qc')">
-          <div class="q-icon">📊</div>
-          <div class="q-label">质控管理</div>
-          <div class="q-desc">IQC/EQA</div>
-        </div>
-        <div class="quick-item" onclick="navigate('workload')">
-          <div class="q-icon">📈</div>
-          <div class="q-label">检测工作量</div>
-          <div class="q-desc">统计排名</div>
-        </div>
-        <div class="quick-item" onclick="navigate('sop')">
-          <div class="q-icon">📚</div>
-          <div class="q-label">SOP学习</div>
-          <div class="q-desc">在线学习</div>
-        </div>
-        <div class="quick-item" onclick="navigate('critical')">
-          <div class="q-icon">🚨</div>
-          <div class="q-label">危急值</div>
-          <div class="q-desc">报告记录</div>
-        </div>
-        <div class="quick-item" onclick="navigate('performance')">
-          <div class="q-icon">🏆</div>
-          <div class="q-label">绩效积分</div>
-          <div class="q-desc">查看排名</div>
-        </div>
+        <div class="stat-card"><div class="stat-icon">📋</div><div class="stat-value" id="statScore">0</div><div class="stat-label">本月积分</div></div>
+        <div class="stat-card"><div class="stat-icon">📊</div><div class="stat-value" id="statRank">-</div><div class="stat-label">科室排名</div></div>
+        <div class="stat-card"><div class="stat-icon">🔧</div><div class="stat-value" id="statMaintain">0</div><div class="stat-label">今日保养</div></div>
+        <div class="stat-card"><div class="stat-icon">📝</div><div class="stat-value" id="statWork">0</div><div class="stat-label">今日工作量</div></div>
       </div>
       <div class="card">
-        <div class="card-header">
-          <h3>📋 今日待办</h3>
-          <span class="badge">5项</span>
-        </div>
-        <div class="card-body" style="padding:8px 16px;">
-          <div class="todo-item">
-            <span class="status urgent"></span>
-            <div class="info">
-              <div class="title">生化分析仪日保养</div>
-              <div class="time">今日 17:00 前完成</div>
-            </div>
-            <button class="action-btn" onclick="navigate('maintenance')">去完成</button>
-          </div>
-          <div class="todo-item">
-            <span class="status warning"></span>
-            <div class="info">
-              <div class="title">血球仪周保养</div>
-              <div class="time">今日 18:00 前完成</div>
-            </div>
-            <button class="action-btn" onclick="navigate('maintenance')">去完成</button>
-          </div>
-          <div class="todo-item">
-            <span class="status normal"></span>
-            <div class="info">
-              <div class="title">SOP学习 - 血常规操作流程</div>
-              <div class="time">今日 20:00 前完成</div>
-            </div>
-            <button class="action-btn" onclick="navigate('sop')">去学习</button>
-          </div>
-          <div class="todo-item">
-            <span class="status normal"></span>
-            <div class="info">
-              <div class="title">质控数据录入</div>
-              <div class="time">今日 12:00 前完成</div>
-            </div>
-            <button class="action-btn" onclick="navigate('qc')">去录入</button>
-          </div>
-          <div class="todo-item">
-            <span class="status normal"></span>
-            <div class="info">
-              <div class="title">危急值报告确认</div>
-              <div class="time">今日 10:30 待确认</div>
-            </div>
-            <button class="action-btn" onclick="navigate('critical')">去确认</button>
-          </div>
-        </div>
+        <div class="card-title">📌 快捷功能</div>
+        <ul class="menu-list">
+          <li class="menu-item" onclick="switchTab(1)">
+            <div class="item-icon" style="background:#E3F2FD;">🔧</div>
+            <div class="item-text"><div class="item-title">仪器保养</div><div class="item-desc">每日保养打卡记录</div></div>
+            <span class="item-arrow">›</span>
+          </li>
+          <li class="menu-item" onclick="switchTab(2)">
+            <div class="item-icon" style="background:#E8F5E9;">🧪</div>
+            <div class="item-text"><div class="item-title">质控管理</div><div class="item-desc">室内质控与室间质评</div></div>
+            <span class="item-arrow">›</span>
+          </li>
+          <li class="menu-item" onclick="switchTab(3)">
+            <div class="item-icon" style="background:#FFF3E0;">📊</div>
+            <div class="item-text"><div class="item-title">检测工作量</div><div class="item-desc">工作量统计与排名</div></div>
+            <span class="item-arrow">›</span>
+          </li>
+          <li class="menu-item" onclick="switchTab(4)">
+            <div class="item-icon" style="background:#FCE4EC;">📖</div>
+            <div class="item-text"><div class="item-title">SOP学习</div><div class="item-desc">SOP文档与在线考试</div></div>
+            <span class="item-arrow">›</span>
+          </li>
+          <li class="menu-item" onclick="switchTab(5)">
+            <div class="item-icon" style="background:#F3E5F5;">⚠️</div>
+            <div class="item-text"><div class="item-title">危急值记录</div><div class="item-desc">危急值报告与闭环</div></div>
+            <span class="item-arrow">›</span>
+          </li>
+          <li class="menu-item" onclick="switchTab(6)">
+            <div class="item-icon" style="background:#E0F7FA;">🏆</div>
+            <div class="item-text"><div class="item-title">绩效积分</div><div class="item-desc">积分明细与排名</div></div>
+            <span class="item-arrow">›</span>
+          </li>
+        </ul>
       </div>
+    </div>
+    <!-- 仪器保养 -->
+    <div id="page-maintain" class="page">
       <div class="card">
-        <div class="card-header">
-          <h3>📅 本月工作动态</h3>
-          <span class="badge">最新</span>
+        <div class="card-title">🔧 仪器保养</div>
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+          <button class="btn btn-primary" style="flex:1;padding:10px;" onclick="showToast('请扫描仪器二维码进行保养打卡')">📷 扫码保养</button>
         </div>
-        <div class="card-body" style="padding:8px 16px;">
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:var(--accent-light);">✅</div>
-            <div class="item-info">
-              <div class="title">质控在控率 98.5%</div>
-              <div class="subtitle">本月质控表现优秀</div>
-            </div>
-            <div class="item-right"><span class="score plus">+5</span></div>
+        <div id="maintainList">
+          <div style="padding:12px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+            <div><div style="font-weight:500;">PB 生化分析仪</div><div style="font-size:12px;color:var(--text-light);">日保养 · 今日</div></div>
+            <span class="tag tag-warning">待保养</span>
           </div>
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:var(--primary-light);">📊</div>
-            <div class="item-info">
-              <div class="title">EQA成绩优秀</div>
-              <div class="subtitle">生化组室间质评</div>
-            </div>
-            <div class="item-right"><span class="score plus">+10</span></div>
+          <div style="padding:12px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+            <div><div style="font-weight:500;">PB 血球仪</div><div style="font-size:12px;color:var(--text-light);">日保养 · 今日</div></div>
+            <span class="tag tag-success">已保养</span>
           </div>
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:#FFF3E6;">⚠️</div>
-            <div class="item-info">
-              <div class="title">设备异常上报</div>
-              <div class="subtitle">凝血仪温度偏差</div>
-            </div>
-            <div class="item-right"><span class="score plus">+2</span></div>
+          <div style="padding:12px;display:flex;justify-content:space-between;align-items:center;">
+            <div><div style="font-weight:500;">PB 凝血仪</div><div style="font-size:12px;color:var(--text-light);">周保养 · 本周</div></div>
+            <span class="tag tag-primary">待保养</span>
           </div>
         </div>
       </div>
     </div>
-    <!-- 工作日志页 -->
-    <div id="page-log" class="page">
-      <div style="display:flex;gap:8px;padding:12px;background:white;border-bottom:1px solid #eee;">
-        <button class="btn btn-primary" style="flex:1;padding:8px;font-size:12px;" onclick="showToast('📅 日历视图')">📅 日历</button>
-        <button class="btn btn-outline" style="flex:1;padding:8px;font-size:12px;" onclick="showToast('📋 列表视图')">📋 列表</button>
-        <button class="btn btn-outline" style="flex:1;padding:8px;font-size:12px;" onclick="showToast('📤 正在导出工作日志...');setTimeout(()=>showToast('✅ 日志导出完成'),1500)">📤 导出</button>
-        <button class="btn btn-outline" style="flex:1;padding:8px;font-size:12px;" onclick="showToast('🖨️ 正在准备打印...');setTimeout(()=>showToast('✅ 打印任务已发送'),1500)">🖨️ 打印</button>
-        <button class="btn btn-outline" style="flex:1;padding:8px;font-size:12px;" onclick="showToast('🖨️ 正在准备打印...');setTimeout(()=>showToast('✅ 打印任务已发送'),1500)">🖨️ 打印</button>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <h3>📝 工作日志</h3>
-          <span class="badge" id="logMonth">2026年8月</span>
-        </div>
-        <div class="card-body">
-          <div class="calendar-grid" id="calendarGrid">
-            <div class="cal-header">日</div>
-            <div class="cal-header">一</div>
-            <div class="cal-header">二</div>
-            <div class="cal-header">三</div>
-            <div class="cal-header">四</div>
-            <div class="cal-header">五</div>
-            <div class="cal-header">六</div>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <h3>📋 今日日志详情</h3>
-          <span class="badge">8月1日</span>
-        </div>
-        <div class="card-body" style="padding:8px 16px;">
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:var(--accent-light);">🔧</div>
-            <div class="item-info">
-              <div class="title">仪器保养完成</div>
-              <div class="subtitle">生化分析仪 · 日保养</div>
-            </div>
-            <div class="item-right"><span class="score plus">+1</span></div>
-          </div>
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:var(--primary-light);">📊</div>
-            <div class="item-info">
-              <div class="title">质控数据录入</div>
-              <div class="subtitle">肝功能 · 在控</div>
-            </div>
-            <div class="item-right"><span class="score plus">+2</span></div>
-          </div>
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:var(--accent-light);">📈</div>
-            <div class="item-info">
-              <div class="title">检测标本 156 份</div>
-              <div class="subtitle">加权工作量 182.5</div>
-            </div>
-            <div class="item-right"><span class="score plus">+18</span></div>
-          </div>
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:var(--primary-light);">📚</div>
-            <div class="item-info">
-              <div class="title">SOP学习完成</div>
-              <div class="subtitle">血常规操作流程 · 45分钟</div>
-            </div>
-            <div class="item-right"><span class="score plus">+2</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- 绩效页 -->
-    <div id="page-performance" class="page">
-      <div style="display:flex;gap:8px;padding:12px;background:white;border-bottom:1px solid #eee;">
-        <button class="btn btn-primary" style="flex:1;padding:8px;font-size:12px;" onclick="showToast('📊 实时积分看板')">📊 积分看板</button>
-        <button class="btn btn-outline" style="flex:1;padding:8px;font-size:12px;" onclick="showToast('📈 历史积分对比')">📈 历史对比</button>
-        <button class="btn btn-outline" style="flex:1;padding:8px;font-size:12px;" onclick="showToast('📤 正在下载绩效报告...');setTimeout(()=>showToast('✅ 报告下载完成'),1500)">📥 下载报告</button>
-      </div>
-      <div class="card">
-        <div class="card-body">
-          <div class="score-display">
-            <div class="score-num">98.5</div>
-            <div class="score-label">本月绩效积分</div>
-            <div class="score-rank">🏆 科室排名第 3 名</div>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <h3>📊 积分维度分析</h3>
-          <span class="badge">本月</span>
-        </div>
-        <div class="card-body">
-          <div class="dim-item">
-            <div class="dim-header">
-              <span class="dim-name">质量控制 (35%)</span>
-              <span class="dim-val">34.2 / 35</span>
-            </div>
-            <div class="dim-bar"><div class="dim-fill" style="width:98%;background:var(--success);"></div></div>
-          </div>
-          <div class="dim-item">
-            <div class="dim-header">
-              <span class="dim-name">工作效率 (30%)</span>
-              <span class="dim-val">28.5 / 30</span>
-            </div>
-            <div class="dim-bar"><div class="dim-fill" style="width:95%;background:var(--primary);"></div></div>
-          </div>
-          <div class="dim-item">
-            <div class="dim-header">
-              <span class="dim-name">设备管理 (15%)</span>
-              <span class="dim-val">13.8 / 15</span>
-            </div>
-            <div class="dim-bar"><div class="dim-fill" style="width:92%;background:var(--accent);"></div></div>
-          </div>
-          <div class="dim-item">
-            <div class="dim-header">
-              <span class="dim-name">学习成长 (10%)</span>
-              <span class="dim-val">9.5 / 10</span>
-            </div>
-            <div class="dim-bar"><div class="dim-fill" style="width:95%;background:var(--warning);"></div></div>
-          </div>
-          <div class="dim-item">
-            <div class="dim-header">
-              <span class="dim-name">综合表现 (10%)</span>
-              <span class="dim-val">9.0 / 10</span>
-            </div>
-            <div class="dim-bar"><div class="dim-fill" style="width:90%;background:var(--danger);"></div></div>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <h3>🏆 科室积分排名</h3>
-          <span class="badge" onclick="navigate('performance-detail')">查看全部</span>
-        </div>
-        <div class="card-body" style="padding:8px 16px;">
-          <div class="rank-list">
-            <div class="rank-item">
-              <div class="rank-num top1">1</div>
-              <div class="rank-name">张明</div>
-              <div class="rank-score">112.5</div>
-            </div>
-            <div class="rank-item">
-              <div class="rank-num top2">2</div>
-              <div class="rank-name">李华</div>
-              <div class="rank-score">105.8</div>
-            </div>
-            <div class="rank-item">
-              <div class="rank-num top3">3</div>
-              <div class="rank-name" style="color:var(--primary);font-weight:600;">我</div>
-              <div class="rank-score" style="color:var(--primary);">98.5</div>
-            </div>
-            <div class="rank-item">
-              <div class="rank-num other">4</div>
-              <div class="rank-name">王强</div>
-              <div class="rank-score">95.2</div>
-            </div>
-            <div class="rank-item">
-              <div class="rank-num other">5</div>
-              <div class="rank-name">赵敏</div>
-              <div class="rank-score">92.8</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- 消息页 -->
-    <div id="page-messages" class="page">
-      <div class="card">
-        <div class="card-header">
-          <h3>🔔 消息通知</h3>
-          <span class="badge" id="unreadCount">5条未读</span>
-        </div>
-        <div class="card-body" style="padding:8px 16px;">
-          <div class="msg-item urgent" style="border-left:3px solid #F44336;padding:10px;margin-bottom:8px;background:#FFF5F5;border-radius:8px;" onclick="showToast('⚠️ 危急值报告')">
-            <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;color:#F44336;">🚨 危急值预警</span><span style="font-size:12px;color:#999;">刚刚</span></div>
-            <div style="font-size:13px;margin-top:4px;">患者 王某某 血钾 6.8mmol/L - 请立即确认</div>
-          </div>
-          <div class="msg-item" style="border-left:3px solid #FF9800;padding:10px;margin-bottom:8px;background:#FFF8E1;border-radius:8px;" onclick="showToast('⚠️ 保养逾期提醒')">
-            <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;color:#FF9800;">⚠️ 保养逾期</span><span style="font-size:12px;color:#999;">10分钟前</span></div>
-            <div style="font-size:13px;margin-top:4px;">生化分析仪 日保养已超时2小时，请尽快完成</div>
-          </div>
-          <div class="msg-item" style="border-left:3px solid #2196F3;padding:10px;margin-bottom:8px;background:#E3F2FD;border-radius:8px;" onclick="showToast('📊 绩效更新')">
-            <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;color:#2196F3;">📊 绩效更新</span><span style="font-size:12px;color:#999;">1小时前</span></div>
-            <div style="font-size:13px;margin-top:4px;">本月绩效积分已更新，点击查看详情</div>
-          </div>
-          <div class="msg-item" style="border-left:3px solid #4CAF50;padding:10px;margin-bottom:8px;background:#E8F5E9;border-radius:8px;" onclick="showToast('📚 SOP学习提醒')">
-            <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;color:#4CAF50;">📚 学习提醒</span><span style="font-size:12px;color:#999;">昨天</span></div>
-            <div style="font-size:13px;margin-top:4px;">本月SOP学习目标4小时，已完成2.5小时</div>
-          </div>
-          <div class="msg-item" style="border-left:3px solid #9C27B0;padding:10px;border-radius:8px;" onclick="showToast('🧪 质控提醒')">
-            <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;color:#9C27B0;">🧪 质控提醒</span><span style="font-size:12px;color:#999;">昨天</span></div>
-            <div style="font-size:13px;margin-top:4px;">今日质控数据已录入，请审核</div>
-          </div>
-          <div class="msg-item" onclick="showToast('已标记为已读')">
-            <div class="msg-icon" style="background:var(--danger);color:#fff;">⚠️</div>
-            <div class="msg-content">
-              <div class="msg-title">危急值报告提醒</div>
-              <div class="msg-desc">患者 #20260801-045 钾离子危急值，请及时处理</div>
-            </div>
-            <div class="msg-time">10分钟前</div>
-          </div>
-          <div class="msg-item" onclick="showToast('已标记为已读')">
-            <div class="msg-icon" style="background:var(--warning);color:#fff;">🔧</div>
-            <div class="msg-content">
-              <div class="msg-title">保养逾期提醒</div>
-              <div class="msg-desc">血球仪周保养已逾期2小时，请尽快完成</div>
-            </div>
-            <div class="msg-time">1小时前</div>
-          </div>
-          <div class="msg-item" onclick="showToast('已标记为已读')">
-            <div class="msg-icon" style="background:var(--primary);color:#fff;">📚</div>
-            <div class="msg-content">
-              <div class="msg-title">SOP学习任务</div>
-              <div class="msg-desc">新SOP《凝血功能检测操作流程》已发布</div>
-            </div>
-            <div class="msg-time">3小时前</div>
-          </div>
-          <div class="msg-item" onclick="showToast('已标记为已读')">
-            <div class="msg-icon" style="background:var(--success);color:#fff;">✅</div>
-            <div class="msg-content">
-              <div class="msg-title">质控审核通过</div>
-              <div class="msg-desc">您提交的失控处理记录已审核通过</div>
-            </div>
-            <div class="msg-time">昨天</div>
-          </div>
-          <div class="msg-item" onclick="showToast('已标记为已读')">
-            <div class="msg-icon" style="background:var(--accent);color:#fff;">🏆</div>
-            <div class="msg-content">
-              <div class="msg-title">绩效报告已生成</div>
-              <div class="msg-desc">7月绩效积分报告已生成，请查看</div>
-            </div>
-            <div class="msg-time">昨天</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- 我的页面 -->
-    <div id="page-system" class="page">
-  <div class="page-header">
-    <h2>⚙️ 系统维护</h2>
-    <div style="font-size:13px;color:var(--text-light);">基础数据管理</div>
-  </div>
-  <div class="card" style="margin:12px;">
-    <div class="card-body" style="padding:8px 0;">
-      <div class="list-item" style="padding:14px 16px;cursor:pointer;" onclick="showSysMgmt('personnel')">
-        <div class="item-icon" style="background:#E3F2FD;width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">👥</div>
-        <div class="item-info"><div class="title">人员管理</div><div class="subtitle">员工信息、岗位、职称管理</div></div>
-        <div class="item-right"><span style="color:var(--text-light);font-size:18px;">›</span></div>
-      </div>
-      <div class="list-item" style="padding:14px 16px;cursor:pointer;" onclick="showSysMgmt('group')">
-        <div class="item-icon" style="background:#E8F5E9;width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">📂</div>
-        <div class="item-info"><div class="title">组别管理</div><div class="subtitle">专业组设置、分组管理</div></div>
-        <div class="item-right"><span style="color:var(--text-light);font-size:18px;">›</span></div>
-      </div>
-      <div class="list-item" style="padding:14px 16px;cursor:pointer;" onclick="showSysMgmt('nature')">
-        <div class="item-icon" style="background:#FFF3E0;width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">🏷️</div>
-        <div class="item-info"><div class="title">性质管理</div><div class="subtitle">标本性质、检验性质分类</div></div>
-        <div class="item-right"><span style="color:var(--text-light);font-size:18px;">›</span></div>
-      </div>
-      <div class="list-item" style="padding:14px 16px;cursor:pointer;" onclick="showSysMgmt('instrument')">
-        <div class="item-icon" style="background:#FCE4EC;width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">PB</div>
-        <div class="item-info"><div class="title">仪器管理</div><div class="subtitle">检验仪器设备档案管理</div></div>
-        <div class="item-right"><span style="color:var(--text-light);font-size:18px;">›</span></div>
-      </div>
-      <div class="list-item" style="padding:14px 16px;cursor:pointer;" onclick="showSysMgmt('reagent')">
-        <div class="item-icon" style="background:#F3E5F5;width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">🧪</div>
-        <div class="item-info"><div class="title">试剂管理</div><div class="subtitle">试剂耗材库存、有效期管理</div></div>
-        <div class="item-right"><span style="color:var(--text-light);font-size:18px;">›</span></div>
-      </div>
-      <div class="list-item" style="padding:14px 16px;cursor:pointer;" onclick="showSysMgmt('qc')">
-        <div class="item-icon" style="background:#E0F7FA;width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">📊</div>
-        <div class="item-info"><div class="title">质控管理</div><div class="subtitle">质控品、质控规则配置</div></div>
-        <div class="item-right"><span style="color:var(--text-light);font-size:18px;">›</span></div>
-      </div>
-    </div>
-  </div>
-</div>
-<div id="page-profile" class="page">
-      <div class="card">
-        <div class="card-body" style="display:flex;align-items:center;gap:14px;">
-          <div style="width:56px;height:56px;border-radius:50%;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:28px;">👤</div>
-          <div style="flex:1;">
-            <div style="font-size:17px;font-weight:600;" id="profileName">王小明</div>
-            <div style="font-size:12px;color:var(--text-light);" id="profileRole">生化组</div>
-          </div>
-          <span class="tag tag-blue" id="profileStatus">在职</span>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header"><h3>⚙️ 功能设置</h3></div>
-        <div class="card-body" style="padding:8px 16px;">
-          <div class="list-item" style="padding:12px 0;" onclick="showMyProfile()">
-            <div class="item-icon" style="background:var(--primary-light);">👤</div>
-            <div class="item-info"><div class="title">个人信息</div><div class="subtitle">编辑我的资料、联系方式</div></div>
-            <div class="item-right"><span style="color:var(--text-light);">›</span></div>
-          </div>
-          <div class="list-item perm-controlled" data-perm="系统设置" style="display:none;padding:12px 0;" onclick="showSystemSettings()">
-            <div class="item-icon" style="background:var(--primary-light);">⚙️</div>
-            <div class="item-info"><div class="title">系统设置</div><div class="subtitle">科室信息、积分规则、数据备份</div></div>
-            <div class="item-right"><span style="color:var(--text-light);">›</span></div>
-          </div>
-          <div class="list-item perm-controlled" data-perm="账号管理" style="display:none;padding:12px 0;" onclick="showUserManagement()">
-            <div class="item-icon" style="background:var(--accent-light);">👥</div>
-            <div class="item-info"><div class="title">账号管理</div><div class="subtitle">新增员工、设置角色权限</div></div>
-            <div class="item-right"><span style="color:var(--text-light);">›</span></div>
-          </div>
-          <div class="list-item perm-controlled" data-perm="权限配置" style="display:none;padding:12px 0;" onclick="showPermConfig()">
-            <div class="item-icon" style="background:#FFF3E6;">🔐</div>
-            <div class="item-info"><div class="title">权限配置</div><div class="subtitle">角色权限设置、职能分配</div></div>
-            <div class="item-right"><span style="color:var(--text-light);">›</span></div>
-          </div>
-          <div class="list-item" style="padding:12px 0;" onclick="showNotificationSettings()">
-            <div class="item-icon" style="background:var(--accent-light);">🔔</div>
-            <div class="item-info"><div class="title">消息通知设置</div><div class="subtitle">保养提醒、危急值推送、学习提醒</div></div>
-            <div class="item-right"><span style="color:var(--text-light);">›</span></div>
-          </div>
-          <div class="list-item" style="padding:12px 0;" onclick="showDataExport()">
-            <div class="item-icon" style="background:#E8F5E9;">📊</div>
-            <div class="item-info"><div class="title">数据导出</div><div class="subtitle">导出工作日志、绩效报告、数据备份</div></div>
-            <div class="item-right"><span style="color:var(--text-light);">›</span></div>
-          </div>
-          <div class="list-item perm-controlled" data-perm="系统设置" style="display:none;padding:12px 0;" onclick="showDataAudit()">
-            <div class="item-icon" style="background:#E8F5E9;">✅</div>
-            <div class="item-info"><div class="title">数据审核</div><div class="subtitle">审核异常数据、手动调整积分</div></div>
-            <div class="item-right"><span style="color:var(--text-light);">›</span></div>
-          </div>
-          <div class="list-item perm-controlled" data-perm="系统设置" style="display:none;padding:12px 0;" onclick="showDataDashboard()">
-            <div class="item-icon" style="background:#E3F2FD;">📊</div>
-            <div class="item-info"><div class="title">数据看板</div><div class="subtitle">科室整体绩效概览、排名TOP10</div></div>
-            <div class="item-right"><span style="color:var(--text-light);">›</span></div>
-          </div>
-          <div class="list-item perm-controlled" data-perm="系统设置" style="display:none;padding:12px 0;" onclick="showReportExport()">
-            <div class="item-icon" style="background:#FFF3E0;">📤</div>
-            <div class="item-info"><div class="title">报表导出</div><div class="subtitle">批量导出全科室绩效汇总表</div></div>
-            <div class="item-right"><span style="color:var(--text-light);">›</span></div>
-          </div>
-          <div class="list-item perm-controlled" data-perm="系统设置" style="display:none;padding:12px 0;" onclick="showAuditLog()">
-            <div class="item-icon" style="background:#F3E5F5;">📋</div>
-            <div class="item-info"><div class="title">操作审计日志</div><div class="subtitle">查看关键操作记录、数据变更追溯</div></div>
-            <div class="item-right"><span style="color:var(--text-light);">›</span></div>
-          </div>
-          <div class="list-item" style="padding:12px 0;" onclick="showAboutApp()">
-            <div class="item-icon" style="background:#E1F5FE;">ℹ️</div>
-            <div class="item-info"><div class="title">关于</div><div class="subtitle">版本信息、用户协议、帮助文档</div></div>
-            <div class="item-right"><span style="color:var(--text-light);">›</span></div>
-          </div>
-          <div class="list-item" style="padding:12px 0;" onclick="showToast('数据导出功能')">
-            <div class="item-icon" style="background:#FFF3E6;">📊</div>
-            <div class="item-info"><div class="title">数据导出</div><div class="subtitle">导出工作日志和绩效报告</div></div>
-            <div class="item-right"><span style="color:var(--text-light);">›</span></div>
-          </div>
-          <div class="list-item" style="padding:12px 0;" onclick="openPasswordModal()">
-            <div class="item-icon" style="background:#FDECEC;">🔒</div>
-            <div class="item-info"><div class="title">账号安全</div><div class="subtitle">修改密码、登录设备</div></div>
-            <div class="item-right"><span style="color:var(--text-light);">›</span></div>
-          </div>
-          <div class="list-item" style="padding:12px 0;" onclick="showToast('关于系统')">
-            <div class="item-icon" style="background:var(--bg);">ℹ️</div>
-            <div class="item-info"><div class="title">关于系统</div><div class="subtitle">版本号、帮助文档</div></div>
-            <div class="item-right"><span style="color:var(--text-light);">›</span></div>
-          </div>
-        </div>
-      </div>
-      <button class="btn btn-danger btn-block" onclick="handleLogout()">退出登录</button>
-    </div>
-    <!-- 仪器保养页 -->
-    <div id="page-maintenance" class="page">
-  <div class="page-header">
-    <h2>🔧 保养管理</h2>
-    <div style="font-size:13px;color:var(--text-light);">仪器保养全流程管理</div>
-  </div>
-  <div class="card" style="margin:12px;">
-    <div class="card-header"><h3>📋 保养计划看板</h3><span class="badge" style="background:#FF9800;">2项逾期</span></div>
-    <div class="card-body" style="padding:8px;">
-      <div style="display:flex;gap:8px;margin-bottom:8px;">
-        <select class="form-input" style="flex:1;padding:6px;font-size:12px;"><option>全部仪器</option><option>生化分析仪</option><option>血球仪</option><option>凝血仪</option></select>
-        <select class="form-input" style="flex:1;padding:6px;font-size:12px;"><option>全部类型</option><option>日保养</option><option>周保养</option><option>月保养</option></select>
-      </div>
-      <div style="padding:10px;background:#FFF8E1;border-radius:8px;margin-bottom:8px;border-left:3px solid #FF9800;">
-        <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">⚠️ 生化分析仪 - 周保养</span><span style="color:#F44336;font-size:12px;">逾期2天</span></div>
-        <div style="font-size:12px;color:#666;margin-top:4px;">责任人：张三 | 计划日期：2026-08-13</div>
-        <button class="btn btn-primary" style="padding:4px 12px;font-size:12px;margin-top:6px;" onclick="showToast('✅ 保养打卡完成')">✅ 立即打卡</button>
-      </div>
-      <div style="padding:10px;background:#FFF8E1;border-radius:8px;margin-bottom:8px;border-left:3px solid #FF9800;">
-        <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">⚠️ 血球仪 - 日保养</span><span style="color:#F44336;font-size:12px;">逾期1天</span></div>
-        <div style="font-size:12px;color:#666;margin-top:4px;">责任人：李四 | 计划日期：2026-08-14</div>
-        <button class="btn btn-primary" style="padding:4px 12px;font-size:12px;margin-top:6px;" onclick="showToast('✅ 保养打卡完成')">✅ 立即打卡</button>
-      </div>
-      <div style="padding:10px;background:#E8F5E9;border-radius:8px;margin-bottom:8px;border-left:3px solid #4CAF50;">
-        <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">✅ 凝血仪 - 日保养</span><span style="color:#4CAF50;font-size:12px;">已完成</span></div>
-        <div style="font-size:12px;color:#666;margin-top:4px;">责任人：王五 | 完成时间：2026-08-15 08:30</div>
-      </div>
-      <div style="padding:10px;background:#E8F5E9;border-radius:8px;border-left:3px solid #4CAF50;">
-        <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">✅ 免疫分析仪 - 日保养</span><span style="color:#4CAF50;font-size:12px;">已完成</span></div>
-        <div style="font-size:12px;color:#666;margin-top:4px;">责任人：赵六 | 完成时间：2026-08-15 09:00</div>
-      </div>
-    </div>
-  </div>
-  <div class="card" style="margin:12px;">
-    <div class="card-header"><h3>📚 保养记录归档</h3><span class="badge">共86条</span></div>
-    <div class="card-body" style="padding:8px;">
-      <div style="display:flex;gap:8px;margin-bottom:8px;">
-        <input class="form-input" style="flex:1;padding:6px;font-size:12px;" placeholder="搜索仪器名称...">
-        <button class="btn btn-outline" style="padding:6px 12px;font-size:12px;" onclick="showToast('🔍 搜索完成')">搜索</button>
-      </div>
-      <div style="font-size:12px;">
-        <div style="display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid #eee;">
-          <span>PB 生化分析仪 - 日保养</span><span style="color:#999;">2026-08-15 张三</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid #eee;">
-          <span>PB 血球仪 - 日保养</span><span style="color:#999;">2026-08-15 李四</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid #eee;">
-          <span>PB 凝血仪 - 周保养</span><span style="color:#999;">2026-08-14 王五</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;padding:8px;">
-          <span>PB 免疫分析仪 - 月保养</span><span style="color:#999;">2026-08-13 赵六</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-      <div class="detail-header">
-        <h2>🔧 仪器保养</h2>
-        <p>保养计划 · 扫码打卡 · 记录归档</p>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <h3>📋 今日保养任务</h3>
-          <span class="badge">2项待完成</span>
-        </div>
-        <div class="card-body" style="padding:8px 16px;">
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:var(--accent-light);">🧪</div>
-            <div class="item-info">
-              <div class="title">生化分析仪</div>
-              <div class="subtitle">日保养 · 型号: AU5800</div>
-            </div>
-            <div class="item-right">
-              <div class="date">17:00前</div>
-              <button class="action-btn" style="margin-top:4px;" onclick="showMaintenanceModal()">去打卡</button>
-            </div>
-          </div>
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:var(--primary-light);">🩸</div>
-            <div class="item-info">
-              <div class="title">血球仪</div>
-              <div class="subtitle">周保养 · 型号: XN-1000</div>
-            </div>
-            <div class="item-right">
-              <div class="date">18:00前</div>
-              <button class="action-btn" style="margin-top:4px;" onclick="showMaintenanceModal()">去打卡</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <h3>📅 保养计划</h3>
-          <span class="badge">本月</span>
-        </div>
-        <div class="card-body" style="padding:8px 16px;">
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:var(--success);">✅</div>
-            <div class="item-info">
-              <div class="title">生化分析仪 · 日保养</div>
-              <div class="subtitle">已完成 · 今日 08:30</div>
-            </div>
-            <div class="item-right"><span class="score plus">+1</span></div>
-          </div>
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:var(--success);">✅</div>
-            <div class="item-info">
-              <div class="title">凝血仪 · 日保养</div>
-              <div class="subtitle">已完成 · 今日 09:15</div>
-            </div>
-            <div class="item-right"><span class="score plus">+1</span></div>
-          </div>
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:var(--success);">✅</div>
-            <div class="item-info">
-              <div class="title">免疫分析仪 · 日保养</div>
-              <div class="subtitle">已完成 · 昨日 17:30</div>
-            </div>
-            <div class="item-right"><span class="score plus">+1</span></div>
-          </div>
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:#FFF3E6;">⚠️</div>
-            <div class="item-info">
-              <div class="title">血球仪 · 周保养</div>
-              <div class="subtitle">待完成 · 已逾期2小时</div>
-            </div>
-            <div class="item-right"><span class="score minus">-2</span></div>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <h3>📊 保养完成率</h3>
-          <span class="badge">本月 92%</span>
-        </div>
-        <div class="card-body">
-          <div class="dim-item">
-            <div class="dim-header"><span class="dim-name">日保养完成率</span><span class="dim-val">95%</span></div>
-            <div class="dim-bar"><div class="dim-fill" style="width:95%;background:var(--success);"></div></div>
-          </div>
-          <div class="dim-item">
-            <div class="dim-header"><span class="dim-name">周/月保养完成率</span><span class="dim-val">88%</span></div>
-            <div class="dim-bar"><div class="dim-fill" style="width:88%;background:var(--primary);"></div></div>
-          </div>
-          <div class="dim-item">
-            <div class="dim-header"><span class="dim-name">设备异常上报</span><span class="dim-val">3次</span></div>
-            <div class="dim-bar"><div class="dim-fill" style="width:60%;background:var(--warning);"></div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- 质控管理页 -->
+    <!-- 质控管理 -->
     <div id="page-qc" class="page">
-  <div class="page-header">
-    <h2>📊 质控管理</h2>
-    <div style="font-size:13px;color:var(--text-light);">室内质控与室间质评管理</div>
-  </div>
-  <div style="display:flex;gap:8px;padding:12px;background:white;">
-    <button class="btn btn-primary" style="flex:1;padding:8px;font-size:12px;" onclick="showToast('📝 质控录入')">📝 录入</button>
-    <button class="btn btn-outline" style="flex:1;padding:8px;font-size:12px;" onclick="showToast('📈 质控趋势')">📈 趋势</button>
-    <button class="btn btn-outline" style="flex:1;padding:8px;font-size:12px;" onclick="showToast('🏛️ 室间质评')">🏛️ 室间质评</button>
-  </div>
-  <div class="card" style="margin:12px;">
-    <div class="card-header"><h3>📊 质控趋势分析</h3><span class="badge">本月</span></div>
-    <div class="card-body">
-      <div style="display:flex;gap:8px;margin-bottom:8px;">
-        <select class="form-input" style="flex:1;padding:6px;font-size:12px;"><option>ALT</option><option>CREA</option><option>GLU</option></select>
-        <select class="form-input" style="flex:1;padding:6px;font-size:12px;"><option>近30天</option><option>近90天</option><option>近180天</option></select>
-      </div>
-      <div style="height:120px;background:linear-gradient(180deg,#E3F2FD 0%,#BBDEFB 100%);border-radius:8px;display:flex;align-items:flex-end;padding:8px;gap:4px;">
-        <div style="flex:1;height:60%;background:var(--primary);border-radius:4px 4px 0 0;min-height:20px;"></div>
-        <div style="flex:1;height:75%;background:var(--primary);border-radius:4px 4px 0 0;min-height:20px;"></div>
-        <div style="flex:1;height:55%;background:var(--primary);border-radius:4px 4px 0 0;min-height:20px;"></div>
-        <div style="flex:1;height:80%;background:var(--primary);border-radius:4px 4px 0 0;min-height:20px;"></div>
-        <div style="flex:1;height:65%;background:var(--primary);border-radius:4px 4px 0 0;min-height:20px;"></div>
-        <div style="flex:1;height:70%;background:#4CAF50;border-radius:4px 4px 0 0;min-height:20px;"></div>
-        <div style="flex:1;height:72%;background:#4CAF50;border-radius:4px 4px 0 0;min-height:20px;"></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:11px;color:#999;margin-top:4px;">
-        <span>8/8</span><span>8/10</span><span>8/12</span><span>8/14</span><span>8/15</span>
-      </div>
-    </div>
-  </div>
-  <div class="card" style="margin:12px;">
-    <div class="card-header"><h3>🏛️ 室间质评（EQA）</h3><span class="badge" style="background:#4CAF50;">优秀</span></div>
-    <div class="card-body">
-      <div style="padding:8px;background:#E8F5E9;border-radius:8px;margin-bottom:8px;">
-        <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">卫健委临检中心</span><span style="color:#4CAF50;">✅ 优秀</span></div>
-        <div style="font-size:12px;color:#666;">2026年第二次室间质评 | 参加项目：12项 | 合格率：100%</div>
-      </div>
-      <div style="padding:8px;background:#E8F5E9;border-radius:8px;margin-bottom:8px;">
-        <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">省临检中心</span><span style="color:#4CAF50;">✅ 优秀</span></div>
-        <div style="font-size:12px;color:#666;">2026年第一次室间质评 | 参加项目：8项 | 合格率：100%</div>
-      </div>
-      <div style="padding:8px;background:#FFF8E1;border-radius:8px;">
-        <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">省临检中心</span><span style="color:#FF9800;">⚠️ 需整改</span></div>
-        <div style="font-size:12px;color:#666;">2025年第三次室间质评 | 不合格项目：HbA1c | 已触发整改</div>
-      </div>
-    </div>
-  </div>
-</div>
-      <div class="detail-header">
-        <h2>📊 质控管理</h2>
-        <p>IQC数据 · 失控处理 · EQA成绩</p>
-      </div>
       <div class="card">
-        <div class="card-header">
-          <h3>📈 今日质控状态</h3>
-          <span class="badge" style="background:var(--accent-light);color:var(--accent);">在控</span>
+        <div class="card-title">🧪 质控管理</div>
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+          <button class="btn btn-primary" style="flex:1;padding:10px;" onclick="showToast('请输入质控数据')">📝 录入质控</button>
+          <button class="btn" style="flex:1;padding:10px;background:var(--primary-light);color:var(--primary);" onclick="showToast('查看质控图')">📈 质控图</button>
         </div>
-        <div class="card-body">
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;margin-bottom:12px;">
-            <div><div style="font-size:20px;font-weight:700;color:var(--success);">98.5%</div><div style="font-size:11px;color:var(--text-light);">在控率</div></div>
-            <div><div style="font-size:20px;font-weight:700;color:var(--primary);">24</div><div style="font-size:11px;color:var(--text-light);">检测项目</div></div>
-            <div><div style="font-size:20px;font-weight:700;color:var(--warning);">1</div><div style="font-size:11px;color:var(--text-light);">失控项目</div></div>
-          </div>
-          <button class="btn btn-outline btn-block" onclick="showQcModal()">📝 录入质控数据</button>
+        <div style="padding:12px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;">
+          <span>ALT 质控</span><span class="tag tag-success">在控</span>
         </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <h3>📋 质控项目列表</h3>
-          <span class="badge">今日</span>
+        <div style="padding:12px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;">
+          <span>GLU 质控</span><span class="tag tag-success">在控</span>
         </div>
-        <div class="card-body" style="padding:8px 16px;">
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:var(--accent-light);">✅</div>
-            <div class="item-info">
-              <div class="title">肝功能 · ALT</div>
-              <div class="subtitle">在控 · CV 3.2%</div>
-            </div>
-            <div class="item-right"><span class="score plus">+1</span></div>
-          </div>
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:var(--accent-light);">✅</div>
-            <div class="item-info">
-              <div class="title">肾功能 · CREA</div>
-              <div class="subtitle">在控 · CV 2.8%</div>
-            </div>
-            <div class="item-right"><span class="score plus">+1</span></div>
-          </div>
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:var(--accent-light);">✅</div>
-            <div class="item-info">
-              <div class="title">血糖 · GLU</div>
-              <div class="subtitle">在控 · CV 3.5%</div>
-            </div>
-            <div class="item-right"><span class="score plus">+1</span></div>
-          </div>
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:#FDECEC;">❌</div>
-            <div class="item-info">
-              <div class="title">凝血 · PT</div>
-              <div class="subtitle">失控 · 需处理</div>
-            </div>
-            <div class="item-right"><button class="action-btn" style="background:var(--danger);" onclick="showToast('已提交失控处理')">处理</button></div>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <h3>🏅 EQA室间质评</h3>
-          <span class="badge">最新</span>
-        </div>
-        <div class="card-body" style="padding:8px 16px;">
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:var(--success);">🏆</div>
-            <div class="item-info">
-              <div class="title">生化项目 EQA</div>
-              <div class="subtitle">2026年第二批 · 优秀</div>
-            </div>
-            <div class="item-right"><span class="score plus">+10</span></div>
-          </div>
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:var(--success);">🏆</div>
-            <div class="item-info">
-              <div class="title">免疫项目 EQA</div>
-              <div class="subtitle">2026年第一批 · 优秀</div>
-            </div>
-            <div class="item-right"><span class="score plus">+10</span></div>
-          </div>
+        <div style="padding:12px;display:flex;justify-content:space-between;">
+          <span>CREA 质控</span><span class="tag tag-warning">警告</span>
         </div>
       </div>
     </div>
-    <!-- 检测工作量页 -->
+    <!-- 检测工作量 -->
     <div id="page-workload" class="page">
-  <div class="page-header">
-    <h2>📊 检测工作量</h2>
-    <div style="font-size:13px;color:var(--text-light);">工作量统计与排名</div>
-  </div>
-  <div class="card" style="margin:12px;">
-    <div class="card-header"><h3>📊 工作量排名</h3><span class="badge">本月</span></div>
-    <div class="card-body" style="padding:8px;">
-      <div style="display:flex;gap:8px;margin-bottom:8px;">
-        <select class="form-input" style="flex:1;padding:6px;font-size:12px;"><option>全部组别</option><option>生化组</option><option>临检组</option><option>免疫组</option></select>
-        <select class="form-input" style="flex:1;padding:6px;font-size:12px;"><option>本月</option><option>本季度</option><option>本年</option></select>
-      </div>
-      <div style="font-size:13px;">
-        <div style="display:flex;align-items:center;padding:8px;border-bottom:1px solid #eee;background:linear-gradient(90deg,#FFF8E1,transparent);">
-          <span style="width:30px;font-weight:700;color:#FF9800;">🥇</span>
-          <span style="flex:1;">张三</span><span style="color:#666;">生化组</span>
-          <span style="font-weight:600;">2,580项</span>
-        </div>
-        <div style="display:flex;align-items:center;padding:8px;border-bottom:1px solid #eee;background:linear-gradient(90deg,#F5F5F5,transparent);">
-          <span style="width:30px;font-weight:700;color:#9E9E9E;">🥈</span>
-          <span style="flex:1;">李四</span><span style="color:#666;">临检组</span>
-          <span style="font-weight:600;">2,350项</span>
-        </div>
-        <div style="display:flex;align-items:center;padding:8px;border-bottom:1px solid #eee;background:linear-gradient(90deg,#F5F5F5,transparent);">
-          <span style="width:30px;font-weight:700;color:#795548;">🥉</span>
-          <span style="flex:1;">王五</span><span style="color:#666;">免疫组</span>
-          <span style="font-weight:600;">2,120项</span>
-        </div>
-        <div style="display:flex;align-items:center;padding:8px;border-bottom:1px solid #eee;">
-          <span style="width:30px;font-weight:700;">4</span>
-          <span style="flex:1;">赵六</span><span style="color:#666;">生化组</span>
-          <span style="font-weight:600;">1,980项</span>
-        </div>
-        <div style="display:flex;align-items:center;padding:8px;">
-          <span style="width:30px;font-weight:700;">5</span>
-          <span style="flex:1;">钱七</span><span style="color:#666;">临检组</span>
-          <span style="font-weight:600;">1,750项</span>
+      <div class="card">
+        <div class="card-title">📊 检测工作量</div>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-value">156</div><div class="stat-label">今日标本</div></div>
+          <div class="stat-card"><div class="stat-value">98%</div><div class="stat-label">TAT达标率</div></div>
+          <div class="stat-card"><div class="stat-value">342</div><div class="stat-label">本月累计</div></div>
+          <div class="stat-card"><div class="stat-value">#3</div><div class="stat-label">组内排名</div></div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="card" style="margin:12px;">
-    <div class="card-header"><h3>📈 TAT达标率</h3><span class="badge" style="background:#4CAF50;">96.5%</span></div>
-    <div class="card-body">
-      <div style="display:flex;gap:8px;margin-bottom:8px;">
-        <div style="flex:1;text-align:center;padding:8px;background:#E8F5E9;border-radius:8px;">
-          <div style="font-size:20px;font-weight:700;color:#4CAF50;">98.2%</div>
-          <div style="font-size:11px;color:#666;">急诊TAT</div>
-        </div>
-        <div style="flex:1;text-align:center;padding:8px;background:#E3F2FD;border-radius:8px;">
-          <div style="font-size:20px;font-weight:700;color:var(--primary);">95.8%</div>
-          <div style="font-size:11px;color:#666;">常规TAT</div>
-        </div>
-        <div style="flex:1;text-align:center;padding:8px;background:#FFF3E0;border-radius:8px;">
-          <div style="font-size:20px;font-weight:700;color:#FF9800;">92.1%</div>
-          <div style="font-size:11px;color:#666;">特殊项目TAT</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-      <div class="detail-header">
-        <h2>📈 检测工作量</h2>
-        <p>标本统计 · 难度加权 · TAT达标率</p>
-      </div>
-      <div class="card">
-        <div class="card-body">
-          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;text-align:center;">
-            <div style="background:var(--primary-light);border-radius:12px;padding:14px;">
-              <div style="font-size:24px;font-weight:700;color:var(--primary);">3,245</div>
-              <div style="font-size:11px;color:var(--text-light);">本月标本数</div>
-            </div>
-            <div style="background:var(--accent-light);border-radius:12px;padding:14px;">
-              <div style="font-size:24px;font-weight:700;color:var(--accent);">4,821</div>
-              <div style="font-size:11px;color:var(--text-light);">加权工作量</div>
-            </div>
-            <div style="background:#FFF3E6;border-radius:12px;padding:14px;">
-              <div style="font-size:24px;font-weight:700;color:var(--warning);">96.8%</div>
-              <div style="font-size:11px;color:var(--text-light);">TAT达标率</div>
-            </div>
-            <div style="background:#FDECEC;border-radius:12px;padding:14px;">
-              <div style="font-size:24px;font-weight:700;color:var(--danger);">1.2%</div>
-              <div style="font-size:11px;color:var(--text-light);">标本差错率</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <h3>📊 项目类型统计</h3>
-          <span class="badge">本月</span>
-        </div>
-        <div class="card-body" style="padding:8px 16px;">
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:var(--primary-light);">🧪</div>
-            <div class="item-info"><div class="title">常规生化/免疫</div><div class="subtitle">难度系数 1.0 · 1,850项</div></div>
-            <div class="item-right"><span class="score">1,850</span></div>
-          </div>
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:var(--accent-light);">⚡</div>
-            <div class="item-info"><div class="title">急诊项目</div><div class="subtitle">难度系数 1.5 · 420项</div></div>
-            <div class="item-right"><span class="score">630</span></div>
-          </div>
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:#FFF3E6;">🦠</div>
-            <div class="item-info"><div class="title">微生物培养/鉴定</div><div class="subtitle">难度系数 2.0 · 85项</div></div>
-            <div class="item-right"><span class="score">170</span></div>
-          </div>
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:#FDECEC;">🧬</div>
-            <div class="item-info"><div class="title">分子诊断/PCR</div><div class="subtitle">难度系数 2.5 · 120项</div></div>
-            <div class="item-right"><span class="score">300</span></div>
-          </div>
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:var(--bg);">🦴</div>
-            <div class="item-info"><div class="title">骨髓/细胞形态学</div><div class="subtitle">难度系数 3.0 · 12项</div></div>
-            <div class="item-right"><span class="score">36</span></div>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <h3>📈 工作量趋势</h3>
-          <span class="badge">近6月</span>
-        </div>
-        <div class="card-body">
-          <div style="display:flex;align-items:flex-end;gap:6px;height:120px;padding:10px 0;">
-            <div style="flex:1;text-align:center;">
-              <div style="font-size:10px;color:var(--text-light);">3月</div>
-              <div style="background:var(--primary-light);border-radius:4px 4px 0 0;height:60px;margin-top:4px;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;font-size:10px;color:var(--primary);font-weight:600;">3,120</div>
-            </div>
-            <div style="flex:1;text-align:center;">
-              <div style="font-size:10px;color:var(--text-light);">4月</div>
-              <div style="background:var(--primary-light);border-radius:4px 4px 0 0;height:70px;margin-top:4px;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;font-size:10px;color:var(--primary);font-weight:600;">3,450</div>
-            </div>
-            <div style="flex:1;text-align:center;">
-              <div style="font-size:10px;color:var(--text-light);">5月</div>
-              <div style="background:var(--primary-light);border-radius:4px 4px 0 0;height:65px;margin-top:4px;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;font-size:10px;color:var(--primary);font-weight:600;">3,380</div>
-            </div>
-            <div style="flex:1;text-align:center;">
-              <div style="font-size:10px;color:var(--text-light);">6月</div>
-              <div style="background:var(--primary-light);border-radius:4px 4px 0 0;height:78px;margin-top:4px;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;font-size:10px;color:var(--primary);font-weight:600;">3,680</div>
-            </div>
-            <div style="flex:1;text-align:center;">
-              <div style="font-size:10px;color:var(--text-light);">7月</div>
-              <div style="background:var(--primary-light);border-radius:4px 4px 0 0;height:72px;margin-top:4px;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;font-size:10px;color:var(--primary);font-weight:600;">3,560</div>
-            </div>
-            <div style="flex:1;text-align:center;">
-              <div style="font-size:10px;color:var(--text-light);">8月</div>
-              <div style="background:var(--primary);border-radius:4px 4px 0 0;height:66px;margin-top:4px;display:flex;align-items:flex-start;justify-content:center;padding-top:4px;font-size:10px;color:#fff;font-weight:600;">3,245</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- SOP学习页 -->
+    <!-- SOP学习 -->
     <div id="page-sop" class="page">
-  <div class="page-header">
-    <h2>📚 SOP学习</h2>
-    <div style="font-size:13px;color:var(--text-light);">在线学习与考试</div>
-  </div>
-  <div class="card" style="margin:12px;">
-    <div class="card-header"><h3>📚 SOP在线阅读</h3><span class="badge">12篇未读</span></div>
-    <div class="card-body" style="padding:8px;">
-      <div style="display:flex;gap:8px;margin-bottom:8px;">
-        <select class="form-input" style="flex:1;padding:6px;font-size:12px;"><option>全部组别</option><option>生化组</option><option>临检组</option><option>免疫组</option><option>微生物组</option></select>
-        <input class="form-input" style="flex:1;padding:6px;font-size:12px;" placeholder="搜索SOP文档...">
-      </div>
-      <div style="padding:10px;background:#F5F5F5;border-radius:8px;margin-bottom:8px;cursor:pointer;" onclick="showToast('📖 正在打开SOP文档')">
-        <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">📄 生化分析仪操作规程</span><span style="font-size:12px;color:#999;">V3.2</span></div>
-        <div style="font-size:12px;color:#666;margin-top:4px;">生化组 | 共15页 | 上次阅读：2026-08-10</div>
-        <div style="margin-top:6px;height:4px;background:#E0E0E0;border-radius:2px;"><div style="width:60%;height:100%;background:var(--primary);border-radius:2px;"></div></div>
-      </div>
-      <div style="padding:10px;background:#F5F5F5;border-radius:8px;margin-bottom:8px;cursor:pointer;" onclick="showToast('📖 正在打开SOP文档')">
-        <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">📄 血球分析仪操作规程</span><span style="font-size:12px;color:#999;">V2.8</span></div>
-        <div style="font-size:12px;color:#666;margin-top:4px;">临检组 | 共12页 | 上次阅读：2026-08-08</div>
-        <div style="margin-top:6px;height:4px;background:#E0E0E0;border-radius:2px;"><div style="width:30%;height:100%;background:var(--primary);border-radius:2px;"></div></div>
-      </div>
-      <div style="padding:10px;background:#F5F5F5;border-radius:8px;margin-bottom:8px;cursor:pointer;" onclick="showToast('📖 正在打开SOP文档')">
-        <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">📄 免疫分析仪操作规程</span><span style="font-size:12px;color:#999;">V3.0</span></div>
-        <div style="font-size:12px;color:#666;margin-top:4px;">免疫组 | 共18页 | 未阅读</div>
-        <div style="margin-top:6px;height:4px;background:#E0E0E0;border-radius:2px;"><div style="width:0%;height:100%;background:var(--primary);border-radius:2px;"></div></div>
-      </div>
-      <div style="padding:10px;background:#F5F5F5;border-radius:8px;cursor:pointer;" onclick="showToast('📖 正在打开SOP文档')">
-        <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">📄 凝血分析仪操作规程</span><span style="font-size:12px;color:#999;">V2.5</span></div>
-        <div style="font-size:12px;color:#666;margin-top:4px;">临检组 | 共10页 | 未阅读</div>
-        <div style="margin-top:6px;height:4px;background:#E0E0E0;border-radius:2px;"><div style="width:0%;height:100%;background:var(--primary);border-radius:2px;"></div></div>
-      </div>
-    </div>
-  </div>
-  <div class="card" style="margin:12px;">
-    <div class="card-header"><h3>📝 在线考试</h3><span class="badge" style="background:#FF9800;">2项待考</span></div>
-    <div class="card-body" style="padding:8px;">
-      <div style="padding:10px;background:#E8F5E9;border-radius:8px;margin-bottom:8px;">
-        <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">📝 生化分析仪操作规程考试</span><span style="color:#4CAF50;">✅ 已通过 85分</span></div>
-        <div style="font-size:12px;color:#666;margin-top:4px;">考试时间：2026-08-10 | 最高分：95分</div>
-      </div>
-      <div style="padding:10px;background:#E8F5E9;border-radius:8px;margin-bottom:8px;">
-        <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">📝 血球分析仪操作规程考试</span><span style="color:#4CAF50;">✅ 已通过 92分</span></div>
-        <div style="font-size:12px;color:#666;margin-top:4px;">考试时间：2026-08-08 | 最高分：98分</div>
-      </div>
-      <div style="padding:10px;background:#FFF8E1;border-radius:8px;margin-bottom:8px;">
-        <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">📝 免疫分析仪操作规程考试</span><span style="color:#FF9800;">⏳ 待考试</span></div>
-        <div style="font-size:12px;color:#666;margin-top:4px;">截止日期：2026-08-20 | 共20题</div>
-        <button class="btn btn-primary" style="padding:4px 12px;font-size:12px;margin-top:6px;" onclick="showToast('📝 开始考试')">开始考试</button>
-      </div>
-      <div style="padding:10px;background:#FFF8E1;border-radius:8px;">
-        <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">📝 凝血分析仪操作规程考试</span><span style="color:#FF9800;">⏳ 待考试</span></div>
-        <div style="font-size:12px;color:#666;margin-top:4px;">截止日期：2026-08-25 | 共15题</div>
-        <button class="btn btn-primary" style="padding:4px 12px;font-size:12px;margin-top:6px;" onclick="showToast('📝 开始考试')">开始考试</button>
-      </div>
-    </div>
-  </div>
-  <div class="card" style="margin:12px;">
-    <div class="card-header"><h3>📊 学习进度追踪</h3><span class="badge">本月2.5h</span></div>
-    <div class="card-body">
-      <div style="display:flex;gap:8px;margin-bottom:8px;">
-        <div style="flex:1;text-align:center;padding:8px;background:#E3F2FD;border-radius:8px;">
-          <div style="font-size:20px;font-weight:700;color:var(--primary);">2.5h</div>
-          <div style="font-size:11px;color:#666;">本月学习</div>
-        </div>
-        <div style="flex:1;text-align:center;padding:8px;background:#E8F5E9;border-radius:8px;">
-          <div style="font-size:20px;font-weight:700;color:#4CAF50;">62.5%</div>
-          <div style="font-size:11px;color:#666;">目标完成率</div>
-        </div>
-        <div style="flex:1;text-align:center;padding:8px;background:#FFF3E0;border-radius:8px;">
-          <div style="font-size:20px;font-weight:700;color:#FF9800;">4篇</div>
-          <div style="font-size:11px;color:#666;">已学SOP</div>
-        </div>
-      </div>
-      <div style="height:8px;background:#E0E0E0;border-radius:4px;margin-top:8px;">
-        <div style="width:62.5%;height:100%;background:linear-gradient(90deg,var(--primary),#4CAF50);border-radius:4px;"></div>
-      </div>
-      <div style="font-size:12px;color:#666;text-align:center;margin-top:4px;">月度目标：4小时 | 剩余1.5小时</div>
-    </div>
-  </div>
-</div>
-      <div class="detail-header">
-        <h2>📚 SOP学习</h2>
-        <p>在线阅读 · 考试测评 · 学习进度</p>
-      </div>
       <div class="card">
-        <div class="card-header">
-          <h3>📖 学习进度</h3>
-          <span class="badge">78%</span>
-        </div>
-        <div class="card-body">
-          <div class="dim-item">
-            <div class="dim-header"><span class="dim-name">本月学习时长</span><span class="dim-val">3.5 / 4 小时</span></div>
-            <div class="dim-bar"><div class="dim-fill" style="width:87%;background:var(--primary);"></div></div>
+        <div class="card-title">📖 SOP学习</div>
+        <div style="margin-bottom:12px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+            <span style="font-size:13px;">本月学习进度</span><span style="font-size:13px;font-weight:600;">3.5 / 4 小时</span>
           </div>
-          <div class="dim-item">
-            <div class="dim-header"><span class="dim-name">SOP完成率</span><span class="dim-val">12 / 15 份</span></div>
-            <div class="dim-bar"><div class="dim-fill" style="width:80%;background:var(--accent);"></div></div>
-          </div>
-          <div class="dim-item">
-            <div class="dim-header"><span class="dim-name">考试平均分</span><span class="dim-val">92.5 分</span></div>
-            <div class="dim-bar"><div class="dim-fill" style="width:92%;background:var(--success);"></div></div>
+          <div style="height:8px;background:#E0E0E0;border-radius:4px;overflow:hidden;">
+            <div style="height:100%;width:87%;background:var(--primary);border-radius:4px;"></div>
           </div>
         </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <h3>📚 SOP文档列表</h3>
-          <span class="badge" onclick="showToast('搜索功能')">🔍 搜索</span>
+        <div style="padding:10px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;">
+          <span>生化检验SOP</span><span class="tag tag-success">已完成</span>
         </div>
-        <div class="card-body" style="padding:8px 16px;">
-          <div class="list-item" style="padding:10px 0;" onclick="showSopModal()">
-            <div class="item-icon" style="background:var(--primary-light);">📄</div>
-            <div class="item-info">
-              <div class="title">血常规操作流程</div>
-              <div class="subtitle">临检组 · 已学习 · 考试通过</div>
-            </div>
-            <div class="item-right"><span class="score plus">+5</span></div>
-          </div>
-          <div class="list-item" style="padding:10px 0;" onclick="showSopModal()">
-            <div class="item-icon" style="background:var(--accent-light);">📄</div>
-            <div class="item-info">
-              <div class="title">生化分析仪校准规范</div>
-              <div class="subtitle">生化组 · 已学习 · 待考试</div>
-            </div>
-            <div class="item-right"><span class="score plus">+2</span></div>
-          </div>
-          <div class="list-item" style="padding:10px 0;" onclick="showSopModal()">
-            <div class="item-icon" style="background:#FFF3E6;">📄</div>
-            <div class="item-info">
-              <div class="title">凝血功能检测操作流程</div>
-              <div class="subtitle">凝血组 · 未学习</div>
-            </div>
-            <div class="item-right"><button class="action-btn" onclick="showSopModal()">去学习</button></div>
-          </div>
-          <div class="list-item" style="padding:10px 0;" onclick="showSopModal()">
-            <div class="item-icon" style="background:var(--bg);">📄</div>
-            <div class="item-info">
-              <div class="title">微生物标本采集与处理</div>
-              <div class="subtitle">微生物组 · 未学习</div>
-            </div>
-            <div class="item-right"><button class="action-btn" onclick="showSopModal()">去学习</button></div>
-          </div>
+        <div style="padding:10px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;">
+          <span>免疫检验SOP</span><span class="tag tag-primary">学习中</span>
+        </div>
+        <div style="padding:10px 0;display:flex;justify-content:space-between;">
+          <span>微生物检验SOP</span><span class="tag tag-warning">未开始</span>
         </div>
       </div>
     </div>
-    <!-- 危急值页 -->
+    <!-- 危急值记录 -->
     <div id="page-critical" class="page">
-  <div class="page-header">
-    <h2>🚨 危急值管理</h2>
-    <div style="font-size:13px;color:var(--text-light);">危急值识别、报告、确认闭环</div>
-  </div>
-  <div class="card" style="margin:12px;">
-    <div class="card-header"><h3>🚨 危急值实时识别</h3><span class="badge" style="background:#F44336;">2项未确认</span></div>
-    <div class="card-body" style="padding:8px;">
-      <div style="padding:10px;background:#FFF5F5;border-radius:8px;margin-bottom:8px;border:1px solid #FFCDD2;">
-        <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;color:#F44336;">🚨 危急值</span><span style="font-size:12px;color:#999;">2026-08-15 14:30</span></div>
-        <div style="font-size:13px;margin-top:4px;"><b>患者：</b>王某某 | <b>项目：</b>血钾(K+) | <b>结果：</b><span style="color:#F44336;font-weight:700;">6.8 mmol/L</span></div>
-        <div style="font-size:12px;color:#666;margin-top:4px;"><b>报告人：</b>张三 | <b>报告流程：</b>系统自动识别→电话通知→临床确认 | <b>通知方式：</b>电话 | <b>接收科室：</b>急诊科</div>
-        <div style="display:flex;gap:8px;margin-top:8px;">
-          <button class="btn btn-primary" style="flex:1;padding:6px;font-size:12px;" onclick="showToast('✅ 已确认接收')">✅ 确认接收</button>
-          <button class="btn btn-outline" style="flex:1;padding:6px;font-size:12px;" onclick="showToast('📞 重新通知')">📞 重新通知</button>
+      <div class="card">
+        <div class="card-title">⚠️ 危急值记录</div>
+        <div style="padding:10px 0;border-bottom:1px solid var(--border);">
+          <div style="display:flex;justify-content:space-between;"><span style="font-weight:500;">血钾 6.8mmol/L</span><span class="tag tag-danger">未确认</span></div>
+          <div style="font-size:12px;color:var(--text-light);margin-top:4px;">急诊科 · 15:30</div>
         </div>
-      </div>
-      <div style="padding:10px;background:#FFF5F5;border-radius:8px;margin-bottom:8px;border:1px solid #FFCDD2;">
-        <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;color:#F44336;">🚨 危急值</span><span style="font-size:12px;color:#999;">2026-08-15 13:15</span></div>
-        <div style="font-size:13px;margin-top:4px;"><b>患者：</b>李某某 | <b>项目：</b>血小板(PLT) | <b>结果：</b><span style="color:#F44336;font-weight:700;">18 ×10⁹/L</span></div>
-        <div style="font-size:12px;color:#666;margin-top:4px;"><b>报告人：</b>李四 | <b>报告流程：</b>系统自动识别→短信通知→临床确认 | <b>通知方式：</b>短信 | <b>接收科室：</b>血液科</div>
-        <div style="display:flex;gap:8px;margin-top:8px;">
-          <button class="btn btn-primary" style="flex:1;padding:6px;font-size:12px;" onclick="showToast('✅ 已确认接收')">✅ 确认接收</button>
-          <button class="btn btn-outline" style="flex:1;padding:6px;font-size:12px;" onclick="showToast('📞 重新通知')">📞 重新通知</button>
+        <div style="padding:10px 0;border-bottom:1px solid var(--border);">
+          <div style="display:flex;justify-content:space-between;"><span style="font-weight:500;">血糖 2.1mmol/L</span><span class="tag tag-success">已确认</span></div>
+          <div style="font-size:12px;color:var(--text-light);margin-top:4px;">内分泌科 · 14:20</div>
         </div>
-      </div>
-      <div style="padding:10px;background:#E8F5E9;border-radius:8px;border:1px solid #C8E6C9;">
-        <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;color:#4CAF50;">✅ 已闭环</span><span style="font-size:12px;color:#999;">2026-08-15 10:20</span></div>
-        <div style="font-size:13px;margin-top:4px;"><b>患者：</b>赵某某 | <b>项目：</b>血糖(GLU) | <b>结果：</b>1.8 mmol/L</div>
-        <div style="font-size:12px;color:#666;margin-top:4px;"><b>报告人：</b>王五 | <b>确认时间：</b>2026-08-15 10:35 | <b>确认人：</b>陈医生 | <b>闭环状态：</b>✅ 已闭环（临床确认完成）</div>
+        <div style="padding:10px 0;">
+          <div style="display:flex;justify-content:space-between;"><span style="font-weight:500;">PT 45.6s</span><span class="tag tag-success">已确认</span></div>
+          <div style="font-size:12px;color:var(--text-light);margin-top:4px;">血液科 · 11:45</div>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="card" style="margin:12px;">
-    <div class="card-header"><h3>📊 危急值统计报表</h3><span class="badge">本月</span></div>
-    <div class="card-body">
-      <div style="display:flex;gap:8px;margin-bottom:8px;">
-        <div style="flex:1;text-align:center;padding:8px;background:#FFF5F5;border-radius:8px;">
-          <div style="font-size:20px;font-weight:700;color:#F44336;">23</div>
-          <div style="font-size:11px;color:#666;">本月危急值</div>
-        </div>
-        <div style="flex:1;text-align:center;padding:8px;background:#E8F5E9;border-radius:8px;">
-          <div style="font-size:20px;font-weight:700;color:#4CAF50;">95.7%</div>
-          <div style="font-size:11px;color:#666;">报告及时率</div>
-        </div>
-        <div style="flex:1;text-align:center;padding:8px;background:#E3F2FD;border-radius:8px;">
-          <div style="font-size:20px;font-weight:700;color:var(--primary);">91.3%</div>
-          <div style="font-size:11px;color:#666;">确认及时率</div>
-        </div>
-      </div>
-      <div style="font-size:12px;color:#666;margin-top:8px;">本月危急值TOP3项目：血钾(8次)、血小板(5次)、血糖(4次)</div>
-    </div>
-  </div>
-</div>
-      <div class="detail-header">
-        <h2>🚨 危急值记录</h2>
-        <p>实时识别 · 报告闭环 · 统计报表</p>
-      </div>
+    <!-- 绩效积分 -->
+    <div id="page-score" class="page">
       <div class="card">
-        <div class="card-body">
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;">
-            <div><div style="font-size:20px;font-weight:700;color:var(--danger);">12</div><div style="font-size:11px;color:var(--text-light);">本月危急值</div></div>
-            <div><div style="font-size:20px;font-weight:700;color:var(--success);">100%</div><div style="font-size:11px;color:var(--text-light);">报告及时率</div></div>
-            <div><div style="font-size:20px;font-weight:700;color:var(--success);">0</div><div style="font-size:11px;color:var(--text-light);">漏报</div></div>
-          </div>
+        <div class="card-title">🏆 绩效积分</div>
+        <div style="text-align:center;padding:16px 0;">
+          <div style="font-size:48px;font-weight:700;color:var(--primary);" id="scoreTotal">0</div>
+          <div style="font-size:13px;color:var(--text-light);">本月总积分</div>
         </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <h3>📋 今日危急值</h3>
-          <span class="badge">1条待处理</span>
-        </div>
-        <div class="card-body" style="padding:8px 16px;">
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:#FDECEC;">🚨</div>
-            <div class="item-info">
-              <div class="title">钾离子 K+ 6.8 mmol/L</div>
-              <div class="subtitle">患者 #20260801-045 · 急诊科</div>
-            </div>
-            <div class="item-right">
-              <div class="date" style="color:var(--danger);">待确认</div>
-              <button class="action-btn" style="background:var(--danger);margin-top:4px;" onclick="showCriticalModal()">去报告</button>
-            </div>
+        <div style="margin-top:12px;">
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+            <span>🔧 仪器保养</span><span style="font-weight:600;">30分</span>
           </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <h3>📋 历史记录</h3>
-          <span class="badge">本月</span>
-        </div>
-        <div class="card-body" style="padding:8px 16px;">
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:var(--success);">✅</div>
-            <div class="item-info">
-              <div class="title">血糖 GLU 2.1 mmol/L</div>
-              <div class="subtitle">7月28日 · 已确认 · 8分钟</div>
-            </div>
-            <div class="item-right"><span class="score plus">+2</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+            <span>🧪 质控管理</span><span style="font-weight:600;">25分</span>
           </div>
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:var(--success);">✅</div>
-            <div class="item-info">
-              <div class="title">白细胞 WBC 0.8×10⁹/L</div>
-              <div class="subtitle">7月25日 · 已确认 · 6分钟</div>
-            </div>
-            <div class="item-right"><span class="score plus">+2</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+            <span>📊 检测工作量</span><span style="font-weight:600;">20分</span>
           </div>
-          <div class="list-item" style="padding:10px 0;">
-            <div class="item-icon" style="background:var(--success);">✅</div>
-            <div class="item-info">
-              <div class="title">血小板 PLT 18×10⁹/L</div>
-              <div class="subtitle">7月20日 · 已确认 · 5分钟</div>
-            </div>
-            <div class="item-right"><span class="score plus">+2</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
+            <span>📖 SOP学习</span><span style="font-weight:600;">15分</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;">
+            <span>⚠️ 危急值处理</span><span style="font-weight:600;">10分</span>
           </div>
         </div>
       </div>
     </div>
-    <!-- 绩效详情页 -->
-    <div id="page-performance-detail" class="page">
-      <div class="detail-header">
-        <h2>🏆 科室绩效排名</h2>
-        <p>2026年8月 · 全科排名</p>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <h3>🏆 全科排名</h3>
-          <span class="badge">共18人</span>
-        </div>
-        <div class="card-body" style="padding:8px 16px;">
-          <div class="rank-list">
-            <div class="rank-item">
-              <div class="rank-num top1">1</div>
-              <div class="rank-name">张明</div>
-              <div class="rank-score">112.5</div>
-            </div>
-            <div class="rank-item">
-              <div class="rank-num top2">2</div>
-              <div class="rank-name">李华</div>
-              <div class="rank-score">105.8</div>
-            </div>
-            <div class="rank-item">
-              <div class="rank-num top3">3</div>
-              <div class="rank-name" style="color:var(--primary);font-weight:600;">王小明 (我)</div>
-              <div class="rank-score" style="color:var(--primary);">98.5</div>
-            </div>
-            <div class="rank-item">
-              <div class="rank-num other">4</div>
-              <div class="rank-name">王强</div>
-              <div class="rank-score">95.2</div>
-            </div>
-            <div class="rank-item">
-              <div class="rank-num other">5</div>
-              <div class="rank-name">赵敏</div>
-              <div class="rank-score">92.8</div>
-            </div>
-            <div class="rank-item">
-              <div class="rank-num other">6</div>
-              <div class="rank-name">刘洋</div>
-              <div class="rank-score">90.5</div>
-            </div>
-            <div class="rank-item">
-              <div class="rank-num other">7</div>
-              <div class="rank-name">陈静</div>
-              <div class="rank-score">88.2</div>
-            </div>
-            <div class="rank-item">
-              <div class="rank-num other">8</div>
-              <div class="rank-name">周涛</div>
-              <div class="rank-score">85.6</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="footer-note" style="text-align:center;font-size:11px;color:var(--text-light);padding:8px 14px 4px;border-top:1px solid var(--border);margin:0 14px;">版权所有 © 裴兵（江苏省人民医院宿迁医院医学检验科） | 技术支持：0527-80525126</div>
-</main>
+  </main>
   <!-- 底部导航 -->
   <nav class="bottom-nav">
-    <div class="nav-item active" data-page="home" onclick="switchTab('home')">
-      <span class="icon">🏠</span>
-      <span class="label">首页</span>
-    </div>
-    <div class="nav-item" data-page="log" onclick="switchTab('log')">
-      <span class="icon">📝</span>
-      <span class="label">工作日志</span>
-    </div>
-    <div class="nav-item" data-page="performance" onclick="switchTab('performance')">
-      <span class="icon">🏆</span>
-      <span class="label">绩效</span>
-    </div>
-    <div class="nav-item" data-page="messages" onclick="switchTab('messages')">
-      <span class="icon">🔔</span>
-      <span class="label">消息</span>
-    </div>
-    <div class="nav-item" data-page="profile" onclick="switchTab('profile')">
-      <span class="icon">👤</span>
-      <span class="label">我的</span>
-    </div>
-    <div class="nav-item" data-page="system" onclick="switchTab('system')">
-      <span class="icon">⚙️</span>
-      <span class="label">系统维护</span>
-    </div>
+    <div class="nav-item active" onclick="switchTab(0)"><div class="nav-icon">🏠</div><div class="nav-label">首页</div></div>
+    <div class="nav-item" onclick="switchTab(1)"><div class="nav-icon">🔧</div><div class="nav-label">保养</div></div>
+    <div class="nav-item" onclick="switchTab(2)"><div class="nav-icon">🧪</div><div class="nav-label">质控</div></div>
+    <div class="nav-item" onclick="switchTab(3)"><div class="nav-icon">📊</div><div class="nav-label">工作量</div></div>
+    <div class="nav-item" onclick="switchTab(6)"><div class="nav-icon">🏆</div><div class="nav-label">绩效</div></div>
   </nav>
-</div>
-<!-- 保养打卡弹窗 -->
-<div class="modal-mask" id="maintenanceModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>🔧 保养打卡</h3>
-      <button class="modal-close" onclick="closeModal('maintenanceModal')">✕</button>
+  <!-- 用户菜单 -->
+  <div id="userMenu" class="user-menu">
+    <div class="user-menu-header">
+      <div class="user-name" id="menuUserName">用户</div>
+      <div class="user-role" id="menuUserRole">检验人员</div>
     </div>
-    <div class="steps">
-      <div class="step active">
-        <div class="step-num">1</div>
-        <div class="step-label">选择仪器</div>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-label">执行保养</div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-label">确认完成</div>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">选择仪器</label>
-      <select class="form-select" id="maintenanceDevice">
-        <option value="生化分析仪">生化分析仪 (AU5800)</option>
-        <option value="血球仪">血球仪 (XN-1000)</option>
-        <option value="凝血仪">凝血仪 (CS-5100)</option>
-        <option value="免疫分析仪">免疫分析仪 (Cobas e601)</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label class="form-label">保养类型</label>
-      <select class="form-select" id="maintenanceType">
-        <option value="日保养">日保养</option>
-        <option value="周保养">周保养</option>
-        <option value="月保养">月保养</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label class="form-label">保养项目</label>
-      <div style="border:1px solid var(--border);border-radius:10px;padding:8px 12px;">
-        <div class="check-item">
-          <div class="checkbox checked" onclick="toggleCheck(this)"></div>
-          <div class="check-text done">表面清洁消毒</div>
-        </div>
-        <div class="check-item">
-          <div class="checkbox checked" onclick="toggleCheck(this)"></div>
-          <div class="check-text done">试剂/耗材检查</div>
-        </div>
-        <div class="check-item">
-          <div class="checkbox checked" onclick="toggleCheck(this)"></div>
-          <div class="check-text done">废液处理</div>
-        </div>
-        <div class="check-item">
-          <div class="checkbox" onclick="toggleCheck(this)"></div>
-          <div class="check-text">温度/压力校准</div>
-        </div>
-        <div class="check-item">
-          <div class="checkbox" onclick="toggleCheck(this)"></div>
-          <div class="check-text">管路冲洗</div>
-        </div>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">备注</label>
-      <textarea class="form-input" placeholder="如有异常请填写备注..."></textarea>
-    </div>
-    <button class="btn btn-primary btn-block" onclick="completeMaintenance()">✓ 确认完成保养</button>
-  </div>
-</div>
-<!-- 质控录入弹窗 -->
-<div class="modal-mask" id="qcModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>📊 质控数据录入</h3>
-      <button class="modal-close" onclick="closeModal('qcModal')">✕</button>
-    </div>
-    <div class="form-group">
-      <label class="form-label">检测项目</label>
-      <select class="form-select" id="qcProject">
-        <option value="ALT">ALT (肝功能)</option>
-        <option value="CREA">CREA (肾功能)</option>
-        <option value="GLU">GLU (血糖)</option>
-        <option value="PT">PT (凝血)</option>
-        <option value="WBC">WBC (血常规)</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label class="form-label">质控品批号</label>
-      <input type="text" class="form-input" placeholder="请输入质控品批号" value="QC-2026-08">
-    </div>
-    <div class="form-group">
-      <label class="form-label">测定值</label>
-      <input type="text" class="form-input" placeholder="请输入测定值" id="qcValue">
-    </div>
-    <div class="form-group">
-      <label class="form-label">靶值</label>
-      <input type="text" class="form-input" placeholder="请输入靶值" id="qcTarget">
-    </div>
-    <div class="form-group">
-      <label class="form-label">SD</label>
-      <input type="text" class="form-input" placeholder="请输入SD值" id="qcSd">
-    </div>
-    <button class="btn btn-primary btn-block" onclick="submitQc()">✓ 提交质控数据</button>
-  </div>
-</div>
-<!-- SOP学习弹窗 -->
-<div class="modal-mask" id="sopModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>📚 SOP学习</h3>
-      <button class="modal-close" onclick="closeModal('sopModal')">✕</button>
-    </div>
-    <div style="background:var(--bg);border-radius:10px;padding:16px;margin-bottom:12px;">
-      <div style="font-size:15px;font-weight:600;margin-bottom:8px;">血常规操作流程</div>
-      <div style="font-size:12px;color:var(--text-light);margin-bottom:12px;">临检组 · 版本 V3.2 · 2026年6月更新</div>
-      <div style="display:flex;gap:8px;margin-bottom:8px;">
-        <span class="tag tag-blue">仪器准备</span>
-        <span class="tag tag-green">标本处理</span>
-        <span class="tag tag-orange">质量控制</span>
-      </div>
-      <div style="font-size:13px;color:var(--text);line-height:1.8;margin-top:12px;">
-        <strong>一、仪器准备</strong><br>
-        1. 开机前检查电源、试剂、废液桶状态<br>
-        2. 启动仪器，等待自检完成<br>
-        3. 执行每日质控，确认在控后开始检测<br><br>
-        <strong>二、标本处理</strong><br>
-        1. 核对标本条码与申请单信息<br>
-        2. 离心处理，检查标本质量<br>
-        3. 上机检测，记录异常情况<br><br>
-        <strong>三、结果审核</strong><br>
-        1. 审核检测结果，确认无异常<br>
-        2. 危急值立即报告<br>
-        3. 结果审核后签发报告
-      </div>
-    </div>
-    <div style="display:flex;gap:8px;">
-      <button class="btn btn-outline" style="flex:1;" onclick="showToast('已收藏')">⭐ 收藏</button>
-      <button class="btn btn-primary" style="flex:2;" onclick="showToast('学习完成，积分+2')">✓ 完成学习</button>
-    </div>
-  </div>
-</div>
-<!-- 危急值报告弹窗 -->
-<div class="modal-mask" id="criticalModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>🚨 危急值报告</h3>
-      <button class="modal-close" onclick="closeModal('criticalModal')">✕</button>
-    </div>
-    <div style="background:#FDECEC;border-radius:10px;padding:14px;margin-bottom:12px;">
-      <div style="font-size:14px;font-weight:600;color:var(--danger);margin-bottom:6px;">⚠️ 危急值提醒</div>
-      <div style="font-size:13px;">患者 #20260801-045 · 急诊科</div>
-      <div style="font-size:16px;font-weight:700;color:var(--danger);margin-top:6px;">钾离子 K+ 6.8 mmol/L</div>
-      <div style="font-size:12px;color:var(--text-light);margin-top:4px;">参考范围: 3.5-5.3 mmol/L</div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">报告方式</label>
-      <select class="form-select">
-        <option value="phone">电话通知</option>
-        <option value="sms">短信通知</option>
-        <option value="system">系统推送</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label class="form-label">接收科室</label>
-      <select class="form-select">
-        <option value="emergency">急诊科</option>
-        <option value="icu">ICU</option>
-        <option value="cardiology">心内科</option>
-        <option value="nephrology">肾内科</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label class="form-label">接收人</label>
-      <input type="text" class="form-input" placeholder="请输入接收人姓名">
-    </div>
-    <div class="form-group">
-      <label class="form-label">备注</label>
-      <textarea class="form-input" placeholder="请填写报告备注..."></textarea>
-    </div>
-    <button class="btn btn-danger btn-block" onclick="submitCritical()">✓ 确认报告</button>
-  </div>
-</div>
-<!-- Toast -->
-<div class="toast" id="toast"></div>
-
-<!-- 系统维护子页面弹窗 -->
-<div id="sysMgmtModal" class="modal">
-  <div class="modal-content" style="max-height:90vh;overflow-y:auto;">
-    <div class="modal-header">
-      <h3 id="sysMgmtTitle">⚙️ 管理</h3>
-      <span class="modal-close" onclick="closeModal('sysMgmtModal')">&times;</span>
-    </div>
-    <div class="modal-body">
-      <div id="sysMgmtContent"></div>
+    <div class="user-menu-body">
+      <div class="user-menu-item" onclick="showToast('查看个人资料')"><span class="um-icon">👤</span>个人资料</div>
+      <div class="user-menu-item" onclick="showToast('查看我的日志')"><span class="um-icon">📋</span>我的工作日志</div>
+      <div class="user-menu-item" onclick="showToast('查看积分报告')"><span class="um-icon">🏆</span>积分报告</div>
+      <div class="user-menu-item" onclick="showToast('系统设置')"><span class="um-icon">⚙️</span>系统设置</div>
+      <div class="user-menu-item" onclick="handleLogout()" style="color:var(--danger);"><span class="um-icon">🚪</span>退出登录</div>
     </div>
   </div>
 </div>
 <script>
 // ===== 用户数据库 =====
 const USER_DB = [
-  { id: 'admin', name: '系统管理员', password: '123456', defaultPwd: true, role: '系统管理员', group: '管理组', title: '系统管理员', phone: '13800000001', email: 'admin@lab.com', status: '在职', permissions: ['全科数据总览','绩效审核','用户管理','日志审核','全科排名','数据导出','员工授权','系统设置','账号管理','权限配置'] },
-  { id: 'zhang01', name: '张组长', password: '123456', defaultPwd: true, role: '组长', group: '生化组', title: '组长', phone: '', email: '', status: '在职', permissions: ['本组数据','本组日志审核','组内绩效','组内排名'] },
-  { id: 'li02', name: '李质检', password: '123456', defaultPwd: true, role: '质控员', group: '质控组', title: '质控员', phone: '', email: '', status: '在职', permissions: ['质控分析','失控审核','质控监控'] },
-  { id: 'wang03', name: '王设备', password: '123456', defaultPwd: true, role: '设备管理员', group: '设备组', title: '设备管理员', phone: '', email: '', status: '在职', permissions: ['设备管理','保养计划管理'] },
-  { id: 'zhao04', name: '赵检验', password: '123456', defaultPwd: true, role: '检验人员', group: '生化组', title: '检验师', phone: '', email: '', status: '在职', permissions: ['个人日志','个人绩效','保养打卡','SOP学习'] },
-  { id: 'qian05', name: '钱检验', password: '123456', defaultPwd: true, role: '检验人员', group: '临检组', title: '检验师', phone: '', email: '', status: '在职', permissions: ['个人日志','个人绩效','保养打卡','SOP学习'] },
-  { id: 'sun06', name: '孙检验', password: '123456', defaultPwd: true, role: '检验人员', group: '免疫组', title: '检验师', phone: '', email: '', status: '在职', permissions: ['个人日志','个人绩效','保养打卡','SOP学习'] },
-  { id: 'zhou07', name: '周检验', password: '123456', defaultPwd: true, role: '检验人员', group: '微生物组', title: '检验师', phone: '', email: '', status: '在职', permissions: ['个人日志','个人绩效','保养打卡','SOP学习'] },
+  {id:'admin', password:'123456', name:'管理员', role:'科主任', group:'管理组', defaultPwd:false},
+  {id:'zhang', password:'123456', name:'张主任', role:'科主任', group:'管理组', defaultPwd:false},
+  {id:'li', password:'123456', name:'李组长', role:'专业组组长', group:'生化组', defaultPwd:false},
+  {id:'wang', password:'123456', name:'王小明', role:'检验人员', group:'临检组', defaultPwd:false},
+  {id:'zhao', password:'123456', name:'赵质检', role:'质控员', group:'质控组', defaultPwd:false},
+  {id:'chen', password:'123456', name:'陈设备', role:'设备管理员', group:'管理组', defaultPwd:false},
+  {id:'liu', password:'123456', name:'刘检验', role:'检验人员', group:'生化组', defaultPwd:false},
+  {id:'sun', password:'123456', name:'孙检验', role:'检验人员', group:'免疫组', defaultPwd:false},
+  {id:'zhou', password:'123456', name:'周检验', role:'检验人员', group:'微生物组', defaultPwd:false},
+  {id:'wu', password:'123456', name:'吴检验', role:'检验人员', group:'临检组', defaultPwd:false},
 ];
-// 所有可用权限列表
-const ALL_PERMISSIONS = [
-  { id: '全科数据总览', label: '全科数据总览' },
-  { id: '绩效审核', label: '绩效审核' },
-  { id: '用户管理', label: '用户管理' },
-  { id: '日志审核', label: '日志审核' },
-  { id: '全科排名', label: '全科排名' },
-  { id: '数据导出', label: '数据导出' },
-  { id: '员工授权', label: '员工授权' },
-  { id: '本组数据', label: '本组数据' },
-  { id: '本组日志审核', label: '本组日志审核' },
-  { id: '组内绩效', label: '组内绩效' },
-  { id: '组内排名', label: '组内排名' },
-  { id: '质控分析', label: '质控分析' },
-  { id: '失控审核', label: '失控审核' },
-  { id: '质控监控', label: '质控监控' },
-  { id: '设备管理', label: '设备管理' },
-  { id: '保养计划管理', label: '保养计划管理' },
-  { id: '个人日志', label: '个人日志' },
-  { id: '个人绩效', label: '个人绩效' },
-  { id: '保养打卡', label: '保养打卡' },
-  { id: 'SOP学习', label: 'SOP学习' },
-  { id: '系统设置', label: '系统设置' },
-  { id: '账号管理', label: '账号管理' },
-  { id: '权限配置', label: '权限配置' },
-];
-// 角色权限定义
-const ROLE_PERMISSIONS = {
-  '系统管理员': {
-    label: '系统管理员',
-    permissions: ['全科数据总览', '绩效审核', '用户管理', '日志审核', '全科排名', '数据导出', '员工授权', '系统设置', '账号管理', '权限配置']
-  },
-  '科主任': {
-    label: '科主任',
-    permissions: ['全科数据总览', '绩效审核', '用户管理', '日志审核', '全科排名', '数据导出']
-  },
-  '组长': {
-    label: '组长',
-    permissions: ['本组数据', '本组日志审核', '组内绩效', '组内排名']
-  },
-  '质控员': {
-    label: '质控员',
-    permissions: ['质控分析', '失控审核', '质控监控']
-  },
-  '设备管理员': {
-    label: '设备管理员',
-    permissions: ['设备管理', '保养计划管理']
-  },
-  '检验人员': {
-    label: '检验人员',
-    permissions: ['个人日志', '个人绩效', '保养打卡', 'SOP学习']
-  }
-};
-// ===== 全局状态 =====
 let currentUser = null;
-let currentTab = 'home';
-// ===== 登录逻辑 =====
+// ===== Toast =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(function(){t.style.display='none';}, 2000);
+}
+// ===== 登录 =====
 function handleLogin() {
   const username = document.getElementById('loginUsername').value.trim();
   const password = document.getElementById('loginPassword').value;
@@ -2275,757 +369,78 @@ function handleLogin() {
     showToast('请输入用户名和密码');
     return;
   }
-  const found = USER_DB.find(u => u.id === username && u.password === password);
+  const found = USER_DB.find(function(u){return u.id===username && u.password===password;});
   if (found) {
     loginSuccess(found);
   } else {
     showToast('用户名或密码错误');
   }
 }
-
+// ===== 登录成功 =====
 function loginSuccess(user) {
   currentUser = user;
   document.getElementById('loginPage').style.display = 'none';
   document.getElementById('appPage').style.display = 'block';
   document.getElementById('headerUserName').textContent = user.name;
-  document.getElementById('profileName').textContent = user.name;
-  document.getElementById('profileRole').textContent = user.role + ' · ' + user.group;
-  // 根据权限显示/隐藏功能
-  applyPermissions(user.role);
+  document.getElementById('menuUserName').textContent = user.name;
+  document.getElementById('menuUserRole').textContent = user.role + ' · ' + user.group;
   showToast('欢迎登录，' + user.name + '！');
-  // 首次登录强制修改密码
-  if (user.defaultPwd) {
-    setTimeout(function() {
-      showToast('首次登录，请先修改默认密码');
-      setTimeout(function() {
-        openModal('passwordModal');
-        // 修改弹窗标题提示
-        document.querySelector('#passwordModal .modal-header h3').textContent = '首次登录 · 请修改默认密码';
-        // 清空输入框
-        document.getElementById('oldPassword').value = '';
-        document.getElementById('newPassword').value = '';
-        document.getElementById('confirmPassword').value = '';
-        // 自动填入当前密码
-        document.getElementById('oldPassword').value = user.password;
-      }, 500);
-    }, 500);
+  // 记住密码
+  if (document.getElementById('rememberMe').checked) {
+    localStorage.setItem('rememberedUser', user.id);
   }
 }
+// ===== 退出登录 =====
 function handleLogout() {
+  closeUserMenu();
   currentUser = null;
   document.getElementById('appPage').style.display = 'none';
   document.getElementById('loginPage').style.display = 'flex';
+  document.getElementById('loginPassword').value = '';
   showToast('已退出登录');
 }
+// ===== 切换页面 =====
+const pages = ['page-home','page-maintain','page-qc','page-workload','page-sop','page-critical','page-score'];
+const navItems = document.querySelectorAll('.nav-item');
+function switchTab(index) {
+  // 隐藏所有页面
+  for (let i = 0; i < pages.length; i++) {
+    document.getElementById(pages[i]).classList.remove('active');
+  }
+  // 显示选中页面
+  document.getElementById(pages[index]).classList.add('active');
+  // 更新底部导航
+  navItems.forEach(function(item){item.classList.remove('active');});
+  if (index <= 3) {
+    navItems[index].classList.add('active');
+  } else if (index === 6) {
+    navItems[4].classList.add('active');
+  }
+}
+// ===== 用户菜单 =====
 function showUserMenu() {
-  if (!currentUser) return;
-  const perms = ROLE_PERMISSIONS[currentUser.role]?.permissions || [];
-  const msg = currentUser.name + ' · ' + currentUser.role + '\n权限：' + perms.join('、');
-  showToast(msg);
+  document.getElementById('userMenu').style.display = 'block';
+  document.getElementById('overlay').style.display = 'block';
 }
-// ===== 权限控制 =====
-function applyPermissions(role) {
-  const perms = ROLE_PERMISSIONS[role]?.permissions || [];
-  // 隐藏所有管理类元素
-  document.querySelectorAll('.perm-controlled').forEach(el => el.style.display = 'none');
-  // 根据权限显示
-  perms.forEach(p => {
-    document.querySelectorAll('[data-perm="' + p + '"]').forEach(el => {
-      el.style.display = '';
-    });
-  });
-  // 主任和组长显示管理入口
-  if (role === '科主任' || role === '系统管理员') {
-    const mgmtBtn = document.getElementById('userMgmtBtn');
-    if (mgmtBtn) mgmtBtn.style.display = '';
-  }
+function closeUserMenu() {
+  document.getElementById('userMenu').style.display = 'none';
+  document.getElementById('overlay').style.display = 'none';
 }
-function hasPermission(perm) {
-  if (!currentUser) return false;
-  const perms = ROLE_PERMISSIONS[currentUser.role]?.permissions || [];
-  return perms.includes(perm);
-}
-// ===== 底部导航切换 =====
-
-// ===== 系统维护 =====
-const SYSTEM_DATA = {
-  personnel: {
-    title: '👥 人员管理',
-    fields: ['用户名', '姓名', '岗位', '职称', '组别', '状态'],
-    items: [
-      { id: '001', name: '张三', post: '检验师', title: '主管技师', group: '生化组', status: '在职' },
-      { id: '002', name: '李四', post: '检验师', title: '技师', group: '临检组', status: '在职' },
-      { id: '003', name: '王五', post: '检验士', title: '初级技师', group: '免疫组', status: '休假' }
-    ]
-  },
-  group: {
-    title: '📂 组别管理',
-    fields: ['组别编号', '组别名称', '组长', '成员数', '状态'],
-    items: [
-      { id: 'G01', name: '生化组', leader: '张组长', count: '8人', status: '正常' },
-      { id: 'G02', name: '临检组', leader: '李组长', count: '6人', status: '正常' },
-      { id: 'G03', name: '免疫组', leader: '王组长', count: '5人', status: '正常' },
-      { id: 'G04', name: '微生物组', leader: '赵组长', count: '4人', status: '正常' },
-      { id: 'G05', name: '分子组', leader: '刘组长', count: '3人', status: '正常' }
-    ]
-  },
-  nature: {
-    title: '🏷️ 性质管理',
-    fields: ['编号', '名称', '类别', '说明'],
-    items: [
-      { id: 'N01', name: '血液', type: '标本性质', desc: '全血/血清/血浆' },
-      { id: 'N02', name: '尿液', type: '标本性质', desc: '随机尿/24h尿' },
-      { id: 'N03', name: '粪便', type: '标本性质', desc: '常规/隐血' },
-      { id: 'N04', name: '脑脊液', type: '标本性质', desc: '常规/生化' },
-      { id: 'N05', name: '常规检验', type: '检验性质', desc: '血常规/尿常规' },
-      { id: 'N06', name: '生化检验', type: '检验性质', desc: '肝功能/肾功能' },
-      { id: 'N07', name: '免疫检验', type: '检验性质', desc: '传染病/激素' }
-    ]
-  },
-  instrument: {
-    title: 'PB 仪器管理',
-    fields: ['仪器编号', '仪器名称', '型号', '所属组别', '状态'],
-    items: [
-      { id: 'I01', name: '全自动生化分析仪', model: 'AU5800', group: '生化组', status: '正常' },
-      { id: 'I02', name: '全自动血球分析仪', model: 'XN-9000', group: '临检组', status: '正常' },
-      { id: 'I03', name: '全自动免疫分析仪', model: 'Cobas e601', group: '免疫组', status: '正常' },
-      { id: 'I04', name: '凝血分析仪', model: 'CS-5100', group: '临检组', status: '正常' },
-      { id: 'I05', name: '血培养仪', model: 'BACTEC FX', group: '微生物组', status: '正常' }
-    ]
-  },
-  reagent: {
-    title: '🧪 试剂管理',
-    fields: ['试剂编号', '试剂名称', '规格', '库存', '有效期', '状态'],
-    items: [
-      { id: 'R01', name: 'ALT试剂盒', spec: '500ml', stock: '23盒', expire: '2026-12', status: '正常' },
-      { id: 'R02', name: 'CREA试剂盒', spec: '500ml', stock: '15盒', expire: '2026-11', status: '正常' },
-      { id: 'R03', name: 'GLU试剂盒', spec: '500ml', stock: '8盒', expire: '2026-10', status: '低库存' },
-      { id: 'R04', name: '血球稀释液', spec: '20L', stock: '5桶', expire: '2027-01', status: '正常' },
-      { id: 'R05', name: '乙肝表面抗原试剂', spec: '100T', stock: '3盒', expire: '2026-09', status: '临期' }
-    ]
-  },
-  qc: {
-    title: '📊 质控管理',
-    fields: ['质控编号', '质控品名称', '项目', '批号', '水平', '状态'],
-    items: [
-      { id: 'QC01', name: '生化质控品', project: 'ALT/CREA/GLU', batch: '202608-1', level: '水平1', status: '在控' },
-      { id: 'QC02', name: '生化质控品', project: 'ALT/CREA/GLU', batch: '202608-1', level: '水平2', status: '在控' },
-      { id: 'QC03', name: '血球质控品', project: 'WBC/RBC/HGB', batch: '202608-2', level: '低值', status: '在控' },
-      { id: 'QC04', name: '血球质控品', project: 'WBC/RBC/HGB', batch: '202608-2', level: '高值', status: '在控' },
-      { id: 'QC05', name: '免疫质控品', project: 'HBsAg/HCV/HIV', batch: '202607-3', level: '阳性', status: '在控' }
-    ]
-  }
-};
-function showSysMgmt(type) {
-  const data = SYSTEM_DATA[type];
-  if (!data) return;
-  document.getElementById('sysMgmtTitle').textContent = data.title;
-  const container = document.getElementById('sysMgmtContent');
-  // 构建表格
-  let html = '<div style="margin-bottom:12px;display:flex;gap:8px;">';
-  html += '<button class="btn btn-primary" style="flex:1;" onclick="showToast('✅ 新增功能')">➕ 新增</button>';
-  html += '<button class="btn btn-outline" style="flex:1;" onclick="showToast('🔍 搜索功能')">🔍 搜索</button>';
-  html += '</div>';
-  html += '<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:12px;">';
-  html += '<thead><tr style="background:var(--primary);color:white;">';
-  data.fields.forEach(f => {
-    html += '<th style="padding:8px 6px;text-align:left;white-space:nowrap;">' + f + '</th>';
-  });
-  html += '<th style="padding:8px 6px;text-align:center;">操作</th></tr></thead><tbody>';
-  data.items.forEach((item, i) => {
-    html += '<tr style="border-bottom:1px solid #eee;' + (i % 2 === 0 ? 'background:#FAFAFA;' : '') + '">';
-    data.fields.forEach(f => {
-      const keyMap = { '用户名': 'id', '姓名': 'name', '岗位': 'post', '职称': 'title', '组别': 'group', '状态': 'status', '组别编号': 'id', '组别名称': 'name', '组长': 'leader', '成员数': 'count', '编号': 'id', '名称': 'name', '类别': 'type', '说明': 'desc', '仪器编号': 'id', '仪器名称': 'name', '型号': 'model', '所属组别': 'group', '试剂编号': 'id', '试剂名称': 'name', '规格': 'spec', '库存': 'stock', '有效期': 'expire', '质控编号': 'id', '质控品名称': 'name', '项目': 'project', '批号': 'batch', '水平': 'level' };
-      const key = keyMap[f] || f.toLowerCase();
-      let val = item[key] || '-';
-      if (f === '状态') {
-        const statusColors = { '在职': '#4CAF50', '休假': '#FF9800', '离职': '#F44336', '正常': '#4CAF50', '低库存': '#FF9800', '临期': '#F44336', '在控': '#4CAF50' };
-        const color = statusColors[val] || '#666';
-        val = '<span style="background:' + color + ';color:white;padding:2px 8px;border-radius:10px;font-size:11px;">' + val + '</span>';
-      }
-      html += '<td style="padding:8px 6px;">' + val + '</td>';
-    });
-    html += '<td style="padding:8px 6px;text-align:center;"><span style="color:var(--primary);cursor:pointer;" onclick="showToast('✏️ 编辑 ' + (item.name || item.id) + '')">✏️</span> <span style="color:#F44336;cursor:pointer;margin-left:4px;" onclick="showToast('🗑️ 删除 ' + (item.name || item.id) + '')">🗑️</span></td>';
-    html += '</tr>';
-  });
-  html += '</tbody></table></div>';
-  container.innerHTML = html;
-  showModal('sysMgmtModal');
-}
-function switchTab(tab) {
-  currentTab = tab;
-  document.querySelectorAll('.nav-item').forEach(item => {
-    item.classList.toggle('active', item.dataset.page === tab);
-  });
-  showPage('page-' + tab);
-}
-// ===== 页面切换 =====
-function showPage(pageId) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  const target = document.getElementById(pageId);
-  if (target) {
-    target.classList.add('active');
-    window.scrollTo(0, 0);
-  }
-}
-function navigate(page) {
-  const pageMap = {
-    'maintenance': 'page-maintenance',
-    'qc': 'page-qc',
-    'workload': 'page-workload',
-    'sop': 'page-sop',
-    'critical': 'page-critical',
-    'performance': 'page-performance',
-    'performance-detail': 'page-performance-detail',
-    'profile': 'page-profile'
-  };
-  const pageId = pageMap[page];
-  if (pageId) {
-    showPage(pageId);
-    // 高亮对应导航
-    const navMap = {
-      'maintenance': 'home', 'qc': 'home', 'workload': 'home',
-      'sop': 'home', 'critical': 'home',
-      'performance': 'performance', 'performance-detail': 'performance',
-      'profile': 'profile'
-    };
-    const navTab = navMap[page] || 'home';
-    document.querySelectorAll('.nav-item').forEach(item => {
-      item.classList.toggle('active', item.dataset.page === navTab);
-    });
-  }
-}
-// ===== 弹窗控制 =====
-function showModal(id) {
-  document.getElementById(id).classList.add('show');
-}
-function closeModal(id) {
-  document.getElementById(id).classList.remove('show');
-}
-function showMaintenanceModal() {
-  showModal('maintenanceModal');
-}
-function showQcModal() {
-  showModal('qcModal');
-}
-function showSopModal() {
-  showModal('sopModal');
-}
-function showCriticalModal() {
-  showModal('criticalModal');
-}
-
-function showAllDeptData() {
-  showToast('📊 全科数据总览：本月检测量1,247项，质控合格率98.5%，保养完成率100%');
-}
-// ===== 功能操作 =====
-function toggleCheck(el) {
-  el.classList.toggle('checked');
-  const text = el.nextElementSibling;
-  if (text) text.classList.toggle('done');
-}
-function completeMaintenance() {
-  closeModal('maintenanceModal');
-  showToast('✅ 保养完成，积分+1');
-}
-function submitQc() {
-  closeModal('qcModal');
-  showToast('✅ 质控数据已提交');
-}
-function submitCritical() {
-  closeModal('criticalModal');
-  showToast('✅ 危急值已报告，积分+2');
-}
-
-
-
-// ===== 系统设置 =====
-function showSystemSettings() {
-  showModal('systemSettingsModal');
-}
-function saveSystemSettings() {
-  const deptName = document.getElementById('sysDeptName').value;
-  const scoreMaint = document.getElementById('sysScoreMaintenance').value;
-  const scoreQc = document.getElementById('sysScoreQc').value;
-  const scoreSop = document.getElementById('sysScoreSop').value;
-  const scoreCritical = document.getElementById('sysScoreCritical').value;
-  showToast('✅ 系统设置已保存：' + deptName + ' 积分规则已更新');
-  closeModal('systemSettingsModal');
-}
-// ===== 权限配置 =====
-let rolePermEditing = null;
-function showPermConfig() {
-  rolePermEditing = null;
-  document.getElementById('permConfigRole').value = '检验人员';
-  loadRolePerms();
-  showModal('permConfigModal');
-}
-function loadRolePerms() {
-  const role = document.getElementById('permConfigRole').value;
-  const rolePerms = {
-    '系统管理员': ['全科数据总览','绩效审核','用户管理','日志审核','全科排名','数据导出','员工授权','系统设置','账号管理','权限配置'],
-    '科主任': ['全科数据总览','绩效审核','用户管理','日志审核','全科排名','数据导出'],
-    '组长': ['本组数据','本组日志审核','组内绩效','组内排名'],
-    '质控员': ['质控分析','失控审核','质控监控'],
-    '设备管理员': ['设备管理','保养计划管理'],
-    '检验人员': ['个人日志','个人绩效','保养打卡','SOP学习']
-  };
-  const perms = rolePerms[role] || [];
-  const container = document.getElementById('rolePermList');
-  container.innerHTML = '';
-  ALL_PERMISSIONS.forEach(p => {
-    const label = document.createElement('label');
-    label.style.cssText = 'display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;border:1px solid #ddd;font-size:12px;cursor:pointer;background:' + (perms.includes(p.id) ? 'var(--primary-light)' : 'white') + ';';
-    const cb = document.createElement('input');
-    cb.type = 'checkbox';
-    cb.value = p.id;
-    cb.checked = perms.includes(p.id);
-    cb.style.cssText = 'accent-color:var(--primary);';
-    cb.onchange = function() {
-      label.style.background = this.checked ? 'var(--primary-light)' : 'white';
-    };
-    label.appendChild(cb);
-    label.appendChild(document.createTextNode(p.label));
-    container.appendChild(label);
-  });
-}
-function saveRolePerms() {
-  const role = document.getElementById('permConfigRole').value;
-  const perms = [];
-  document.querySelectorAll('#rolePermList input[type=checkbox]:checked').forEach(cb => {
-    perms.push(cb.value);
-  });
-  showToast('✅ 角色「' + role + '」权限已保存：' + perms.join('、'));
-  closeModal('permConfigModal');
-}
-
-// ===== 消息通知设置 =====
-function showNotificationSettings() {
-  showModal('notificationModal');
-}
-// ===== 数据导出 =====
-function showDataExport() {
-  showModal('dataExportModal');
-}
-function exportData(type) {
-  const names = {
-    'worklog': '📋 工作日志',
-    'performance': '🏆 绩效积分报告',
-    'backup': '💾 全量数据备份'
-  };
-  showToast('✅ 正在导出' + (names[type] || type) + '，请稍候...');
-  closeModal('dataExportModal');
-  setTimeout(() => showToast('✅ ' + (names[type] || type) + ' 导出完成！文件已保存'), 1500);
-}
-// ===== 操作审计日志 =====
-
-// ===== 管理后台 =====
-function showDataAudit() {
-  showModal('dataAuditModal');
-}
-function showDataDashboard() {
-  showModal('dataDashboardModal');
-}
-function showReportExport() {
-  showModal('reportExportModal');
-}
-function showAuditLog() {
-  showModal('auditLogModal');
-}
-// ===== 关于 =====
-function showAboutApp() {
-  showModal('aboutModal');
-}
-// ===== 个人信息编辑 =====
-function showMyProfile() {
-  if (!currentUser) return;
-  document.getElementById('myName').value = currentUser.name || '';
-  document.getElementById('myPhone').value = currentUser.phone || '';
-  document.getElementById('myEmail').value = currentUser.email || '';
-  document.getElementById('myUserId').value = currentUser.id || '';
-  document.getElementById('myRole').value = currentUser.role || '';
-  document.getElementById('myGroup').value = currentUser.group || '';
-  document.getElementById('myTitle').value = currentUser.title || '';
-  showModal('myProfileModal');
-}
-function saveMyProfile() {
-  if (!currentUser) return;
-  const name = document.getElementById('myName').value.trim();
-  const phone = document.getElementById('myPhone').value.trim();
-  const email = document.getElementById('myEmail').value.trim();
-  const title = document.getElementById('myTitle').value.trim();
-  if (!name) {
-    showToast('⚠️ 姓名不能为空');
-    return;
-  }
-  // 更新当前用户
-  currentUser.name = name;
-  currentUser.phone = phone;
-  currentUser.email = email;
-  currentUser.title = title;
-  // 同步更新数据库
-  const dbUser = USER_DB.find(u => u.id === currentUser.id);
-  if (dbUser) {
-    dbUser.name = name;
-    dbUser.phone = phone;
-    dbUser.email = email;
-    dbUser.title = title;
-  }
-  // 刷新界面
-  document.getElementById('headerUserName').textContent = name;
-  document.getElementById('profileName').textContent = name;
-  closeModal('myProfileModal');
-  showToast('✅ 个人信息已保存');
-}
-// ===== 用户管理 =====
-let editingUserId = null;
-let isAddingUser = false;
-function showUserManagement() {
-  renderUserList();
-  showModal('userMgmtModal');
-}
-function renderUserList(filter) {
-  const list = document.getElementById('userList');
-  list.innerHTML = '';
-  let users = USER_DB;
-  if (filter) {
-    const f = filter.toLowerCase();
-    users = users.filter(u => u.name.includes(f) || u.id.includes(f) || u.group.includes(f) || u.role.includes(f));
-  }
-  users.forEach(u => {
-    const statusColor = u.status === '在职' ? '#22c55e' : u.status === '休假' ? '#f59e0b' : '#ef4444';
-    const card = document.createElement('div');
-    card.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--bg-card);border-radius:12px;border:1px solid var(--border);';
-    card.innerHTML = `
-      <div style="display:flex;align-items:center;gap:12px;flex:1;">
-        <div style="width:40px;height:40px;border-radius:50%;background:var(--primary);color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;">${u.name[0]}</div>
-        <div style="flex:1;">
-          <div style="display:flex;align-items:center;gap:6px;">
-            <span style="font-weight:600;">${u.name}</span>
-            <span style="font-size:11px;padding:1px 6px;border-radius:10px;background:${statusColor}20;color:${statusColor};">${u.status || '在职'}</span>
-          </div>
-          <div style="font-size:12px;color:var(--text-light);">${u.role} · ${u.group}${u.title ? ' · ' + u.title : ''}
-          <div style="font-size:11px;color:var(--text-light);">用户名: ${u.id}${u.phone ? ' | 📞' + u.phone : ''}
-        
-      
-      <div style="display:flex;gap:4px;">
-        <button class="btn btn-outline btn-sm" onclick="editUser('${u.id}')">编辑</button>
-        <button class="btn btn-outline btn-sm" onclick="setUserPerm('${u.id}')">权限</button>
-      
-    `;
-    list.appendChild(card);
-  });
-}
-function searchUsers() {
-  const filter = document.getElementById('userSearchInput').value;
-  renderUserList(filter);
-}
-function showAddUser() {
-  isAddingUser = true;
-  editingUserId = null;
-  document.getElementById('editUserId').value = '';
-  document.getElementById('editUserId').readOnly = false;
-  document.getElementById('editUserId').style.background = 'white';
-  document.getElementById('editUserName').value = '';
-  document.getElementById('editUserPassword').value = '123456';
-  document.getElementById('editUserRole').value = '检验人员';
-  document.getElementById('editUserGroup').value = '生化组';
-  document.getElementById('editUserTitle').value = '检验师';
-  document.getElementById('editUserPhone').value = '';
-  document.getElementById('editUserEmail').value = '';
-  document.getElementById('editUserStatus').value = '在职';
-  document.getElementById('editUserDeleteArea').style.display = 'none';
-  renderPermCheckboxes([]);
-  document.querySelector('#userEditModal h3').textContent = '➕ 新增员工';
-  showModal('userEditModal');
-}
-function editUser(userId) {
-  isAddingUser = false;
-  editingUserId = userId;
-  const user = USER_DB.find(u => u.id === userId);
-  if (!user) return;
-  document.getElementById('editUserId').value = user.id;
-  document.getElementById('editUserId').readOnly = true;
-  document.getElementById('editUserId').style.background = '#f5f5f5';
-  document.getElementById('editUserName').value = user.name;
-  document.getElementById('editUserPassword').value = user.password || '123456';
-  document.getElementById('editUserRole').value = user.role;
-  document.getElementById('editUserGroup').value = user.group;
-  document.getElementById('editUserTitle').value = user.title || '';
-  document.getElementById('editUserPhone').value = user.phone || '';
-  document.getElementById('editUserEmail').value = user.email || '';
-  document.getElementById('editUserStatus').value = user.status || '在职';
-  document.getElementById('editUserDeleteArea').style.display = '';
-  renderPermCheckboxes(user.permissions || []);
-  document.querySelector('#userEditModal h3').textContent = '✏️ 编辑用户 - ' + user.name;
-  showModal('userEditModal');
-}
-function renderPermCheckboxes(selectedPerms) {
-  const container = document.getElementById('permCheckboxList');
-  container.innerHTML = '';
-  ALL_PERMISSIONS.forEach(p => {
-    const label = document.createElement('label');
-    label.style.cssText = 'display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;border:1px solid #ddd;font-size:12px;cursor:pointer;background:' + (selectedPerms.includes(p.id) ? 'var(--primary-light)' : 'white') + ';';
-    const cb = document.createElement('input');
-    cb.type = 'checkbox';
-    cb.value = p.id;
-    cb.checked = selectedPerms.includes(p.id);
-    cb.style.cssText = 'accent-color:var(--primary);';
-    cb.onchange = function() {
-      label.style.background = this.checked ? 'var(--primary-light)' : 'white';
-    };
-    label.appendChild(cb);
-    label.appendChild(document.createTextNode(p.label));
-    container.appendChild(label);
-  });
-}
-function onRoleChange() {
-  // 根据角色自动推荐权限
-  const role = document.getElementById('editUserRole').value;
-  const rolePerms = {
-    '科主任': ['全科数据总览','绩效审核','用户管理','日志审核','全科排名','数据导出','员工授权'],
-    '组长': ['本组数据','本组日志审核','组内绩效','组内排名'],
-    '质控员': ['质控分析','失控审核','质控监控'],
-    '设备管理员': ['设备管理','保养计划管理'],
-    '检验人员': ['个人日志','个人绩效','保养打卡','SOP学习']
-  };
-  const perms = rolePerms[role] || [];
-  renderPermCheckboxes(perms);
-}
-function saveUserEdit() {
-  const userId = document.getElementById('editUserId').value.trim();
-  const name = document.getElementById('editUserName').value.trim();
-  const password = document.getElementById('editUserPassword').value.trim();
-  const role = document.getElementById('editUserRole').value;
-  const group = document.getElementById('editUserGroup').value;
-  const title = document.getElementById('editUserTitle').value.trim();
-  const phone = document.getElementById('editUserPhone').value.trim();
-  const email = document.getElementById('editUserEmail').value.trim();
-  const status = document.getElementById('editUserStatus').value;
-  if (!userId || !name) {
-    showToast('⚠️ 用户名和姓名不能为空');
-    return;
-  }
-  // 收集选中的权限
-  const perms = [];
-  document.querySelectorAll('#permCheckboxList input[type=checkbox]:checked').forEach(cb => {
-    perms.push(cb.value);
-  });
-  if (isAddingUser) {
-    // 新增用户
-    if (USER_DB.find(u => u.id === userId)) {
-      showToast('⚠️ 用户名已存在');
-      return;
-    }
-    USER_DB.push({
-      id: userId,
-      name: name,
-      password: password || '123456',
-      role: role,
-      group: group,
-      title: title,
-      phone: phone,
-      email: email,
-      status: status,
-      permissions: perms
-    });
-    showToast('✅ 员工 ' + name + ' 已添加');
-  } else {
-    // 编辑用户
-    const user = USER_DB.find(u => u.id === editingUserId);
-    if (!user) return;
-    user.name = name;
-    if (password) user.password = password;
-    user.role = role;
-    user.group = group;
-    user.title = title;
-    user.phone = phone;
-    user.email = email;
-    user.status = status;
-    user.permissions = perms;
-    showToast('✅ 用户信息已更新');
-    // 如果编辑的是当前用户，刷新显示
-    if (currentUser && currentUser.id === editingUserId) {
-      currentUser.name = name;
-      currentUser.role = role;
-      currentUser.group = group;
-      document.getElementById('headerUserName').textContent = name;
-      document.getElementById('profileName').textContent = name;
-      document.getElementById('profileRole').textContent = role + ' · ' + group;
-      applyPermissions(role);
-    }
-  }
-  closeModal('userEditModal');
-  renderUserList();
-}
-function deleteCurrentUser() {
-  if (!editingUserId) return;
-  if (editingUserId === 'admin') {
-    showToast('⚠️ 不能删除主任账号');
-    return;
-  }
-  if (!confirm('确定要删除该员工吗？')) return;
-  const idx = USER_DB.findIndex(u => u.id === editingUserId);
-  if (idx >= 0) {
-    const name = USER_DB[idx].name;
-    USER_DB.splice(idx, 1);
-    closeModal('userEditModal');
-    renderUserList();
-    showToast('🗑️ 已删除员工：' + name);
-  }
-}
-function setUserPerm(userId) {
-  editUser(userId);
-}
-// ===== Toast提示 =====
-function showToast(msg) {
-  const toast = document.getElementById('toast');
-  toast.textContent = msg;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2000);
-}
-// ===== 初始化日历 =====
-function initCalendar() {
-  const grid = document.getElementById('calendarGrid');
-  const days = ['日','一','二','三','四','五','六'];
-  days.forEach(d => {
-    const el = document.createElement('div');
-    el.className = 'cal-header';
-    el.textContent = d;
-    grid.appendChild(el);
-  });
-  // 2026年8月1日是星期六
-  const startDay = 6; // 星期六
-  for (let i = 0; i < startDay; i++) {
-    const el = document.createElement('div');
-    el.className = 'cal-day';
-    el.style.visibility = 'hidden';
-    grid.appendChild(el);
-  }
-  const today = 1;
-  const daysInMonth = 31;
-  for (let day = 1; day <= daysInMonth; day++) {
-    const el = document.createElement('div');
-    el.className = 'cal-day';
-    if (day === today) {
-      el.classList.add('today');
-    } else if (day < today) {
-      el.classList.add('has-record');
-      const dot = document.createElement('div');
-      dot.className = 'dot';
-      el.appendChild(dot);
-    }
-    el.textContent = day;
-    el.onclick = () => showToast('查看 ' + day + ' 日工作日志');
-    grid.appendChild(el);
-  }
-}
-// 初始化
-initCalendar();
-
-// ===== 密码修改功能 =====
-function openPasswordModal() {
-  if (!currentUser) {
-    showToast('请先登录');
-    return;
-  }
-  document.getElementById('oldPassword').value = '';
-  document.getElementById('newPassword').value = '';
-  document.getElementById('confirmPassword').value = '';
-  openModal('passwordModal');
-}
-function changePassword() {
-  if (!currentUser) return;
-  const oldPwd = document.getElementById('oldPassword').value;
-  const newPwd = document.getElementById('newPassword').value;
-  const confirmPwd = document.getElementById('confirmPassword').value;
-  
-  if (!oldPwd || !newPwd || !confirmPwd) {
-    showToast('请填写完整信息');
-    return;
-  }
-  if (oldPwd !== currentUser.password) {
-    showToast('当前密码错误');
-    return;
-  }
-  if (newPwd.length < 6) {
-    showToast('新密码至少6位');
-    return;
-  }
-  if (newPwd !== confirmPwd) {
-    showToast('两次输入的新密码不一致');
-    return;
-  }
-  if (oldPwd === newPwd) {
-    showToast('新密码不能与当前密码相同');
-    return;
-  }
-  
-  // 更新密码
-  currentUser.password = newPwd;
-  const user = USER_DB.find(u => u.id === currentUser.id);
-  if (user) {
-    user.password = newPwd;
-    // 移除首次登录标记
-    user.defaultPwd = false;
-  }
-  currentUser.defaultPwd = false;
-  showToast('✅ 密码修改成功，请重新登录');
-  closeModal('passwordModal');
-  // 恢复弹窗标题
-  document.querySelector('#passwordModal .modal-header h3').textContent = '🔒 修改密码';
-  setTimeout(() => handleLogout(), 1500);
-}
-
-// ===== 登录页增强 =====
-// 回车键登录
+// ===== 回车键登录 =====
 document.addEventListener('DOMContentLoaded', function() {
-  const pwdInput = document.getElementById('loginPassword');
-  if (pwdInput) {
-    pwdInput.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        handleLogin();
-      }
-    });
-  }
-  const userInput = document.getElementById('loginUsername');
-  if (userInput) {
-    userInput.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        handleLogin();
-      }
-    });
-  }
-  // 记住密码功能
-  const savedUser = localStorage.getItem('savedUsername');
-  const savedPwd = localStorage.getItem('savedPassword');
-  if (savedUser && savedPwd) {
-    document.getElementById('loginUsername').value = savedUser;
-    document.getElementById('loginPassword').value = savedPwd;
+  document.getElementById('loginPassword').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') handleLogin();
+  });
+  document.getElementById('loginUsername').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') handleLogin();
+  });
+  // 记住密码
+  var remembered = localStorage.getItem('rememberedUser');
+  if (remembered) {
+    document.getElementById('loginUsername').value = remembered;
     document.getElementById('rememberMe').checked = true;
   }
 });
-// 增强登录函数，加入记住密码
-const originalHandleLogin = handleLogin;
-handleLogin = function() {
-  const username = document.getElementById('loginUsername').value.trim();
-  const password = document.getElementById('loginPassword').value;
-  if (!username || !password) {
-    showToast('请输入用户名和密码');
-    return;
-  }
-  // 记住密码
-  if (document.getElementById('rememberMe').checked) {
-    localStorage.setItem('savedUsername', username);
-    localStorage.setItem('savedPassword', password);
-  } else {
-    localStorage.removeItem('savedUsername');
-    localStorage.removeItem('savedPassword');
-  }
-  originalHandleLogin();
-};
 </script>
 </body>
 </html>
