@@ -30,7 +30,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hira
 .btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;box-shadow:0 4px 12px rgba(26,35,126,0.3);}
 .btn-success{background:linear-gradient(135deg,#2e7d32,#43a047);color:#fff;}
 .btn-danger{background:linear-gradient(135deg,#c62828,#e53935);color:#fff;}
-.btn-outline{background:#fff;border:1.5px solid var(--primary);color:var(--primary);}
+.btn-outline{background:#fff;border:1.5px solid var(--primary);color:var(--primary);}.btn-orange{background:#fff3e0;border:1.5px solid #e65100;color:#e65100;}.btn-info{background:#e3f2fd;border:1.5px solid #1565c0;color:#1565c0;}
 .btn-sm{padding:8px 14px;font-size:13px;width:auto;display:inline-block;border-radius:6px;}
 .login-footer{margin-top:25px;text-align:center;color:#c5cae9;font-size:12px;}
 .login-footer .copyright{margin-bottom:5px;}
@@ -172,6 +172,7 @@ tr:nth-child(even){background:#fafafa;}
     </div>
     <div class="sidebar-nav" id="sidebarNav"></div>
     <div class="sidebar-footer">
+      <div class="logout-btn" onclick="openChangePwdModal()">🔑 修改密码</div>
       <div class="logout-btn" onclick="handleLogout()">🚪 退出登录</div>
     </div>
   </div>
@@ -199,12 +200,18 @@ tr:nth-child(even){background:#fafafa;}
     <div class="page" id="page-maintenance"><div class="page-title">🔧 仪器保养 <span class="sub">每日保养打卡</span></div><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openMaintenanceModal()">➕ 新增保养</button></div><div id="maintenanceList"></div></div>
     <div class="page" id="page-quality"><div class="page-title">📊 质控管理 <span class="sub">室内质控 · 室间质评</span></div><div class="tabs"><div class="tab active" onclick="switchQcTab('daily',this)">每日质控</div><div class="tab" onclick="switchQcTab('eqa',this)">室间质评</div><div class="tab" onclick="switchQcTab('trend',this)">趋势分析</div></div><div id="qcDaily"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openQcModal()">➕ 录入质控</button></div><div id="qcList"></div></div><div id="qcEqa" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openEqaModal()">➕ 新增EQA</button></div><div id="eqaList"></div></div><div id="qcTrend" style="display:none;"><div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon">📈</div><div><div class="item-title">质控CV趋势</div><div class="item-desc">点击查看详细趋势分析</div></div></div><div class="item-right"><span class="badge badge-blue">正常</span></div></div></div></div></div>
     <div class="page" id="page-workload"><div class="page-title">📝 工作量 <span class="sub">今日检测统计</span></div><div class="stats-grid"><div class="stat-card"><div class="label">今日样本量</div><div class="value" id="wlToday">0</div></div><div class="stat-card"><div class="label">本周样本量</div><div class="value" id="wlWeek">0</div></div><div class="stat-card"><div class="label">本月样本量</div><div class="value" id="wlMonth">0</div></div><div class="stat-card"><div class="label">TAT达标率</div><div class="value" id="wlTat">0%</div></div></div><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openWorkloadModal()">➕ 录入工作量</button></div><div id="workloadList"></div></div>
-    <div class="page" id="page-sop"><div class="page-title">📚 SOP学习 <span class="sub">在线阅读 · 在线考试</span></div><div class="tabs"><div class="tab active" onclick="switchSopTab('list',this)">SOP列表</div><div class="tab" onclick="switchSopTab('exam',this)">在线考试</div><div class="tab" onclick="switchSopTab('progress',this)">学习进度</div></div><div id="sopList"></div><div id="sopExam" style="display:none;"></div><div id="sopProgress" style="display:none;"></div></div>
+    <div class="page" id="page-sop"><div class="page-title">📚 SOP学习 <span class="sub">在线阅读 · 在线考试</span></div><div class="tabs"><div class="tab active" onclick="switchSopTab('list',this)">SOP列表</div><div class="tab" onclick="switchSopTab('exam',this)">在线考试</div><div class="tab" onclick="switchSopTab('progress',this)">学习进度</div></div><div id="sopList"></div><div id="sopExam" style="display:none;">
+  <div class="action-bar">
+    <button class="action-btn action-btn-blue" onclick="startExam()">📝 开始考试</button>
+    <button class="action-btn action-btn-green" onclick="showExamResult()">📊 考试成绩</button>
+  </div>
+  <div id="examContent"></div>
+</div><div id="sopProgress" style="display:none;"></div></div>
     <div class="page" id="page-critical"><div class="page-title">⚠️ 危急值报告 <span class="sub">及时报告 · 保障安全</span></div><div class="action-bar"><button class="action-btn action-btn-red" onclick="openCriticalModal()">➕ 新增危急值</button></div><div id="criticalList"></div></div>
     <div class="page" id="page-reagent"><div class="page-title">🧪 试剂管理 <span class="sub">库存 · 出入库 · 效期</span></div><div class="tabs"><div class="tab active" onclick="switchReagentTab('inventory',this)">库存管理</div><div class="tab" onclick="switchReagentTab('inout',this)">出入库记录</div><div class="tab" onclick="switchReagentTab('expiry',this)">效期预警</div></div><div id="reagentInventory"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openReagentModal()">➕ 新增试剂</button><button class="action-btn action-btn-green" onclick="openReagentInOutModal()">📦 出入库</button></div><div id="reagentList"></div></div><div id="reagentInout" style="display:none;"><div id="reagentInoutList"></div></div><div id="reagentExpiry" style="display:none;"><div id="reagentExpiryList"></div></div></div>
     <div class="page" id="page-handover"><div class="page-title">🔄 交接班记录 <span class="sub">白班 · 夜班</span></div><div class="tabs"><div class="tab active" onclick="switchHandoverTab('list',this)">交接记录</div><div class="tab" onclick="switchHandoverTab('add',this)">填写交接</div></div><div id="handoverList"></div><div id="handoverAdd" style="display:none;"><div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e8f5e9;">📝</div><div><div class="item-title">填写交接班记录</div><div class="item-desc">记录白班/夜班交接内容</div></div></div><div class="item-right"><button class="btn btn-primary btn-sm" onclick="openHandoverModal()">填写</button></div></div></div></div></div>
     <div class="page" id="page-performance"><div class="page-title">🏆 绩效积分 <span class="sub">量化考核 · 公平透明</span></div><div class="stats-grid"><div class="stat-card"><div class="label">本月总积分</div><div class="value" id="perfTotal">0</div></div><div class="stat-card"><div class="label">科室排名</div><div class="value" id="perfRank">-</div></div><div class="stat-card"><div class="label">达标率</div><div class="value" id="perfRate">0%</div></div><div class="stat-card"><div class="label">评级</div><div class="value" id="perfGrade">-</div></div></div><div class="tabs"><div class="tab active" onclick="switchPerfTab('detail',this)">积分明细</div><div class="tab" onclick="switchPerfTab('rank',this)">科室排名</div><div class="tab" onclick="switchPerfTab('rules',this)">积分规则</div></div><div id="perfDetail"></div><div id="perfRank" style="display:none;"></div><div id="perfRules" style="display:none;"></div></div>
-    <div class="page" id="page-settings"><div class="page-title">⚙️ 系统设置 <span class="sub">管理配置中心</span></div><div class="tabs"><div class="tab active" onclick="switchSettingsTab('staff',this)">员工管理</div><div class="tab" onclick="switchSettingsTab('device',this)">设备管理</div><div class="tab" onclick="switchSettingsTab('reagent',this)">试剂管理</div><div class="tab" onclick="switchSettingsTab('sop',this)">SOP管理</div></div><div id="settingsStaff"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openStaffModal()">➕ 新增员工</button><button class="action-btn action-btn-purple" onclick="showToast('权限配置功能开发中')">🔐 权限配置</button></div><div class="search-bar"><input type="text" placeholder="搜索员工姓名/工号..." id="staffSearch" oninput="filterStaff()"></div><div id="staffList"></div></div><div id="settingsDevice" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openDeviceModal()">➕ 新增设备</button></div><div id="deviceList"></div></div><div id="settingsReagent" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openReagentModal()">➕ 新增试剂</button><button class="action-btn action-btn-green" onclick="openReagentInOutModal()">📦 出入库</button></div><div id="settingsReagentList"></div></div><div id="settingsSop" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openSopManageModal()">➕ 新增SOP</button></div><div id="sopManageList"></div></div></div>
+    <div class="page" id="page-settings"><div class="page-title">⚙️ 系统设置 <span class="sub">管理配置中心</span></div><div class="tabs"><div class="tab active" onclick="switchSettingsTab('staff',this)">员工管理</div><div class="tab" onclick="switchSettingsTab('device',this)">设备管理</div><div class="tab" onclick="switchSettingsTab('reagent',this)">试剂管理</div><div class="tab" onclick="switchSettingsTab('sop',this)">SOP管理</div></div><div id="settingsStaff"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openStaffModal()">➕ 新增员工</button><button class="action-btn action-btn-purple" onclick="showToast('权限配置功能开发中')">🔐 权限配置</button></div><div class="search-bar"><input type="text" placeholder="搜索员工姓名/工号..." id="staffSearch" oninput="filterStaff()"></div><div id="staffList"></div></div><div id="settingsDevice" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openDeviceModal()">➕ 新增设备</button></div><div id="deviceList"></div></div><div id="settingsReagent" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openReagentModal()">➕ 新增试剂</button><button class="action-btn action-btn-green" onclick="openReagentInOutModal()">📦 出入库</button></div><div id="settingsReagentList"></div></div><div id="settingsSop" style="display:none;"><div class="tabs" style="margin-bottom:10px;"><div class="tab active" onclick="switchSopSettingsTab('sop',this)">SOP管理</div><div class="tab" onclick="switchSopSettingsTab('exam',this)">试题管理</div></div><div id="sopSettingsSop"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openSopManageModal()">➕ 新增SOP</button></div><div id="sopManageList"></div></div><div id="sopSettingsExam" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openExamQuestionModal()">➕ 新增试题</button></div><div id="examQuestionList"></div></div></div></div>
   </div>
 </div>
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)"><div class="modal" id="modalContent"></div></div>
@@ -915,10 +922,11 @@ function switchPerfTab(tab, el){
   document.getElementById('perfRank').style.display = tab === 'rank' ? 'block' : 'none';
   document.getElementById('perfRules').style.display = tab === 'rules' ? 'block' : 'none';
 }
-function loadSettings(){ loadStaff(); loadDevice(); loadSettingsReagent(); loadSopManage(); }
+function loadSettings(){ loadStaff(); loadDevice(); loadSettingsReagent(); loadSopManage(); loadExamQuestions(); }
 function loadStaff(){
   var list = document.getElementById('staffList');
   var html = '';
+  var isManager = currentUser.role === '系统管理员' || currentUser.role === '科主任';
   for(var i=0;i<appData.users.length;i++){
     var u = appData.users[i];
     var statusBadge = u.status === 'active' ? '<span class="badge badge-green">在职</span>' : '<span class="badge badge-gray">停用</span>';
@@ -926,7 +934,9 @@ function loadStaff(){
     var canDelete = u.id !== 'admin' && u.id !== currentUser.id ? '<button class="btn btn-danger btn-sm" onclick="deleteStaff(\'' + u.id + '\')">删除</button>' : '';
     var editBtn = '<button class="btn btn-outline btn-sm" onclick="editStaff(\'' + u.id + '\')">编辑</button>';
     var permBtn = '<button class="btn btn-success btn-sm" onclick="openPermModal(\'' + u.id + '\')">权限</button>';
-    html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e8eaf6;">👤</div><div><div class="item-title">' + u.name + ' <span style="font-size:11px;color:var(--text-light);">' + u.id + '</span></div><div class="item-desc">' + u.group + ' · ' + u.phone + '</div></div></div><div class="item-right">' + roleBadge + ' ' + statusBadge + '<div style="display:flex;gap:5px;margin-top:5px;">' + editBtn + ' ' + permBtn + ' ' + canDelete + '</div></div></div></div>';
+    var changePwdBtn = u.id === currentUser.id ? '<button class="btn btn-info btn-sm" onclick="openChangePwdModal()">修改密码</button>' : '';
+    var resetPwdBtn = isManager && u.id !== currentUser.id ? '<button class="btn btn-orange btn-sm" onclick="openResetPwdModal(\'' + u.id + '\')">恢复密码</button>' : '';
+    html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e8eaf6;">👤</div><div><div class="item-title">' + u.name + ' <span style="font-size:11px;color:var(--text-light);">' + u.id + '</span></div><div class="item-desc">' + u.group + ' · ' + u.phone + '</div></div></div><div class="item-right">' + roleBadge + ' ' + statusBadge + '<div style="display:flex;gap:5px;margin-top:5px;flex-wrap:wrap;">' + editBtn + ' ' + permBtn + ' ' + changePwdBtn + ' ' + resetPwdBtn + ' ' + canDelete + '</div></div></div></div>';
   }
   if(appData.users.length === 0) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无员工</div></div></div>';
   list.innerHTML = html;
@@ -1060,10 +1070,59 @@ function loadDevice(){
   for(var i=0;i<appData.devices.length;i++){
     var d = appData.devices[i];
     var statusBadge = d.status === 'normal' ? '<span class="badge badge-green">正常</span>' : d.status === 'warning' ? '<span class="badge badge-orange">需保养</span>' : '<span class="badge badge-red">故障</span>';
-    html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e3f2fd;">🔬</div><div><div class="item-title">' + d.name + '</div><div class="item-desc">' + d.model + ' · ' + d.group + ' · 责任人:' + d.responsible + '</div></div></div><div class="item-right">' + statusBadge + '</div></div></div>';
+    var editBtn = '<button class="btn btn-outline btn-sm" onclick="editDevice(\'' + d.id + '\')">编辑</button>';
+    var delBtn = '<button class="btn btn-danger btn-sm" onclick="deleteDevice(\'' + d.id + '\')">删除</button>';
+    html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e3f2fd;">🔬</div><div><div class="item-title">' + d.name + '</div><div class="item-desc">' + d.model + ' · ' + d.group + ' · 责任人:' + d.responsible + '</div></div></div><div class="item-right">' + statusBadge + '<div style="display:flex;gap:5px;margin-top:5px;">' + editBtn + ' ' + delBtn + '</div></div></div></div>';
   }
   if(appData.devices.length === 0) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无设备</div></div></div>';
   list.innerHTML = html;
+}
+function editDevice(id){
+  var d = null;
+  for(var i=0;i<appData.devices.length;i++){ if(appData.devices[i].id === id){ d = appData.devices[i]; break; } }
+  if(!d){ showToast('设备不存在'); return; }
+  var modal = document.getElementById('modalContent');
+  modal.innerHTML = '<div class="modal-header"><h3>编辑设备</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">设备编号</label><input type="text" class="form-input" id="dId2" value="' + d.id + '"></div><div class="form-group"><label class="form-label">设备名称</label><input type="text" class="form-input" id="dName2" value="' + d.name + '"></div><div class="form-group"><label class="form-label">型号</label><input type="text" class="form-input" id="dModel2" value="' + d.model + '"></div><div class="form-group"><label class="form-label">厂商</label><input type="text" class="form-input" id="dVendor2" value="' + d.vendor + '"></div><div class="form-group"><label class="form-label">专业组</label><select class="form-select" id="dGroup2"><option value="临检组"' + (d.group==='临检组'?' selected':'') + '>临检组</option><option value="生化组"' + (d.group==='生化组'?' selected':'') + '>生化组</option><option value="免疫组"' + (d.group==='免疫组'?' selected':'') + '>免疫组</option><option value="微生物组"' + (d.group==='微生物组'?' selected':'') + '>微生物组</option><option value="分子组"' + (d.group==='分子组'?' selected':'') + '>分子组</option><option value="输血组"' + (d.group==='输血组'?' selected':'') + '>输血组</option></select></div><div class="form-group"><label class="form-label">状态</label><select class="form-select" id="dStatus2"><option value="normal"' + (d.status==='normal'?' selected':'') + '>正常</option><option value="warning"' + (d.status==='warning'?' selected':'') + '>需保养</option><option value="error"' + (d.status==='error'?' selected':'') + '>故障</option></select></div><div class="form-group"><label class="form-label">责任人</label><input type="text" class="form-input" id="dResponsible2" value="' + d.responsible + '"></div><div class="form-group"><label class="form-label">下次保养日期</label><input type="date" class="form-input" id="dNextMaint2" value="' + d.nextMaintenance + '"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveEditDevice(\'' + id + '\')">保存</button></div>';
+  document.getElementById('modalOverlay').classList.add('active');
+}
+function saveEditDevice(id){
+  var name = document.getElementById('dName2').value.trim();
+  var model = document.getElementById('dModel2').value.trim();
+  var vendor = document.getElementById('dVendor2').value.trim();
+  var group = document.getElementById('dGroup2').value;
+  var status = document.getElementById('dStatus2').value;
+  var responsible = document.getElementById('dResponsible2').value.trim();
+  var nextMaintenance = document.getElementById('dNextMaint2').value;
+  if(!name){ showToast('请输入设备名称'); return; }
+  for(var i=0;i<appData.devices.length;i++){
+    if(appData.devices[i].id === id){
+      appData.devices[i].name = name;
+      appData.devices[i].model = model;
+      appData.devices[i].vendor = vendor;
+      appData.devices[i].group = group;
+      appData.devices[i].status = status;
+      appData.devices[i].responsible = responsible;
+      appData.devices[i].nextMaintenance = nextMaintenance;
+      break;
+    }
+  }
+  saveData();
+  closeModal();
+  loadDevice();
+  showToast('✅ 设备已更新');
+}
+function deleteDevice(id){
+  if(confirm('确定要删除该设备吗？')){
+    for(var i=0;i<appData.devices.length;i++){
+      if(appData.devices[i].id === id){
+        appData.devices.splice(i,1);
+        break;
+      }
+    }
+    saveData();
+    loadDevice();
+    showToast('✅ 设备已删除');
+  }
 }
 function openDeviceModal(){
   var modal = document.getElementById('modalContent');
@@ -1090,7 +1149,9 @@ function loadSettingsReagent(){
   var html = '';
   for(var i=0;i<appData.reagents.length;i++){
     var r = appData.reagents[i];
-    html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e8f5e9;">🧪</div><div><div class="item-title">' + r.name + '</div><div class="item-desc">' + r.spec + ' · 库存:' + r.stock + r.unit + ' · 效期:' + r.expiry + '</div></div></div><div class="item-right"><span class="badge badge-blue">' + r.group + '</span></div></div></div>';
+    var editBtn = '<button class="btn btn-outline btn-sm" onclick="editReagent(\'' + r.id + '\')">编辑</button>';
+    var delBtn = '<button class="btn btn-danger btn-sm" onclick="deleteReagent(\'' + r.id + '\')">删除</button>';
+    html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e8f5e9;">🧪</div><div><div class="item-title">' + r.name + '</div><div class="item-desc">' + r.spec + ' · 库存:' + r.stock + r.unit + ' · 效期:' + r.expiry + '</div></div></div><div class="item-right"><span class="badge badge-blue">' + r.group + '</span><div style="display:flex;gap:5px;margin-top:5px;">' + editBtn + ' ' + delBtn + '</div></div></div></div>';
   }
   if(appData.reagents.length === 0) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无试剂</div></div></div>';
   list.innerHTML = html;
@@ -1228,6 +1289,14 @@ function viewSopPdf(id){
     showToast('该文档暂无PDF附件');
   }
 }
+function switchSopSettingsTab(tab, el){
+  var tabs = document.querySelectorAll('#settingsSop .tab');
+  for(var i=0;i<tabs.length;i++){ tabs[i].classList.remove('active'); }
+  el.classList.add('active');
+  document.getElementById('sopSettingsSop').style.display = tab === 'sop' ? 'block' : 'none';
+  document.getElementById('sopSettingsExam').style.display = tab === 'exam' ? 'block' : 'none';
+  if(tab === 'exam') loadExamQuestions();
+}
 function switchSettingsTab(tab, el){
   var tabs = document.querySelectorAll('#page-settings .tab');
   for(var i=0;i<tabs.length;i++){ tabs[i].classList.remove('active'); }
@@ -1291,15 +1360,193 @@ function openHandoverModal(){
 }
 function saveHandover(){
   var shift = document.getElementById('hShift').value;
-  var content = document.getElementById('hContent').value;
+  var hContentVal = document.getElementById('hContent').value;
   var toUser = document.getElementById('hToUser').value;
   var date = document.getElementById('hDate').value;
-  if(!content){ showToast('请填写交接内容'); return; }
-  appData.handoverRecords.push({id:'H'+Date.now(),shift:shift,date:date,content:content,fromUser:currentUser.name,toUser:toUser,status:'completed'});
+  if(!hContentVal){ showToast('请填写交接内容'); return; }
+  if(!toUser){ showToast('请选择交接人'); return; }
+  appData.handoverRecords.push({id:'H'+Date.now(),shift:shift,date:date,content:hContentVal,fromUser:currentUser.name,toUser:toUser,status:'completed'});
   saveData();
   closeModal();
   loadHandover();
   showToast('✅ 交接班记录已保存');
+}
+
+function openChangePwdModal(){
+  var modal = document.getElementById('modalContent');
+  modal.innerHTML = '<div class="modal-header"><h3>🔑 修改密码</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">当前密码</label><input type="password" class="form-input" id="oldPwd" placeholder="请输入当前密码"></div><div class="form-group"><label class="form-label">新密码</label><input type="password" class="form-input" id="newPwd" placeholder="请输入新密码（至少6位）"></div><div class="form-group"><label class="form-label">确认新密码</label><input type="password" class="form-input" id="confirmPwd" placeholder="请再次输入新密码"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveChangePwd()">确认修改</button></div>';
+  document.getElementById('modalOverlay').classList.add('active');
+}
+function saveChangePwd(){
+  var oldPwd = document.getElementById('oldPwd').value;
+  var newPwd = document.getElementById('newPwd').value;
+  var confirmPwd = document.getElementById('confirmPwd').value;
+  if(!oldPwd || !newPwd || !confirmPwd){ showToast('请填写完整信息'); return; }
+  if(newPwd.length < 6){ showToast('新密码至少6位'); return; }
+  if(newPwd !== confirmPwd){ showToast('两次密码输入不一致'); return; }
+  if(oldPwd !== currentUser.password){ showToast('当前密码错误'); return; }
+  for(var i=0;i<appData.users.length;i++){
+    if(appData.users[i].id === currentUser.id){
+      appData.users[i].password = newPwd;
+      currentUser.password = newPwd;
+      break;
+    }
+  }
+  saveData();
+  closeModal();
+  showToast('✅ 密码修改成功！');
+}
+function openResetPwdModal(id){
+  var u = null;
+  for(var i=0;i<appData.users.length;i++){ if(appData.users[i].id === id){ u = appData.users[i]; break; } }
+  if(!u){ showToast('员工不存在'); return; }
+  var modal = document.getElementById('modalContent');
+  modal.innerHTML = '<div class="modal-header"><h3>🔐 恢复密码 - ' + u.name + '</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><p style="margin-bottom:15px;color:var(--text-light);">将密码重置为默认密码：<strong>123456</strong></p><div class="form-group"><label class="form-label">新密码</label><input type="password" class="form-input" id="resetPwd" placeholder="请输入新密码（默认123456）" value="123456"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveResetPwd(\'' + id + '\')">确认恢复</button></div>';
+  document.getElementById('modalOverlay').classList.add('active');
+}
+function saveResetPwd(id){
+  var newPwd = document.getElementById('resetPwd').value;
+  if(!newPwd || newPwd.length < 6){ showToast('密码至少6位'); return; }
+  for(var i=0;i<appData.users.length;i++){
+    if(appData.users[i].id === id){
+      appData.users[i].password = newPwd;
+      break;
+    }
+  }
+  saveData();
+  closeModal();
+  loadStaff();
+  showToast('✅ 密码已恢复为：' + newPwd);
+}
+
+// ===== 在线考试功能 =====
+var currentExam = null;
+var examAnswers = {};
+function startExam(){
+  var questions = appData.examQuestions || [];
+  if(questions.length === 0){ showToast('暂无试题，请联系管理员上传'); return; }
+  // 随机抽取10题
+  var shuffled = questions.slice().sort(function(){return 0.5-Math.random();});
+  var selected = shuffled.slice(0, Math.min(10, questions.length));
+  currentExam = selected;
+  examAnswers = {};
+  var html = '<div class="list-card" style="padding:20px;"><h3 style="color:var(--primary);margin-bottom:15px;">📝 在线考试</h3><p style="color:var(--text-light);margin-bottom:15px;">共' + selected.length + '题，每题5分，满分' + (selected.length*5) + '分</p>';
+  for(var i=0;i<selected.length;i++){
+    var q = selected[i];
+    html += '<div style="padding:12px 0;border-bottom:1px solid var(--border);"><div style="font-weight:500;margin-bottom:8px;">' + (i+1) + '. ' + q.question + '</div><div style="font-size:12px;color:var(--text-light);margin-bottom:8px;">[' + q.type + '] ' + q.group + '</div>';
+    for(var j=0;j<q.options.length;j++){
+      var optLabel = String.fromCharCode(65 + j);
+      html += '<label style="display:block;padding:6px 10px;margin:3px 0;border-radius:6px;background:#f5f5f5;cursor:pointer;"><input type="radio" name="exam_' + i + '" value="' + optLabel + '" onchange="examAnswers[\'' + q.id + '\']=this.value"> ' + optLabel + '. ' + q.options[j] + '</label>';
+    }
+    html += '</div>';
+  }
+  html += '<div style="margin-top:15px;"><button class="btn btn-primary" onclick="submitExam()">📤 交卷</button></div></div>';
+  document.getElementById('examContent').innerHTML = html;
+}
+function submitExam(){
+  if(!currentExam || currentExam.length === 0){ showToast('请先开始考试'); return; }
+  var total = currentExam.length;
+  var correct = 0;
+  for(var i=0;i<currentExam.length;i++){
+    var q = currentExam[i];
+    if(examAnswers[q.id] === q.answer) correct++;
+  }
+  var score = correct * 5;
+  var percent = Math.round(correct/total*100);
+  var grade = percent >= 90 ? '优秀' : percent >= 80 ? '良好' : percent >= 60 ? '及格' : '不及格';
+  var html = '<div class="list-card" style="padding:20px;text-align:center;"><h3 style="color:var(--primary);">📊 考试结果</h3><div style="font-size:48px;font-weight:bold;color:' + (percent>=60?'var(--success)':'var(--danger)') + ';margin:20px 0;">' + score + '分</div><p>正确 ' + correct + '/' + total + ' 题 · 正确率 ' + percent + '%</p><p>评级：<span class="badge ' + (percent>=90?'badge-green':percent>=80?'badge-blue':percent>=60?'badge-orange':'badge-red') + '">' + grade + '</span></p><div style="margin-top:15px;"><button class="btn btn-primary btn-sm" onclick="startExam()">重新考试</button> <button class="btn btn-outline btn-sm" onclick="showExamResult()">查看历史</button></div></div>';
+  document.getElementById('examContent').innerHTML = html;
+  // 保存成绩
+  if(!appData.examRecords) appData.examRecords = [];
+  appData.examRecords.push({id:'ER'+Date.now(),user:currentUser.name,score:score,total:total,correct:correct,date:new Date().toISOString().split('T')[0],grade:grade});
+  saveData();
+}
+function showExamResult(){
+  var records = appData.examRecords || [];
+  var myRecords = [];
+  for(var i=0;i<records.length;i++){
+    if(records[i].user === currentUser.name) myRecords.push(records[i]);
+  }
+  if(myRecords.length === 0){
+    document.getElementById('examContent').innerHTML = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无考试记录</div></div></div>';
+    return;
+  }
+  var html = '<div class="list-card" style="padding:20px;"><h3 style="color:var(--primary);margin-bottom:15px;">📊 我的考试成绩</h3>';
+  for(var i=myRecords.length-1;i>=0;i--){
+    var r = myRecords[i];
+    var gradeBadge = r.grade === '优秀' ? '<span class="badge badge-green">优秀</span>' : r.grade === '良好' ? '<span class="badge badge-blue">良好</span>' : r.grade === '及格' ? '<span class="badge badge-orange">及格</span>' : '<span class="badge badge-red">不及格</span>';
+    html += '<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);"><span>' + r.date + '</span><span>得分: ' + r.score + '分 (' + r.correct + '/' + r.total + ')</span>' + gradeBadge + '</div>';
+  }
+  html += '</div>';
+  document.getElementById('examContent').innerHTML = html;
+}
+function switchSopTab(tab, el){
+  var tabs = document.querySelectorAll('#page-sop .tab');
+  for(var i=0;i<tabs.length;i++){ tabs[i].classList.remove('active'); }
+  el.classList.add('active');
+  document.getElementById('sopList').style.display = tab === 'list' ? 'block' : 'none';
+  document.getElementById('sopExam').style.display = tab === 'exam' ? 'block' : 'none';
+  document.getElementById('sopProgress').style.display = tab === 'progress' ? 'block' : 'none';
+  if(tab === 'exam') document.getElementById('examContent').innerHTML = '';
+}
+// ===== 试题管理（系统设置中） =====
+function openExamQuestionModal(){
+  var modal = document.getElementById('modalContent');
+  modal.innerHTML = '<div class="modal-header"><h3>📝 新增试题</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">题目类型</label><select class="form-select" id="eqType"><option value="单选">单选题</option><option value="判断">判断题</option></select></div><div class="form-group"><label class="form-label">专业组</label><select class="form-select" id="eqGroup"><option value="生化组">生化组</option><option value="临检组">临检组</option><option value="免疫组">免疫组</option><option value="微生物组">微生物组</option><option value="分子组">分子组</option><option value="输血组">输血组</option><option value="质控组">质控组</option></select></div><div class="form-group"><label class="form-label">题目内容</label><textarea class="form-input" id="eqQuestion" rows="3" placeholder="请输入题目"></textarea></div><div class="form-group"><label class="form-label">选项A</label><input type="text" class="form-input" id="eqOptA" placeholder="选项A内容"></div><div class="form-group"><label class="form-label">选项B</label><input type="text" class="form-input" id="eqOptB" placeholder="选项B内容"></div><div class="form-group" id="eqOptCGroup"><label class="form-label">选项C</label><input type="text" class="form-input" id="eqOptC" placeholder="选项C内容（可选）"></div><div class="form-group" id="eqOptDGroup"><label class="form-label">选项D</label><input type="text" class="form-input" id="eqOptD" placeholder="选项D内容（可选）"></div><div class="form-group"><label class="form-label">正确答案</label><select class="form-select" id="eqAnswer"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select></div><div class="form-group"><label class="form-label">分值</label><input type="number" class="form-input" id="eqScore" value="5"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveExamQuestion()">保存</button></div>';
+  document.getElementById('modalOverlay').classList.add('active');
+  // 判断题只显示AB选项
+  document.getElementById('eqType').onchange = function(){
+    var isJudge = this.value === '判断';
+    document.getElementById('eqOptCGroup').style.display = isJudge ? 'none' : 'block';
+    document.getElementById('eqOptDGroup').style.display = isJudge ? 'none' : 'block';
+  };
+}
+function saveExamQuestion(){
+  var type = document.getElementById('eqType').value;
+  var group = document.getElementById('eqGroup').value;
+  var question = document.getElementById('eqQuestion').value.trim();
+  var optA = document.getElementById('eqOptA').value.trim();
+  var optB = document.getElementById('eqOptB').value.trim();
+  var optC = document.getElementById('eqOptC').value.trim();
+  var optD = document.getElementById('eqOptD').value.trim();
+  var answer = document.getElementById('eqAnswer').value;
+  var score = parseInt(document.getElementById('eqScore').value) || 5;
+  if(!question || !optA || !optB){ showToast('请填写题目和选项'); return; }
+  var options = [optA, optB];
+  if(type !== '判断' && optC) options.push(optC);
+  if(type !== '判断' && optD) options.push(optD);
+  if(!appData.examQuestions) appData.examQuestions = [];
+  appData.examQuestions.push({id:'EQ'+Date.now(),type:type==='判断'?'判断':'单选',question:question,options:options,answer:answer,score:score,group:group});
+  saveData();
+  closeModal();
+  loadExamQuestions();
+  showToast('✅ 试题已添加');
+}
+function loadExamQuestions(){
+  var list = document.getElementById('examQuestionList');
+  if(!list) return;
+  var questions = appData.examQuestions || [];
+  var html = '';
+  for(var i=0;i<questions.length;i++){
+    var q = questions[i];
+    var delBtn = '<button class="btn btn-danger btn-sm" onclick="deleteExamQuestion(\'' + q.id + '\')">删除</button>';
+    html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#f3e5f5;">📝</div><div><div class="item-title">' + q.question + '</div><div class="item-desc">[' + q.type + '] ' + q.group + ' · 答案:' + q.answer + ' · ' + q.score + '分</div></div></div><div class="item-right">' + delBtn + '</div></div></div>';
+  }
+  if(questions.length === 0) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无试题，请点击上方按钮添加</div></div></div>';
+  list.innerHTML = html;
+}
+function deleteExamQuestion(id){
+  if(confirm('确定要删除该试题吗？')){
+    for(var i=0;i<appData.examQuestions.length;i++){
+      if(appData.examQuestions[i].id === id){
+        appData.examQuestions.splice(i,1);
+        break;
+      }
+    }
+    saveData();
+    loadExamQuestions();
+    showToast('✅ 试题已删除');
+  }
 }
 </script>
 </body>
