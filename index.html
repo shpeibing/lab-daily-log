@@ -411,7 +411,7 @@ textarea.form-input{min-height:80px;resize:vertical;}
       <input type="password" class="form-input" id="loginPassword" placeholder="请输入密码">
     </div>
     <button class="btn btn-primary" onclick="handleLogin()">登 录</button>
-    <div class="login-hint">演示账号：admin / 123456</div>
+    <div class="login-hint">演示账号：admin / 123456<br><span style="font-size:11px;">科主任：admin | 组长：zhang01 | 检验人员：zhao04</span></div>
   </div>
 </div>
 <!-- APP主界面 -->
@@ -779,9 +779,24 @@ textarea.form-input{min-height:80px;resize:vertical;}
       <div class="card">
         <div class="card-header"><h3>⚙️ 功能设置</h3></div>
         <div class="card-body" style="padding:8px 16px;">
-          <div class="list-item" style="padding:12px 0;" onclick="showToast('个人信息')">
+          <div class="list-item" style="padding:12px 0;" onclick="showMyProfile()">
             <div class="item-icon" style="background:var(--primary-light);">👤</div>
-            <div class="item-info"><div class="title">个人信息</div><div class="subtitle">工号、联系方式、头像</div></div>
+            <div class="item-info"><div class="title">个人信息</div><div class="subtitle">编辑我的资料、联系方式</div></div>
+            <div class="item-right"><span style="color:var(--text-light);">›</span></div>
+          </div>
+          <div class="list-item perm-controlled" data-perm="系统设置" style="display:none;padding:12px 0;" onclick="showSystemSettings()">
+            <div class="item-icon" style="background:var(--primary-light);">⚙️</div>
+            <div class="item-info"><div class="title">系统设置</div><div class="subtitle">系统参数、积分规则配置</div></div>
+            <div class="item-right"><span style="color:var(--text-light);">›</span></div>
+          </div>
+          <div class="list-item perm-controlled" data-perm="账号管理" style="display:none;padding:12px 0;" onclick="showUserManagement()">
+            <div class="item-icon" style="background:var(--accent-light);">👥</div>
+            <div class="item-info"><div class="title">账号管理</div><div class="subtitle">新增员工、设置角色权限</div></div>
+            <div class="item-right"><span style="color:var(--text-light);">›</span></div>
+          </div>
+          <div class="list-item perm-controlled" data-perm="权限配置" style="display:none;padding:12px 0;" onclick="showPermConfig()">
+            <div class="item-icon" style="background:#FFF3E6;">🔐</div>
+            <div class="item-info"><div class="title">权限配置</div><div class="subtitle">角色权限设置、职能分配</div></div>
             <div class="item-right"><span style="color:var(--text-light);">›</span></div>
           </div>
           <div class="list-item" style="padding:12px 0;" onclick="showToast('消息通知设置')">
@@ -1489,6 +1504,70 @@ textarea.form-input{min-height:80px;resize:vertical;}
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 <script>
+// ===== 用户数据库 =====
+const USER_DB = [
+  { id: 'admin', name: '系统管理员', password: '123456', role: '系统管理员', group: '管理组', title: '系统管理员', phone: '13800000001', email: 'admin@lab.com', status: '在职', permissions: ['全科数据总览','绩效审核','用户管理','日志审核','全科排名','数据导出','员工授权','系统设置','账号管理','权限配置'] },
+  { id: 'zhang01', name: '张组长', password: '123456', role: '组长', group: '生化组', title: '组长', phone: '', email: '', status: '在职', permissions: ['本组数据','本组日志审核','组内绩效','组内排名'] },
+  { id: 'li02', name: '李质检', password: '123456', role: '质控员', group: '质控组', title: '质控员', phone: '', email: '', status: '在职', permissions: ['质控分析','失控审核','质控监控'] },
+  { id: 'wang03', name: '王设备', password: '123456', role: '设备管理员', group: '设备组', title: '设备管理员', phone: '', email: '', status: '在职', permissions: ['设备管理','保养计划管理'] },
+  { id: 'zhao04', name: '赵检验', password: '123456', role: '检验人员', group: '生化组', title: '检验师', phone: '', email: '', status: '在职', permissions: ['个人日志','个人绩效','保养打卡','SOP学习'] },
+  { id: 'qian05', name: '钱检验', password: '123456', role: '检验人员', group: '临检组', title: '检验师', phone: '', email: '', status: '在职', permissions: ['个人日志','个人绩效','保养打卡','SOP学习'] },
+  { id: 'sun06', name: '孙检验', password: '123456', role: '检验人员', group: '免疫组', title: '检验师', phone: '', email: '', status: '在职', permissions: ['个人日志','个人绩效','保养打卡','SOP学习'] },
+  { id: 'zhou07', name: '周检验', password: '123456', role: '检验人员', group: '微生物组', title: '检验师', phone: '', email: '', status: '在职', permissions: ['个人日志','个人绩效','保养打卡','SOP学习'] },
+];
+// 所有可用权限列表
+const ALL_PERMISSIONS = [
+  { id: '全科数据总览', label: '全科数据总览' },
+  { id: '绩效审核', label: '绩效审核' },
+  { id: '用户管理', label: '用户管理' },
+  { id: '日志审核', label: '日志审核' },
+  { id: '全科排名', label: '全科排名' },
+  { id: '数据导出', label: '数据导出' },
+  { id: '员工授权', label: '员工授权' },
+  { id: '本组数据', label: '本组数据' },
+  { id: '本组日志审核', label: '本组日志审核' },
+  { id: '组内绩效', label: '组内绩效' },
+  { id: '组内排名', label: '组内排名' },
+  { id: '质控分析', label: '质控分析' },
+  { id: '失控审核', label: '失控审核' },
+  { id: '质控监控', label: '质控监控' },
+  { id: '设备管理', label: '设备管理' },
+  { id: '保养计划管理', label: '保养计划管理' },
+  { id: '个人日志', label: '个人日志' },
+  { id: '个人绩效', label: '个人绩效' },
+  { id: '保养打卡', label: '保养打卡' },
+  { id: 'SOP学习', label: 'SOP学习' },
+  { id: '系统设置', label: '系统设置' },
+  { id: '账号管理', label: '账号管理' },
+  { id: '权限配置', label: '权限配置' },
+];
+// 角色权限定义
+const ROLE_PERMISSIONS = {
+  '系统管理员': {
+    label: '系统管理员',
+    permissions: ['全科数据总览', '绩效审核', '用户管理', '日志审核', '全科排名', '数据导出', '员工授权', '系统设置', '账号管理', '权限配置']
+  },
+  '科主任': {
+    label: '科主任',
+    permissions: ['全科数据总览', '绩效审核', '用户管理', '日志审核', '全科排名', '数据导出']
+  },
+  '组长': {
+    label: '组长',
+    permissions: ['本组数据', '本组日志审核', '组内绩效', '组内排名']
+  },
+  '质控员': {
+    label: '质控员',
+    permissions: ['质控分析', '失控审核', '质控监控']
+  },
+  '设备管理员': {
+    label: '设备管理员',
+    permissions: ['设备管理', '保养计划管理']
+  },
+  '检验人员': {
+    label: '检验人员',
+    permissions: ['个人日志', '个人绩效', '保养打卡', 'SOP学习']
+  }
+};
 // ===== 全局状态 =====
 let currentUser = null;
 let currentTab = 'home';
@@ -1500,31 +1579,57 @@ function handleLogin() {
     showToast('请输入工号和密码');
     return;
   }
-  if (username === 'admin' && password === '123456') {
-    loginSuccess('系统管理员');
+  const found = USER_DB.find(u => u.id === username && u.password === password);
+  if (found) {
+    loginSuccess(found);
   } else {
-    loginSuccess('检验人员');
+    showToast('工号或密码错误');
   }
 }
-function quickLogin(role) {
-  loginSuccess(role);
-}
-function loginSuccess(role) {
-  currentUser = { name: '王小明', role: role };
+function loginSuccess(user) {
+  currentUser = user;
   document.getElementById('loginPage').style.display = 'none';
   document.getElementById('appPage').style.display = 'block';
-  document.getElementById('headerUserName').textContent = '王小明';
-  document.getElementById('profileName').textContent = '王小明';
-  document.getElementById('profileRole').textContent = '生化组';
-  showToast('欢迎登录！');
+  document.getElementById('headerUserName').textContent = user.name;
+  document.getElementById('profileName').textContent = user.name;
+  document.getElementById('profileRole').textContent = user.role + ' · ' + user.group;
+  // 根据权限显示/隐藏功能
+  applyPermissions(user.role);
+  showToast('欢迎登录，' + user.name + '！');
 }
 function handleLogout() {
+  currentUser = null;
   document.getElementById('appPage').style.display = 'none';
   document.getElementById('loginPage').style.display = 'flex';
   showToast('已退出登录');
 }
 function showUserMenu() {
-  showToast('王小明 · 生化组');
+  if (!currentUser) return;
+  const perms = ROLE_PERMISSIONS[currentUser.role]?.permissions || [];
+  const msg = currentUser.name + ' · ' + currentUser.role + '\n权限：' + perms.join('、');
+  showToast(msg);
+}
+// ===== 权限控制 =====
+function applyPermissions(role) {
+  const perms = ROLE_PERMISSIONS[role]?.permissions || [];
+  // 隐藏所有管理类元素
+  document.querySelectorAll('.perm-controlled').forEach(el => el.style.display = 'none');
+  // 根据权限显示
+  perms.forEach(p => {
+    document.querySelectorAll('[data-perm="' + p + '"]').forEach(el => {
+      el.style.display = '';
+    });
+  });
+  // 主任和组长显示管理入口
+  if (role === '科主任' || role === '系统管理员') {
+    const mgmtBtn = document.getElementById('userMgmtBtn');
+    if (mgmtBtn) mgmtBtn.style.display = '';
+  }
+}
+function hasPermission(perm) {
+  if (!currentUser) return false;
+  const perms = ROLE_PERMISSIONS[currentUser.role]?.permissions || [];
+  return perms.includes(perm);
 }
 // ===== 底部导航切换 =====
 function switchTab(tab) {
@@ -1589,6 +1694,10 @@ function showSopModal() {
 function showCriticalModal() {
   showModal('criticalModal');
 }
+
+function showAllDeptData() {
+  showToast('📊 全科数据总览：本月检测量1,247项，质控合格率98.5%，保养完成率100%');
+}
 // ===== 功能操作 =====
 function toggleCheck(el) {
   el.classList.toggle('checked');
@@ -1606,6 +1715,309 @@ function submitQc() {
 function submitCritical() {
   closeModal('criticalModal');
   showToast('✅ 危急值已报告，积分+2');
+}
+
+
+
+// ===== 系统设置 =====
+function showSystemSettings() {
+  showModal('systemSettingsModal');
+}
+function saveSystemSettings() {
+  const deptName = document.getElementById('sysDeptName').value;
+  const scoreMaint = document.getElementById('sysScoreMaintenance').value;
+  const scoreQc = document.getElementById('sysScoreQc').value;
+  const scoreSop = document.getElementById('sysScoreSop').value;
+  const scoreCritical = document.getElementById('sysScoreCritical').value;
+  showToast('✅ 系统设置已保存：' + deptName + ' 积分规则已更新');
+  closeModal('systemSettingsModal');
+}
+// ===== 权限配置 =====
+let rolePermEditing = null;
+function showPermConfig() {
+  rolePermEditing = null;
+  document.getElementById('permConfigRole').value = '检验人员';
+  loadRolePerms();
+  showModal('permConfigModal');
+}
+function loadRolePerms() {
+  const role = document.getElementById('permConfigRole').value;
+  const rolePerms = {
+    '系统管理员': ['全科数据总览','绩效审核','用户管理','日志审核','全科排名','数据导出','员工授权','系统设置','账号管理','权限配置'],
+    '科主任': ['全科数据总览','绩效审核','用户管理','日志审核','全科排名','数据导出'],
+    '组长': ['本组数据','本组日志审核','组内绩效','组内排名'],
+    '质控员': ['质控分析','失控审核','质控监控'],
+    '设备管理员': ['设备管理','保养计划管理'],
+    '检验人员': ['个人日志','个人绩效','保养打卡','SOP学习']
+  };
+  const perms = rolePerms[role] || [];
+  const container = document.getElementById('rolePermList');
+  container.innerHTML = '';
+  ALL_PERMISSIONS.forEach(p => {
+    const label = document.createElement('label');
+    label.style.cssText = 'display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;border:1px solid #ddd;font-size:12px;cursor:pointer;background:' + (perms.includes(p.id) ? 'var(--primary-light)' : 'white') + ';';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.value = p.id;
+    cb.checked = perms.includes(p.id);
+    cb.style.cssText = 'accent-color:var(--primary);';
+    cb.onchange = function() {
+      label.style.background = this.checked ? 'var(--primary-light)' : 'white';
+    };
+    label.appendChild(cb);
+    label.appendChild(document.createTextNode(p.label));
+    container.appendChild(label);
+  });
+}
+function saveRolePerms() {
+  const role = document.getElementById('permConfigRole').value;
+  const perms = [];
+  document.querySelectorAll('#rolePermList input[type=checkbox]:checked').forEach(cb => {
+    perms.push(cb.value);
+  });
+  showToast('✅ 角色「' + role + '」权限已保存：' + perms.join('、'));
+  closeModal('permConfigModal');
+}
+// ===== 个人信息编辑 =====
+function showMyProfile() {
+  if (!currentUser) return;
+  document.getElementById('myName').value = currentUser.name || '';
+  document.getElementById('myPhone').value = currentUser.phone || '';
+  document.getElementById('myEmail').value = currentUser.email || '';
+  document.getElementById('myUserId').value = currentUser.id || '';
+  document.getElementById('myRole').value = currentUser.role || '';
+  document.getElementById('myGroup').value = currentUser.group || '';
+  document.getElementById('myTitle').value = currentUser.title || '';
+  showModal('myProfileModal');
+}
+function saveMyProfile() {
+  if (!currentUser) return;
+  const name = document.getElementById('myName').value.trim();
+  const phone = document.getElementById('myPhone').value.trim();
+  const email = document.getElementById('myEmail').value.trim();
+  const title = document.getElementById('myTitle').value.trim();
+  if (!name) {
+    showToast('⚠️ 姓名不能为空');
+    return;
+  }
+  // 更新当前用户
+  currentUser.name = name;
+  currentUser.phone = phone;
+  currentUser.email = email;
+  currentUser.title = title;
+  // 同步更新数据库
+  const dbUser = USER_DB.find(u => u.id === currentUser.id);
+  if (dbUser) {
+    dbUser.name = name;
+    dbUser.phone = phone;
+    dbUser.email = email;
+    dbUser.title = title;
+  }
+  // 刷新界面
+  document.getElementById('headerUserName').textContent = name;
+  document.getElementById('profileName').textContent = name;
+  closeModal('myProfileModal');
+  showToast('✅ 个人信息已保存');
+}
+// ===== 用户管理 =====
+let editingUserId = null;
+let isAddingUser = false;
+function showUserManagement() {
+  renderUserList();
+  showModal('userMgmtModal');
+}
+function renderUserList(filter) {
+  const list = document.getElementById('userList');
+  list.innerHTML = '';
+  let users = USER_DB;
+  if (filter) {
+    const f = filter.toLowerCase();
+    users = users.filter(u => u.name.includes(f) || u.id.includes(f) || u.group.includes(f) || u.role.includes(f));
+  }
+  users.forEach(u => {
+    const statusColor = u.status === '在职' ? '#22c55e' : u.status === '休假' ? '#f59e0b' : '#ef4444';
+    const card = document.createElement('div');
+    card.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--bg-card);border-radius:12px;border:1px solid var(--border);';
+    card.innerHTML = `
+      <div style="display:flex;align-items:center;gap:12px;flex:1;">
+        <div style="width:40px;height:40px;border-radius:50%;background:var(--primary);color:white;display:flex;align-items:center;justify-content:center;font-weight:bold;">${u.name[0]}</div>
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span style="font-weight:600;">${u.name}</span>
+            <span style="font-size:11px;padding:1px 6px;border-radius:10px;background:${statusColor}20;color:${statusColor};">${u.status || '在职'}</span>
+          </div>
+          <div style="font-size:12px;color:var(--text-light);">${u.role} · ${u.group}${u.title ? ' · ' + u.title : ''}</div>
+          <div style="font-size:11px;color:var(--text-light);">工号: ${u.id}${u.phone ? ' | 📞' + u.phone : ''}</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:4px;">
+        <button class="btn btn-outline btn-sm" onclick="editUser('${u.id}')">编辑</button>
+        <button class="btn btn-outline btn-sm" onclick="setUserPerm('${u.id}')">权限</button>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+}
+function searchUsers() {
+  const filter = document.getElementById('userSearchInput').value;
+  renderUserList(filter);
+}
+function showAddUser() {
+  isAddingUser = true;
+  editingUserId = null;
+  document.getElementById('editUserId').value = '';
+  document.getElementById('editUserId').readOnly = false;
+  document.getElementById('editUserId').style.background = 'white';
+  document.getElementById('editUserName').value = '';
+  document.getElementById('editUserPassword').value = '123456';
+  document.getElementById('editUserRole').value = '检验人员';
+  document.getElementById('editUserGroup').value = '生化组';
+  document.getElementById('editUserTitle').value = '检验师';
+  document.getElementById('editUserPhone').value = '';
+  document.getElementById('editUserEmail').value = '';
+  document.getElementById('editUserStatus').value = '在职';
+  document.getElementById('editUserDeleteArea').style.display = 'none';
+  renderPermCheckboxes([]);
+  document.querySelector('#userEditModal h3').textContent = '➕ 新增员工';
+  showModal('userEditModal');
+}
+function editUser(userId) {
+  isAddingUser = false;
+  editingUserId = userId;
+  const user = USER_DB.find(u => u.id === userId);
+  if (!user) return;
+  document.getElementById('editUserId').value = user.id;
+  document.getElementById('editUserId').readOnly = true;
+  document.getElementById('editUserId').style.background = '#f5f5f5';
+  document.getElementById('editUserName').value = user.name;
+  document.getElementById('editUserPassword').value = user.password || '123456';
+  document.getElementById('editUserRole').value = user.role;
+  document.getElementById('editUserGroup').value = user.group;
+  document.getElementById('editUserTitle').value = user.title || '';
+  document.getElementById('editUserPhone').value = user.phone || '';
+  document.getElementById('editUserEmail').value = user.email || '';
+  document.getElementById('editUserStatus').value = user.status || '在职';
+  document.getElementById('editUserDeleteArea').style.display = '';
+  renderPermCheckboxes(user.permissions || []);
+  document.querySelector('#userEditModal h3').textContent = '✏️ 编辑用户 - ' + user.name;
+  showModal('userEditModal');
+}
+function renderPermCheckboxes(selectedPerms) {
+  const container = document.getElementById('permCheckboxList');
+  container.innerHTML = '';
+  ALL_PERMISSIONS.forEach(p => {
+    const label = document.createElement('label');
+    label.style.cssText = 'display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;border:1px solid #ddd;font-size:12px;cursor:pointer;background:' + (selectedPerms.includes(p.id) ? 'var(--primary-light)' : 'white') + ';';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.value = p.id;
+    cb.checked = selectedPerms.includes(p.id);
+    cb.style.cssText = 'accent-color:var(--primary);';
+    cb.onchange = function() {
+      label.style.background = this.checked ? 'var(--primary-light)' : 'white';
+    };
+    label.appendChild(cb);
+    label.appendChild(document.createTextNode(p.label));
+    container.appendChild(label);
+  });
+}
+function onRoleChange() {
+  // 根据角色自动推荐权限
+  const role = document.getElementById('editUserRole').value;
+  const rolePerms = {
+    '科主任': ['全科数据总览','绩效审核','用户管理','日志审核','全科排名','数据导出','员工授权'],
+    '组长': ['本组数据','本组日志审核','组内绩效','组内排名'],
+    '质控员': ['质控分析','失控审核','质控监控'],
+    '设备管理员': ['设备管理','保养计划管理'],
+    '检验人员': ['个人日志','个人绩效','保养打卡','SOP学习']
+  };
+  const perms = rolePerms[role] || [];
+  renderPermCheckboxes(perms);
+}
+function saveUserEdit() {
+  const userId = document.getElementById('editUserId').value.trim();
+  const name = document.getElementById('editUserName').value.trim();
+  const password = document.getElementById('editUserPassword').value.trim();
+  const role = document.getElementById('editUserRole').value;
+  const group = document.getElementById('editUserGroup').value;
+  const title = document.getElementById('editUserTitle').value.trim();
+  const phone = document.getElementById('editUserPhone').value.trim();
+  const email = document.getElementById('editUserEmail').value.trim();
+  const status = document.getElementById('editUserStatus').value;
+  if (!userId || !name) {
+    showToast('⚠️ 工号和姓名不能为空');
+    return;
+  }
+  // 收集选中的权限
+  const perms = [];
+  document.querySelectorAll('#permCheckboxList input[type=checkbox]:checked').forEach(cb => {
+    perms.push(cb.value);
+  });
+  if (isAddingUser) {
+    // 新增用户
+    if (USER_DB.find(u => u.id === userId)) {
+      showToast('⚠️ 工号已存在');
+      return;
+    }
+    USER_DB.push({
+      id: userId,
+      name: name,
+      password: password || '123456',
+      role: role,
+      group: group,
+      title: title,
+      phone: phone,
+      email: email,
+      status: status,
+      permissions: perms
+    });
+    showToast('✅ 员工 ' + name + ' 已添加');
+  } else {
+    // 编辑用户
+    const user = USER_DB.find(u => u.id === editingUserId);
+    if (!user) return;
+    user.name = name;
+    if (password) user.password = password;
+    user.role = role;
+    user.group = group;
+    user.title = title;
+    user.phone = phone;
+    user.email = email;
+    user.status = status;
+    user.permissions = perms;
+    showToast('✅ 用户信息已更新');
+    // 如果编辑的是当前用户，刷新显示
+    if (currentUser && currentUser.id === editingUserId) {
+      currentUser.name = name;
+      currentUser.role = role;
+      currentUser.group = group;
+      document.getElementById('headerUserName').textContent = name;
+      document.getElementById('profileName').textContent = name;
+      document.getElementById('profileRole').textContent = role + ' · ' + group;
+      applyPermissions(role);
+    }
+  }
+  closeModal('userEditModal');
+  renderUserList();
+}
+function deleteCurrentUser() {
+  if (!editingUserId) return;
+  if (editingUserId === 'admin') {
+    showToast('⚠️ 不能删除主任账号');
+    return;
+  }
+  if (!confirm('确定要删除该员工吗？')) return;
+  const idx = USER_DB.findIndex(u => u.id === editingUserId);
+  if (idx >= 0) {
+    const name = USER_DB[idx].name;
+    USER_DB.splice(idx, 1);
+    closeModal('userEditModal');
+    renderUserList();
+    showToast('🗑️ 已删除员工：' + name);
+  }
+}
+function setUserPerm(userId) {
+  editUser(userId);
 }
 // ===== Toast提示 =====
 function showToast(msg) {
