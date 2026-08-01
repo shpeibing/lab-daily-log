@@ -393,6 +393,13 @@ textarea.form-input{min-height:80px;resize:vertical;}
   .main-content{margin:0 auto;}
   .modal{border-radius:16px;margin-bottom:auto;margin-top:10vh;}
 }
+/* 开关样式 */
+.switch { position:relative; display:inline-block; width:44px; height:24px; }
+.switch input { opacity:0; width:0; height:0; }
+.slider { position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background:#ccc; transition:.3s; border-radius:24px; }
+.slider:before { position:absolute; content:""; height:18px; width:18px; left:3px; bottom:3px; background:white; transition:.3s; border-radius:50%; }
+input:checked + .slider { background:var(--primary); }
+input:checked + .slider:before { transform:translateX(20px); }
 </style>
 </head>
 <body>
@@ -406,6 +413,157 @@ textarea.form-input{min-height:80px;resize:vertical;}
       <label class="form-label">工号</label>
       <input type="text" class="form-input" id="loginUsername" placeholder="请输入工号">
     </div>
+<!-- 消息通知设置弹窗 -->
+<div id="notificationModal" class="modal">
+  <div class="modal-content" style="max-height:90vh;overflow-y:auto;">
+    <div class="modal-header">
+      <h3>🔔 消息通知设置</h3>
+      <span class="modal-close" onclick="closeModal('notificationModal')">&times;</span>
+    </div>
+    <div class="modal-body">
+      <div style="margin-bottom:12px;font-weight:600;color:var(--primary);font-size:14px;">📬 通知类型</div>
+      <div class="form-group" style="display:flex;align-items:center;justify-content:space-between;">
+        <label class="form-label" style="margin-bottom:0;">保养提醒</label>
+        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+      </div>
+      <div class="form-group" style="display:flex;align-items:center;justify-content:space-between;">
+        <label class="form-label" style="margin-bottom:0;">危急值推送</label>
+        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+      </div>
+      <div class="form-group" style="display:flex;align-items:center;justify-content:space-between;">
+        <label class="form-label" style="margin-bottom:0;">SOP学习提醒</label>
+        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+      </div>
+      <div class="form-group" style="display:flex;align-items:center;justify-content:space-between;">
+        <label class="form-label" style="margin-bottom:0;">绩效积分更新</label>
+        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+      </div>
+      <div class="form-group" style="display:flex;align-items:center;justify-content:space-between;">
+        <label class="form-label" style="margin-bottom:0;">质控失控预警</label>
+        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+      </div>
+      <div style="margin-bottom:12px;font-weight:600;color:var(--primary);font-size:14px;margin-top:16px;">⏰ 提醒时间设置</div>
+      <div class="form-group">
+        <label class="form-label">保养提醒提前（分钟）</label>
+        <input type="number" class="form-input" value="30">
+      </div>
+      <div class="form-group">
+        <label class="form-label">逾期升级提醒（小时）</label>
+        <input type="number" class="form-input" value="2">
+      </div>
+      <div style="display:flex;gap:8px;margin-top:16px;">
+        <button class="btn btn-primary" style="flex:1;" onclick="showToast('✅ 通知设置已保存');closeModal('notificationModal')">💾 保存设置</button>
+        <button class="btn btn-outline" style="flex:1;" onclick="closeModal('notificationModal')">取消</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 数据导出弹窗 -->
+<div id="dataExportModal" class="modal">
+  <div class="modal-content" style="max-height:90vh;overflow-y:auto;">
+    <div class="modal-header">
+      <h3>📊 数据导出</h3>
+      <span class="modal-close" onclick="closeModal('dataExportModal')">&times;</span>
+    </div>
+    <div class="modal-body">
+      <div style="margin-bottom:12px;font-weight:600;color:var(--primary);font-size:14px;">📄 导出类型</div>
+      <div class="list-item" style="padding:12px 0;cursor:pointer;" onclick="exportData('worklog')">
+        <div class="item-icon" style="background:#E8F5E9;width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;">📋</div>
+        <div class="item-info"><div class="title">工作日志</div><div class="subtitle">导出个人/科室工作日志（Excel格式）</div></div>
+        <div class="item-right"><span style="color:var(--text-light);">›</span></div>
+      </div>
+      <div class="list-item" style="padding:12px 0;cursor:pointer;" onclick="exportData('performance')">
+        <div class="item-icon" style="background:#FFF3E6;width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;">🏆</div>
+        <div class="item-info"><div class="title">绩效积分报告</div><div class="subtitle">导出月度/年度绩效积分报告（PDF格式）</div></div>
+        <div class="item-right"><span style="color:var(--text-light);">›</span></div>
+      </div>
+      <div class="list-item" style="padding:12px 0;cursor:pointer;" onclick="exportData('backup')">
+        <div class="item-icon" style="background:#E1F5FE;width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;">💾</div>
+        <div class="item-info"><div class="title">全量数据备份</div><div class="subtitle">导出所有数据（JSON格式，管理员权限）</div></div>
+        <div class="item-right"><span style="color:var(--text-light);">›</span></div>
+      </div>
+      <div style="margin-top:12px;padding:12px;background:#FFF8E1;border-radius:8px;font-size:12px;color:#795548;">
+        ⚠️ 数据导出包含工作记录和绩效信息，请妥善保管导出文件。
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 操作审计日志弹窗 -->
+<div id="auditLogModal" class="modal">
+  <div class="modal-content" style="max-height:90vh;overflow-y:auto;">
+    <div class="modal-header">
+      <h3>📋 操作审计日志</h3>
+      <span class="modal-close" onclick="closeModal('auditLogModal')">&times;</span>
+    </div>
+    <div class="modal-body">
+      <div style="margin-bottom:12px;font-size:13px;color:var(--text-light);">记录所有关键操作，支持追溯和审计</div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;">
+        <select class="form-input" style="flex:1;" id="auditFilter">
+          <option value="all">全部类型</option>
+          <option value="login">登录/登出</option>
+          <option value="data">数据修改</option>
+          <option value="score">积分调整</option>
+          <option value="export">数据导出</option>
+          <option value="user">用户管理</option>
+        </select>
+        <button class="btn btn-outline" onclick="showToast('🔍 筛选完成')">筛选</button>
+      </div>
+      <div id="auditLogList">
+        <div style="padding:10px;border-bottom:1px solid #eee;font-size:13px;">
+          <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">🔐 登录</span><span style="color:var(--text-light);font-size:12px;">2026-08-15 08:30</span></div>
+          <div style="color:var(--text-light);font-size:12px;margin-top:4px;">系统管理员 登录系统</div>
+        </div>
+        <div style="padding:10px;border-bottom:1px solid #eee;font-size:13px;">
+          <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">📝 数据修改</span><span style="color:var(--text-light);font-size:12px;">2026-08-15 09:15</span></div>
+          <div style="color:var(--text-light);font-size:12px;margin-top:4px;">张组长 修改了 生化组 质控数据</div>
+        </div>
+        <div style="padding:10px;border-bottom:1px solid #eee;font-size:13px;">
+          <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">⭐ 积分调整</span><span style="color:var(--text-light);font-size:12px;">2026-08-14 16:40</span></div>
+          <div style="color:var(--text-light);font-size:12px;margin-top:4px;">科主任 调整了 李检验 的绩效积分（+2分，原因：加班处理急诊）</div>
+        </div>
+        <div style="padding:10px;border-bottom:1px solid #eee;font-size:13px;">
+          <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">📤 数据导出</span><span style="color:var(--text-light);font-size:12px;">2026-08-14 14:20</span></div>
+          <div style="color:var(--text-light);font-size:12px;margin-top:4px;">系统管理员 导出了 全科绩效汇总表</div>
+        </div>
+        <div style="padding:10px;font-size:13px;">
+          <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">👥 用户管理</span><span style="color:var(--text-light);font-size:12px;">2026-08-13 10:00</span></div>
+          <div style="color:var(--text-light);font-size:12px;margin-top:4px;">系统管理员 新增了 王检验 账号</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 关于弹窗 -->
+<div id="aboutModal" class="modal">
+  <div class="modal-content" style="max-height:90vh;overflow-y:auto;">
+    <div class="modal-header">
+      <h3>ℹ️ 关于</h3>
+      <span class="modal-close" onclick="closeModal('aboutModal')">&times;</span>
+    </div>
+    <div class="modal-body" style="text-align:center;">
+      <div style="font-size:48px;margin:16px 0;">🔬</div>
+      <div style="font-size:20px;font-weight:700;color:var(--primary);">检验科工作日志与绩效考核系统</div>
+      <div style="font-size:13px;color:var(--text-light);margin:8px 0;">版本 V2.0.0</div>
+      <div style="font-size:13px;color:var(--text-light);margin:4px 0;">构建日期：2026年8月</div>
+      <div style="margin:16px 0;padding:12px;background:#F5F5F5;border-radius:8px;text-align:left;font-size:13px;">
+        <div style="font-weight:600;margin-bottom:8px;">📋 功能模块</div>
+        <div>• 仪器保养管理</div>
+        <div>• 质控管理（IQC/EQA）</div>
+        <div>• 检测工作量统计</div>
+        <div>• SOP在线学习与考试</div>
+        <div>• 危急值记录与追踪</div>
+        <div>• 绩效考核积分</div>
+        <div>• 数据导出与备份</div>
+      </div>
+      <div style="margin:12px 0;padding:12px;background:#FFF8E1;border-radius:8px;text-align:left;font-size:12px;color:#795548;">
+        <div style="font-weight:600;margin-bottom:4px;">📞 技术支持</div>
+        <div>如有问题请联系检验科信息化建设工作组</div>
+      </div>
+      <button class="btn btn-outline" style="width:100%;margin-top:8px;" onclick="closeModal('aboutModal')">关闭</button>
+    </div>
+  </div>
+</div>
+
     <div class="form-group">
       <label class="form-label">密码</label>
       <input type="password" class="form-input" id="loginPassword" placeholder="请输入密码">
@@ -786,7 +944,7 @@ textarea.form-input{min-height:80px;resize:vertical;}
           </div>
           <div class="list-item perm-controlled" data-perm="系统设置" style="display:none;padding:12px 0;" onclick="showSystemSettings()">
             <div class="item-icon" style="background:var(--primary-light);">⚙️</div>
-            <div class="item-info"><div class="title">系统设置</div><div class="subtitle">系统参数、积分规则配置</div></div>
+            <div class="item-info"><div class="title">系统设置</div><div class="subtitle">科室信息、积分规则、数据备份</div></div>
             <div class="item-right"><span style="color:var(--text-light);">›</span></div>
           </div>
           <div class="list-item perm-controlled" data-perm="账号管理" style="display:none;padding:12px 0;" onclick="showUserManagement()">
@@ -799,9 +957,24 @@ textarea.form-input{min-height:80px;resize:vertical;}
             <div class="item-info"><div class="title">权限配置</div><div class="subtitle">角色权限设置、职能分配</div></div>
             <div class="item-right"><span style="color:var(--text-light);">›</span></div>
           </div>
-          <div class="list-item" style="padding:12px 0;" onclick="showToast('消息通知设置')">
+          <div class="list-item" style="padding:12px 0;" onclick="showNotificationSettings()">
             <div class="item-icon" style="background:var(--accent-light);">🔔</div>
-            <div class="item-info"><div class="title">消息通知设置</div><div class="subtitle">保养提醒、危急值推送</div></div>
+            <div class="item-info"><div class="title">消息通知设置</div><div class="subtitle">保养提醒、危急值推送、学习提醒</div></div>
+            <div class="item-right"><span style="color:var(--text-light);">›</span></div>
+          </div>
+          <div class="list-item" style="padding:12px 0;" onclick="showDataExport()">
+            <div class="item-icon" style="background:#E8F5E9;">📊</div>
+            <div class="item-info"><div class="title">数据导出</div><div class="subtitle">导出工作日志、绩效报告、数据备份</div></div>
+            <div class="item-right"><span style="color:var(--text-light);">›</span></div>
+          </div>
+          <div class="list-item perm-controlled" data-perm="系统设置" style="display:none;padding:12px 0;" onclick="showAuditLog()">
+            <div class="item-icon" style="background:#F3E5F5;">📋</div>
+            <div class="item-info"><div class="title">操作审计日志</div><div class="subtitle">查看关键操作记录、数据变更追溯</div></div>
+            <div class="item-right"><span style="color:var(--text-light);">›</span></div>
+          </div>
+          <div class="list-item" style="padding:12px 0;" onclick="showAboutApp()">
+            <div class="item-icon" style="background:#E1F5FE;">ℹ️</div>
+            <div class="item-info"><div class="title">关于</div><div class="subtitle">版本信息、用户协议、帮助文档</div></div>
             <div class="item-right"><span style="color:var(--text-light);">›</span></div>
           </div>
           <div class="list-item" style="padding:12px 0;" onclick="showToast('数据导出功能')">
@@ -1777,6 +1950,33 @@ function saveRolePerms() {
   });
   showToast('✅ 角色「' + role + '」权限已保存：' + perms.join('、'));
   closeModal('permConfigModal');
+}
+
+// ===== 消息通知设置 =====
+function showNotificationSettings() {
+  showModal('notificationModal');
+}
+// ===== 数据导出 =====
+function showDataExport() {
+  showModal('dataExportModal');
+}
+function exportData(type) {
+  const names = {
+    'worklog': '📋 工作日志',
+    'performance': '🏆 绩效积分报告',
+    'backup': '💾 全量数据备份'
+  };
+  showToast('✅ 正在导出' + (names[type] || type) + '，请稍候...');
+  closeModal('dataExportModal');
+  setTimeout(() => showToast('✅ ' + (names[type] || type) + ' 导出完成！文件已保存'), 1500);
+}
+// ===== 操作审计日志 =====
+function showAuditLog() {
+  showModal('auditLogModal');
+}
+// ===== 关于 =====
+function showAboutApp() {
+  showModal('aboutModal');
 }
 // ===== 个人信息编辑 =====
 function showMyProfile() {
