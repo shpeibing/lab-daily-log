@@ -249,119 +249,88 @@ textarea.form-input{min-height:80px;resize:vertical;}
 }
 .toast.show{opacity:1;transform:translate(-50%,-50%) scale(1);}
 /* 登录页 */
-/* ===== 登录页增强样式 ===== */
-.login-page{
-  min-height:100vh;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  padding:20px;
-  background:linear-gradient(135deg,#1B5E9E 0%,#0D3B66 50%,#1B5E9E 100%);
-  position:relative;overflow:hidden;
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #1a237e 0%, #283593 30%, #3949ab 60%, #5c6bc0 100%);
 }
-/* 背景装饰 - 六边形网格 */
-.login-page::before{
-  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
-  background-image: 
-    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.05) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(255,255,255,0.05) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 40%);
-  pointer-events:none;
+.login-logo {
+  font-size: 56px;
+  font-weight: 800;
+  margin-bottom: 4px;
+  animation: float 3s ease-in-out infinite;
+  background: linear-gradient(135deg, #fff 0%, #90CAF9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 8px;
+  font-family: 'Arial Black', Arial, sans-serif;
 }
-/* DNA双螺旋装饰 */
-.login-page::after{
-  content:'🧬';position:absolute;font-size:120px;opacity:0.06;
-  top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);
-  pointer-events:none;
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
 }
-.login-logo{
-  width:88px;height:88px;border-radius:22px;
-  background:linear-gradient(135deg,rgba(255,255,255,0.25),rgba(255,255,255,0.1));
-  display:flex;align-items:center;justify-content:center;
-  font-size:42px;margin-bottom:12px;
-  backdrop-filter:blur(10px);
-  box-shadow:0 4px 20px rgba(0,0,0,0.1);
-  position:relative;z-index:1;
-  animation:logoPulse 3s ease-in-out infinite;
+.login-hospital {
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 4px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
-@keyframes logoPulse{
-  0%,100%{transform:scale(1);box-shadow:0 4px 20px rgba(0,0,0,0.1);}
-  50%{transform:scale(1.05);box-shadow:0 6px 30px rgba(0,0,0,0.15);}
+.login-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 4px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
-.login-hospital{
-  color:rgba(255,255,255,0.9);font-size:14px;font-weight:400;
-  margin-bottom:2px;letter-spacing:1px;position:relative;z-index:1;
+.login-subtitle {
+  font-size: 13px;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 24px;
+  text-shadow: 0 1px 5px rgba(0,0,0,0.2);
 }
-.login-title{
-  color:#fff;font-size:24px;font-weight:700;margin-bottom:2px;
-  letter-spacing:2px;position:relative;z-index:1;
+.login-card {
+  width: 100%;
+  max-width: 360px;
+  background: white;
+  border-radius: 16px;
+  padding: 28px 24px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
 }
-.login-subtitle{
-  color:rgba(255,255,255,0.65);font-size:13px;margin-bottom:28px;
-  letter-spacing:3px;position:relative;z-index:1;
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  font-size: 13px;
 }
-.login-card{
-  background:rgba(255,255,255,0.98);border-radius:20px;padding:28px 24px;
-  width:100%;max-width:360px;
-  box-shadow:0 15px 50px rgba(0,0,0,0.25);
-  position:relative;z-index:1;
-  animation:cardSlideUp 0.6s ease-out;
+.login-remember {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #666;
+  cursor: pointer;
 }
-@keyframes cardSlideUp{
-  from{opacity:0;transform:translateY(30px);}
-  to{opacity:1;transform:translateY(0);}
+.login-forgot {
+  color: var(--primary);
+  cursor: pointer;
 }
-.login-card .form-group{margin-bottom:16px;}
-.login-card .form-label{
-  font-size:13px;color:#555;font-weight:500;
-  display:flex;align-items:center;gap:6px;margin-bottom:6px;
+.login-footer {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.7);
 }
-.login-card .form-input{
-  padding:12px 14px;border-radius:12px;font-size:15px;
-  border:1.5px solid #E8ECF0;background:#F7F8FA;
-  transition:all 0.3s;color:#333;
+.login-footer .copyright {
+  margin-bottom: 4px;
 }
-.login-card .form-input:focus{
-  border-color:#1B5E9E;background:#fff;
-  box-shadow:0 0 0 3px rgba(27,94,158,0.1);
-}
-.login-card .form-input::placeholder{color:#B0B8C4;}
-.login-card .btn{
-  width:100%;padding:13px;font-size:15px;border-radius:12px;margin-top:8px;
-  background:linear-gradient(135deg,#1B5E9E,#0D3B66);
-  font-weight:600;letter-spacing:2px;
-  transition:all 0.3s;box-shadow:0 4px 15px rgba(27,94,158,0.3);
-}
-.login-card .btn:active{
-  transform:scale(0.97);box-shadow:0 2px 8px rgba(27,94,158,0.2);
-}
-.login-options{
-  display:flex;align-items:center;justify-content:space-between;
-  margin:12px 0 4px;font-size:12px;
-}
-.login-remember{
-  display:flex;align-items:center;gap:6px;color:#888;cursor:pointer;
-}
-.login-remember input[type="checkbox"]{
-  width:16px;height:16px;accent-color:#1B5E9E;cursor:pointer;
-}
-.login-forgot{
-  color:#1B5E9E;cursor:pointer;text-decoration:none;font-weight:500;
-}
-.login-forgot:hover{text-decoration:underline;}
-.login-footer{
-  text-align:center;padding:20px 0 8px;position:relative;z-index:1;
-  animation:footerFadeIn 0.8s ease-out 0.3s both;
-}
-@keyframes footerFadeIn{
-  from{opacity:0;}
-  to{opacity:1;}
-}
-.login-footer .copyright{
-  font-size:11px;color:rgba(255,255,255,0.45);line-height:1.8;
-}
-.login-footer .phone{
-  font-size:11px;color:rgba(255,255,255,0.55);
-  display:inline-flex;align-items:center;gap:4px;
-  margin-top:2px;
+.login-footer .phone {
+  color: rgba(255,255,255,0.6);
 }
 /* 顶部导航 */
 .app-header{
@@ -475,12 +444,8 @@ textarea.form-input{min-height:80px;resize:vertical;}
 .list-item .item-right .score.minus{color:var(--danger);}
 .list-item .item-right .date{font-size:11px;color:var(--text-light);}
 /* 按钮 */
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;
-  padding:10px 20px;border-radius:22px;font-size:14px;font-weight:500;
-  border:none;cursor:pointer;transition:all 0.2s;
-}
-.btn-primary{background:var(--primary);color:#fff;}
+
+
 .btn-primary:active{background:var(--primary-dark);}
 .btn-outline{background:transparent;border:1px solid var(--primary);color:var(--primary);}
 .btn-success{background:var(--success);color:#fff;}
@@ -488,20 +453,16 @@ textarea.form-input{min-height:80px;resize:vertical;}
 .btn-sm{padding:6px 14px;font-size:12px;}
 .btn-block{width:100%;margin-top:12px;}
 /* 表单 */
-.form-group{margin-bottom:14px;}
-.form-label{font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px;display:block;}
-.form-input{
-  width:100%;padding:10px 12px;border:1px solid var(--border);
-  border-radius:10px;font-size:14px;color:var(--text);
-  background:#FAFBFC;outline:none;transition:border-color 0.2s;
-}
+
+
+
 .form-input:focus{border-color:var(--primary);background:#fff;}
 .form-select{
   width:100%;padding:10px 12px;border:1px solid var(--border);
   border-radius:10px;font-size:14px;color:var(--text);
   background:#FAFBFC;outline:none;-webkit-appearance:none;
 }
-textarea.form-input{min-height:80px;resize:vertical;}
+textarea
 /* 积分展示 */
 .score-display{
   text-align:center;padding:20px 0;
@@ -580,33 +541,6 @@ textarea.form-input{min-height:80px;resize:vertical;}
 }
 .toast.show{opacity:1;transform:translate(-50%,-50%) scale(1);}
 /* 登录页 */
-.login-page{
-  min-height:100vh;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  padding:20px;
-  background:linear-gradient(135deg,#1B5E9E 0%,#0D3B66 50%,#1B5E9E 100%);
-}
-.login-logo{
-  width:80px;height:80px;border-radius:20px;
-  background:rgba(255,255,255,0.2);
-  display:flex;align-items:center;justify-content:center;
-  font-size:40px;margin-bottom:16px;
-  backdrop-filter:blur(10px);
-}
-.login-title{color:#fff;font-size:22px;font-weight:600;margin-bottom:4px;}
-.login-subtitle{color:rgba(255,255,255,0.7);font-size:13px;margin-bottom:32px;}
-.login-card{
-  background:#fff;border-radius:16px;padding:24px;
-  width:100%;max-width:360px;box-shadow:0 10px 40px rgba(0,0,0,0.2);
-}
-.login-card .form-group{margin-bottom:16px;}
-.login-card .form-label{font-size:13px;color:var(--text-light);}
-.login-card .form-input{
-  padding:12px;border-radius:10px;font-size:15px;
-  border:1px solid var(--border);background:#F8F9FA;
-}
-.login-card .btn{width:100%;padding:12px;font-size:15px;border-radius:10px;margin-top:8px;}
-.login-hint{margin-top:16px;text-align:center;font-size:11px;color:var(--text-light);}
 /* 绩效详情 */
 .rank-list .rank-item{
   display:flex;align-items:center;padding:10px 0;
@@ -742,348 +676,26 @@ input:checked + .slider:before { transform:translateX(20px); }
   <div class="login-subtitle">工作日志 · 绩效考核 · 积分管理</div>
   <div class="login-card">
     <div class="form-group">
-      <label class="form-label" style="font-size:14px;font-weight:600;color:#333;">👤 用户名</label>
-      <input type="text" class="form-input" id="loginUsername" placeholder="请输入用户名" autocomplete="username" style="padding:14px 16px;font-size:15px;border-radius:12px;border:2px solid #E0E0E0;transition:all 0.3s;background:#FAFAFA;">
+      <label class="form-label">👤 用户名</label>
+      <input type="text" class="form-input" id="loginUsername" placeholder="请输入用户名" autocomplete="username">
     </div>
     <div class="form-group">
-      <label class="form-label" style="font-size:14px;font-weight:600;color:#333;">🔒 密码</label>
-      <input type="password" class="form-input" id="loginPassword" placeholder="请输入密码" autocomplete="current-password" style="padding:14px 16px;font-size:15px;border-radius:12px;border:2px solid #E0E0E0;transition:all 0.3s;background:#FAFAFA;">
+      <label class="form-label">🔒 密码</label>
+      <input type="password" class="form-input" id="loginPassword" placeholder="请输入密码" autocomplete="current-password">
     </div>
     <div class="login-options">
       <label class="login-remember">
         <input type="checkbox" id="rememberMe"> 记住密码
       </label>
-      <span class="login-forgot" onclick="showToast('📞 请联系科主任重置密码，或拨打技术支持：0527-80525126')">忘记密码？</span>
+      <span class="login-forgot" onclick="showToast('请联系科主任重置密码')">忘记密码？</span>
     </div>
-    <button class="btn btn-primary" onclick="handleLogin()" id="loginBtn" style="padding:14px;font-size:16px;letter-spacing:4px;border-radius:12px;background:linear-gradient(135deg,var(--primary),#1565C0);box-shadow:0 4px 15px rgba(33,150,243,0.4);">登 录</button>
+    <button class="btn btn-primary" onclick="handleLogin()" id="loginBtn">登 录</button>
   </div>
   <div class="login-footer">
     <div class="copyright">版权所有 © 裴兵（江苏省人民医院宿迁医院医学检验科）</div>
     <div class="phone">📞 技术支持：0527-80525126</div>
   </div>
-</div>
-<!-- 消息通知设置弹窗 -->
-<div id="notificationModal" class="modal">
-  <div class="modal-content" style="max-height:90vh;overflow-y:auto;">
-    <div class="modal-header">
-      <h3>🔔 消息通知设置</h3>
-      <span class="modal-close" onclick="closeModal('notificationModal')">&times;</span>
-    </div>
-    <div class="modal-body">
-      <div style="margin-bottom:12px;font-weight:600;color:var(--primary);font-size:14px;">📬 通知类型</div>
-      <div class="form-group" style="display:flex;align-items:center;justify-content:space-between;">
-        <label class="form-label" style="margin-bottom:0;">保养提醒</label>
-        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-      </div>
-      <div class="form-group" style="display:flex;align-items:center;justify-content:space-between;">
-        <label class="form-label" style="margin-bottom:0;">危急值推送</label>
-        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-      </div>
-      <div class="form-group" style="display:flex;align-items:center;justify-content:space-between;">
-        <label class="form-label" style="margin-bottom:0;">SOP学习提醒</label>
-        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-      </div>
-      <div class="form-group" style="display:flex;align-items:center;justify-content:space-between;">
-        <label class="form-label" style="margin-bottom:0;">绩效积分更新</label>
-        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-      </div>
-      <div class="form-group" style="display:flex;align-items:center;justify-content:space-between;">
-        <label class="form-label" style="margin-bottom:0;">质控失控预警</label>
-        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-      </div>
-      <div style="margin-bottom:12px;font-weight:600;color:var(--primary);font-size:14px;margin-top:16px;">⏰ 提醒时间设置</div>
-      <div class="form-group">
-        <label class="form-label">保养提醒提前（分钟）</label>
-        <input type="number" class="form-input" value="30">
-      </div>
-      <div class="form-group">
-        <label class="form-label">逾期升级提醒（小时）</label>
-        <input type="number" class="form-input" value="2">
-      </div>
-      <div style="display:flex;gap:8px;margin-top:16px;">
-        <button class="btn btn-primary" style="flex:1;" onclick="showToast('✅ 通知设置已保存');closeModal('notificationModal')">💾 保存设置</button>
-        <button class="btn btn-outline" style="flex:1;" onclick="closeModal('notificationModal')">取消</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- 数据导出弹窗 -->
-<div id="dataExportModal" class="modal">
-  <div class="modal-content" style="max-height:90vh;overflow-y:auto;">
-    <div class="modal-header">
-      <h3>📊 数据导出</h3>
-      <span class="modal-close" onclick="closeModal('dataExportModal')">&times;</span>
-    </div>
-    <div class="modal-body">
-      <div style="margin-bottom:12px;font-weight:600;color:var(--primary);font-size:14px;">📄 导出类型</div>
-      <div class="list-item" style="padding:12px 0;cursor:pointer;" onclick="exportData('worklog')">
-        <div class="item-icon" style="background:#E8F5E9;width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;">📋</div>
-        <div class="item-info"><div class="title">工作日志</div><div class="subtitle">导出个人/科室工作日志（Excel格式）</div></div>
-        <div class="item-right"><span style="color:var(--text-light);">›</span></div>
-      </div>
-      <div class="list-item" style="padding:12px 0;cursor:pointer;" onclick="exportData('performance')">
-        <div class="item-icon" style="background:#FFF3E6;width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;">🏆</div>
-        <div class="item-info"><div class="title">绩效积分报告</div><div class="subtitle">导出月度/年度绩效积分报告（PDF格式）</div></div>
-        <div class="item-right"><span style="color:var(--text-light);">›</span></div>
-      </div>
-      <div class="list-item" style="padding:12px 0;cursor:pointer;" onclick="exportData('backup')">
-        <div class="item-icon" style="background:#E1F5FE;width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;">💾</div>
-        <div class="item-info"><div class="title">全量数据备份</div><div class="subtitle">导出所有数据（JSON格式，管理员权限）</div></div>
-        <div class="item-right"><span style="color:var(--text-light);">›</span></div>
-      </div>
-      <div style="margin-top:12px;padding:12px;background:#FFF8E1;border-radius:8px;font-size:12px;color:#795548;">
-        ⚠️ 数据导出包含工作记录和绩效信息，请妥善保管导出文件。
-      </div>
-    </div>
-  </div>
-</div>
-<!-- 操作审计日志弹窗 -->
-<div id="auditLogModal" class="modal">
-  <div class="modal-content" style="max-height:90vh;overflow-y:auto;">
-    <div class="modal-header">
-      <h3>📋 操作审计日志</h3>
-      <span class="modal-close" onclick="closeModal('auditLogModal')">&times;</span>
-    </div>
-    <div class="modal-body">
-      <div style="margin-bottom:12px;font-size:13px;color:var(--text-light);">记录所有关键操作，支持追溯和审计</div>
-      <div style="display:flex;gap:8px;margin-bottom:12px;">
-        <select class="form-input" style="flex:1;" id="auditFilter">
-          <option value="all">全部类型</option>
-          <option value="login">登录/登出</option>
-          <option value="data">数据修改</option>
-          <option value="score">积分调整</option>
-          <option value="export">数据导出</option>
-          <option value="user">用户管理</option>
-        </select>
-        <button class="btn btn-outline" onclick="showToast('🔍 筛选完成')">筛选</button>
-      </div>
-      <div id="auditLogList">
-        <div style="padding:10px;border-bottom:1px solid #eee;font-size:13px;">
-          <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">🔐 登录</span><span style="color:var(--text-light);font-size:12px;">2026-08-15 08:30</span></div>
-          <div style="color:var(--text-light);font-size:12px;margin-top:4px;">系统管理员 登录系统</div>
-        </div>
-        <div style="padding:10px;border-bottom:1px solid #eee;font-size:13px;">
-          <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">📝 数据修改</span><span style="color:var(--text-light);font-size:12px;">2026-08-15 09:15</span></div>
-          <div style="color:var(--text-light);font-size:12px;margin-top:4px;">张组长 修改了 生化组 质控数据</div>
-        </div>
-        <div style="padding:10px;border-bottom:1px solid #eee;font-size:13px;">
-          <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">⭐ 积分调整</span><span style="color:var(--text-light);font-size:12px;">2026-08-14 16:40</span></div>
-          <div style="color:var(--text-light);font-size:12px;margin-top:4px;">科主任 调整了 李检验 的绩效积分（+2分，原因：加班处理急诊）</div>
-        </div>
-        <div style="padding:10px;border-bottom:1px solid #eee;font-size:13px;">
-          <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">📤 数据导出</span><span style="color:var(--text-light);font-size:12px;">2026-08-14 14:20</span></div>
-          <div style="color:var(--text-light);font-size:12px;margin-top:4px;">系统管理员 导出了 全科绩效汇总表</div>
-        </div>
-        <div style="padding:10px;font-size:13px;">
-          <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">👥 用户管理</span><span style="color:var(--text-light);font-size:12px;">2026-08-13 10:00</span></div>
-          <div style="color:var(--text-light);font-size:12px;margin-top:4px;">系统管理员 新增了 王检验 账号</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- 数据审核弹窗 -->
-<div id="dataAuditModal" class="modal">
-  <div class="modal-content" style="max-height:90vh;overflow-y:auto;">
-    <div class="modal-header">
-      <h3>✅ 数据审核</h3>
-      <span class="modal-close" onclick="closeModal('dataAuditModal')">&times;</span>
-    </div>
-    <div class="modal-body">
-      <div style="margin-bottom:12px;font-size:13px;color:var(--text-light);">审核异常数据，手动调整积分（操作留痕）</div>
-      <div style="display:flex;gap:8px;margin-bottom:12px;">
-        <select class="form-input" style="flex:1;padding:6px;font-size:12px;">
-          <option>全部类型</option><option>保养数据</option><option>质控数据</option><option>工作量数据</option><option>绩效积分</option>
-        </select>
-        <select class="form-input" style="flex:1;padding:6px;font-size:12px;">
-          <option>全部状态</option><option>待审核</option><option>已通过</option><option>已驳回</option>
-        </select>
-      </div>
-      <div style="padding:10px;background:#FFF8E1;border-radius:8px;margin-bottom:8px;border-left:3px solid #FF9800;">
-        <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">📊 绩效积分异常</span><span style="color:#FF9800;">待审核</span></div>
-        <div style="font-size:12px;color:#666;margin-top:4px;">张三 - 本月保养积分异常偏高（+15分），需核实</div>
-        <div style="display:flex;gap:8px;margin-top:8px;">
-          <button class="btn btn-primary" style="flex:1;padding:6px;font-size:12px;" onclick="showToast('✅ 已审核通过')">✅ 通过</button>
-          <button class="btn btn-outline" style="flex:1;padding:6px;font-size:12px;" onclick="showToast('❌ 已驳回')">❌ 驳回</button>
-        </div>
-      </div>
-      <div style="padding:10px;background:#FFF8E1;border-radius:8px;margin-bottom:8px;border-left:3px solid #FF9800;">
-        <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">PB 保养数据缺失</span><span style="color:#FF9800;">待审核</span></div>
-        <div style="font-size:12px;color:#666;margin-top:4px;">李四 - 2026-08-14 血球仪日保养未打卡</div>
-        <div style="display:flex;gap:8px;margin-top:8px;">
-          <button class="btn btn-primary" style="flex:1;padding:6px;font-size:12px;" onclick="showToast('✅ 已审核通过')">✅ 通过</button>
-          <button class="btn btn-outline" style="flex:1;padding:6px;font-size:12px;" onclick="showToast('❌ 已驳回')">❌ 驳回</button>
-        </div>
-      </div>
-      <div style="padding:10px;background:#E8F5E9;border-radius:8px;border-left:3px solid #4CAF50;">
-        <div style="display:flex;justify-content:space-between;"><span style="font-weight:600;">📊 绩效积分调整</span><span style="color:#4CAF50;">已通过</span></div>
-        <div style="font-size:12px;color:#666;margin-top:4px;">王五 - 加班处理急诊 +2分 | 审核人：科主任 | 2026-08-14</div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- 数据看板弹窗 -->
-<div id="dataDashboardModal" class="modal">
-  <div class="modal-content" style="max-height:90vh;overflow-y:auto;">
-    <div class="modal-header">
-      <h3>📊 数据看板</h3>
-      <span class="modal-close" onclick="closeModal('dataDashboardModal')">&times;</span>
-    </div>
-    <div class="modal-body">
-      <div style="margin-bottom:12px;font-size:13px;color:var(--text-light);">科室整体绩效概览</div>
-      <div style="display:flex;gap:8px;margin-bottom:12px;">
-        <div style="flex:1;text-align:center;padding:12px;background:linear-gradient(135deg,var(--primary),#1976D2);border-radius:12px;color:white;">
-          <div style="font-size:24px;font-weight:700;">98.5</div>
-          <div style="font-size:11px;opacity:0.9;">平均绩效分</div>
-        </div>
-        <div style="flex:1;text-align:center;padding:12px;background:linear-gradient(135deg,#4CAF50,#66BB6A);border-radius:12px;color:white;">
-          <div style="font-size:24px;font-weight:700;">96.2%</div>
-          <div style="font-size:11px;opacity:0.9;">保养完成率</div>
-        </div>
-        <div style="flex:1;text-align:center;padding:12px;background:linear-gradient(135deg,#FF9800,#FFA726);border-radius:12px;color:white;">
-          <div style="font-size:24px;font-weight:700;">95.7%</div>
-          <div style="font-size:11px;opacity:0.9;">质控在控率</div>
-        </div>
-      </div>
-      <div style="font-weight:600;margin-bottom:8px;">🏆 人员排名TOP10</div>
-      <div style="font-size:13px;">
-        <div style="display:flex;align-items:center;padding:8px;border-bottom:1px solid #eee;background:linear-gradient(90deg,#FFF8E1,transparent);">
-          <span style="width:30px;font-weight:700;color:#FF9800;">🥇</span><span style="flex:1;">张三</span><span style="color:#666;">生化组</span><span style="font-weight:600;">108.5分</span>
-        </div>
-        <div style="display:flex;align-items:center;padding:8px;border-bottom:1px solid #eee;">
-          <span style="width:30px;font-weight:700;color:#9E9E9E;">🥈</span><span style="flex:1;">李四</span><span style="color:#666;">临检组</span><span style="font-weight:600;">102.3分</span>
-        </div>
-        <div style="display:flex;align-items:center;padding:8px;border-bottom:1px solid #eee;">
-          <span style="width:30px;font-weight:700;color:#795548;">🥉</span><span style="flex:1;">王五</span><span style="color:#666;">免疫组</span><span style="font-weight:600;">98.5分</span>
-        </div>
-        <div style="display:flex;align-items:center;padding:8px;border-bottom:1px solid #eee;">
-          <span style="width:30px;font-weight:700;">4</span><span style="flex:1;">赵六</span><span style="color:#666;">生化组</span><span style="font-weight:600;">95.2分</span>
-        </div>
-        <div style="display:flex;align-items:center;padding:8px;">
-          <span style="width:30px;font-weight:700;">5</span><span style="flex:1;">钱七</span><span style="color:#666;">临检组</span><span style="font-weight:600;">92.8分</span>
-        </div>
-      </div>
-      <div style="margin-top:12px;font-weight:600;margin-bottom:8px;">📈 月度趋势</div>
-      <div style="height:100px;background:linear-gradient(180deg,#E3F2FD 0%,#BBDEFB 100%);border-radius:8px;display:flex;align-items:flex-end;padding:8px;gap:4px;">
-        <div style="flex:1;height:40%;background:var(--primary);border-radius:4px 4px 0 0;"></div>
-        <div style="flex:1;height:55%;background:var(--primary);border-radius:4px 4px 0 0;"></div>
-        <div style="flex:1;height:50%;background:var(--primary);border-radius:4px 4px 0 0;"></div>
-        <div style="flex:1;height:65%;background:var(--primary);border-radius:4px 4px 0 0;"></div>
-        <div style="flex:1;height:70%;background:var(--primary);border-radius:4px 4px 0 0;"></div>
-        <div style="flex:1;height:80%;background:#4CAF50;border-radius:4px 4px 0 0;"></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:11px;color:#999;margin-top:4px;">
-        <span>3月</span><span>4月</span><span>5月</span><span>6月</span><span>7月</span><span>8月</span>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- 报表导出弹窗 -->
-<div id="reportExportModal" class="modal">
-  <div class="modal-content" style="max-height:90vh;overflow-y:auto;">
-    <div class="modal-header">
-      <h3>📤 报表导出</h3>
-      <span class="modal-close" onclick="closeModal('reportExportModal')">&times;</span>
-    </div>
-    <div class="modal-body">
-      <div style="margin-bottom:12px;font-size:13px;color:var(--text-light);">批量导出全科室数据报表</div>
-      <div class="form-group">
-        <label class="form-label">导出类型</label>
-        <select class="form-input" id="reportType">
-          <option>全科室绩效汇总表</option>
-          <option>按组别绩效汇总表</option>
-          <option>个人绩效明细表</option>
-          <option>保养完成率统计表</option>
-          <option>质控在控率统计表</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">时间范围</label>
-        <select class="form-input">
-          <option>本月</option><option>本季度</option><option>本年</option><option>自定义</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">组别筛选</label>
-        <select class="form-input">
-          <option>全部组别</option><option>生化组</option><option>临检组</option><option>免疫组</option><option>微生物组</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">导出格式</label>
-        <div style="display:flex;gap:8px;">
-          <button class="btn btn-primary" style="flex:1;padding:8px;font-size:12px;" onclick="showToast('📤 正在导出Excel...');setTimeout(()=>showToast('✅ Excel导出完成'),1500)">📊 Excel</button>
-          <button class="btn btn-outline" style="flex:1;padding:8px;font-size:12px;" onclick="showToast('📤 正在导出PDF...');setTimeout(()=>showToast('✅ PDF导出完成'),1500)">📄 PDF</button>
-        </div>
-      </div>
-      <div style="margin-top:12px;padding:12px;background:#FFF8E1;border-radius:8px;font-size:12px;color:#795548;">
-        ⚠️ 导出数据包含全科室人员绩效信息，请妥善保管。
-      </div>
-    </div>
-  </div>
-</div>
-<!-- 关于弹窗 -->
-<div id="aboutModal" class="modal">
-  <div class="modal-content" style="max-height:90vh;overflow-y:auto;">
-    <div class="modal-header">
-      <h3>ℹ️ 关于</h3>
-      <span class="modal-close" onclick="closeModal('aboutModal')">&times;</span>
-    </div>
-    <div class="modal-body" style="text-align:center;">
-      <div style="font-size:48px;margin:16px 0;">PB</div>
-      <div style="font-size:20px;font-weight:700;color:var(--primary);">检验科工作日志与绩效考核系统</div>
-      <div style="font-size:13px;color:var(--text-light);margin:8px 0;">版本 V2.0.0</div>
-      <div style="font-size:13px;color:var(--text-light);margin:4px 0;">构建日期：2026年8月</div>
-      <div style="margin:16px 0;padding:12px;background:#F5F5F5;border-radius:8px;text-align:left;font-size:13px;">
-        <div style="font-weight:600;margin-bottom:8px;">📋 功能模块</div>
-        <div>• 仪器保养管理</div>
-        <div>• 质控管理（IQC/EQA）</div>
-        <div>• 检测工作量统计</div>
-        <div>• SOP在线学习与考试</div>
-        <div>• 危急值记录与追踪</div>
-        <div>• 绩效考核积分</div>
-        <div>• 数据导出与备份</div>
-      </div>
-      <div style="margin:12px 0;padding:12px;background:#FFF8E1;border-radius:8px;text-align:left;font-size:12px;color:#795548;">
-        <div style="font-weight:600;margin-bottom:4px;">📞 技术支持</div>
-        <div>技术支持电话：0527-80525126</div>
-      </div>
-      <button class="btn btn-outline" style="width:100%;margin-top:8px;" onclick="closeModal('aboutModal')">关闭</button>
-    </div>
-  </div>
-</div>
-
-    
-</div>
-<!-- 密码修改弹窗 -->
-<div id="passwordModal" class="modal">
-  <div class="modal-content" style="max-height:90vh;overflow-y:auto;">
-    <div class="modal-header">
-      <h3>🔒 修改密码</h3>
-      <span class="modal-close" onclick="closeModal('passwordModal')">&times;</span>
-    </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label class="form-label">当前密码</label>
-        <input type="password" class="form-input" id="oldPassword" placeholder="请输入当前密码">
-      </div>
-      <div class="form-group">
-        <label class="form-label">新密码</label>
-        <input type="password" class="form-input" id="newPassword" placeholder="请输入新密码（至少6位）">
-      </div>
-      <div class="form-group">
-        <label class="form-label">确认新密码</label>
-        <input type="password" class="form-input" id="confirmPassword" placeholder="请再次输入新密码">
-      </div>
-      <div style="display:flex;gap:8px;margin-top:16px;">
-        <button class="btn btn-primary" style="flex:1;" onclick="changePassword()">✅ 确认修改</button>
-        <button class="btn btn-outline" style="flex:1;" onclick="closeModal('passwordModal')">取消</button>
-      </div>
-    </div>
-  </div>
-
-<!-- APP主界面 -->
+</div><!-- APP主界面 -->
 <div id="appPage" style="display:none;">
   <!-- 顶部导航 -->
   <header class="app-header">
@@ -2659,45 +2271,16 @@ let currentTab = 'home';
 function handleLogin() {
   const username = document.getElementById('loginUsername').value.trim();
   const password = document.getElementById('loginPassword').value;
-  const loginBtn = document.getElementById('loginBtn');
   if (!username || !password) {
-    showToast('⚠️ 请输入用户名和密码');
-    // 输入框抖动效果
-    if (!username) document.getElementById('loginUsername').style.borderColor = '#f44336';
-    if (!password) document.getElementById('loginPassword').style.borderColor = '#f44336';
-    setTimeout(() => {
-      document.getElementById('loginUsername').style.borderColor = '#E0E0E0';
-      document.getElementById('loginPassword').style.borderColor = '#E0E0E0';
-    }, 1000);
+    showToast('请输入用户名和密码');
     return;
   }
-  // 按钮加载状态
-  loginBtn.disabled = true;
-  loginBtn.innerHTML = '⏳ 登录中...';
-  loginBtn.style.opacity = '0.7';
-  // 模拟网络延迟（实际使用时可以去掉延迟）
-  setTimeout(() => {
-    const found = USER_DB.find(u => u.id === username && u.password === password);
-    if (found) {
-      loginBtn.innerHTML = '✅ 登录成功';
-      loginBtn.style.background = 'linear-gradient(135deg,#4CAF50,#388E3C)';
-      setTimeout(() => {
-        loginSuccess(found);
-      }, 300);
-    } else {
-      loginBtn.disabled = false;
-      loginBtn.innerHTML = '登 录';
-      loginBtn.style.opacity = '1';
-      showToast('❌ 用户名或密码错误，请重试');
-      // 输入框抖动
-      document.getElementById('loginPassword').style.borderColor = '#f44336';
-      document.getElementById('loginUsername').style.borderColor = '#f44336';
-      setTimeout(() => {
-        document.getElementById('loginUsername').style.borderColor = '#E0E0E0';
-        document.getElementById('loginPassword').style.borderColor = '#E0E0E0';
-      }, 1000);
-    }
-  }, 800);
+  const found = USER_DB.find(u => u.id === username && u.password === password);
+  if (found) {
+    loginSuccess(found);
+  } else {
+    showToast('用户名或密码错误');
+  }
 }
 
 function loginSuccess(user) {
