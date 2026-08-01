@@ -923,7 +923,47 @@ input:checked + .slider:before { transform:translateX(20px); }
       </div>
     </div>
     <!-- 我的页面 -->
-    <div id="page-profile" class="page">
+    <div id="page-system" class="page">
+  <div class="page-header">
+    <h2>⚙️ 系统维护</h2>
+    <div style="font-size:13px;color:var(--text-light);">基础数据管理</div>
+  </div>
+  <div class="card" style="margin:12px;">
+    <div class="card-body" style="padding:8px 0;">
+      <div class="list-item" style="padding:14px 16px;cursor:pointer;" onclick="showSysMgmt('personnel')">
+        <div class="item-icon" style="background:#E3F2FD;width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">👥</div>
+        <div class="item-info"><div class="title">人员管理</div><div class="subtitle">员工信息、岗位、职称管理</div></div>
+        <div class="item-right"><span style="color:var(--text-light);font-size:18px;">›</span></div>
+      </div>
+      <div class="list-item" style="padding:14px 16px;cursor:pointer;" onclick="showSysMgmt('group')">
+        <div class="item-icon" style="background:#E8F5E9;width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">📂</div>
+        <div class="item-info"><div class="title">组别管理</div><div class="subtitle">专业组设置、分组管理</div></div>
+        <div class="item-right"><span style="color:var(--text-light);font-size:18px;">›</span></div>
+      </div>
+      <div class="list-item" style="padding:14px 16px;cursor:pointer;" onclick="showSysMgmt('nature')">
+        <div class="item-icon" style="background:#FFF3E0;width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">🏷️</div>
+        <div class="item-info"><div class="title">性质管理</div><div class="subtitle">标本性质、检验性质分类</div></div>
+        <div class="item-right"><span style="color:var(--text-light);font-size:18px;">›</span></div>
+      </div>
+      <div class="list-item" style="padding:14px 16px;cursor:pointer;" onclick="showSysMgmt('instrument')">
+        <div class="item-icon" style="background:#FCE4EC;width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">🔬</div>
+        <div class="item-info"><div class="title">仪器管理</div><div class="subtitle">检验仪器设备档案管理</div></div>
+        <div class="item-right"><span style="color:var(--text-light);font-size:18px;">›</span></div>
+      </div>
+      <div class="list-item" style="padding:14px 16px;cursor:pointer;" onclick="showSysMgmt('reagent')">
+        <div class="item-icon" style="background:#F3E5F5;width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">🧪</div>
+        <div class="item-info"><div class="title">试剂管理</div><div class="subtitle">试剂耗材库存、有效期管理</div></div>
+        <div class="item-right"><span style="color:var(--text-light);font-size:18px;">›</span></div>
+      </div>
+      <div class="list-item" style="padding:14px 16px;cursor:pointer;" onclick="showSysMgmt('qc')">
+        <div class="item-icon" style="background:#E0F7FA;width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">📊</div>
+        <div class="item-info"><div class="title">质控管理</div><div class="subtitle">质控品、质控规则配置</div></div>
+        <div class="item-right"><span style="color:var(--text-light);font-size:18px;">›</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="page-profile" class="page">
       <div class="card">
         <div class="card-body" style="display:flex;align-items:center;gap:14px;">
           <div style="width:56px;height:56px;border-radius:50%;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:28px;">👤</div>
@@ -1489,6 +1529,10 @@ input:checked + .slider:before { transform:translateX(20px); }
       <span class="icon">👤</span>
       <span class="label">我的</span>
     </div>
+    <div class="nav-item" data-page="system" onclick="switchTab('system')">
+      <span class="icon">⚙️</span>
+      <span class="label">系统维护</span>
+    </div>
   </nav>
 </div>
 <!-- 保养打卡弹窗 -->
@@ -1676,6 +1720,19 @@ input:checked + .slider:before { transform:translateX(20px); }
 </div>
 <!-- Toast -->
 <div class="toast" id="toast"></div>
+
+<!-- 系统维护子页面弹窗 -->
+<div id="sysMgmtModal" class="modal">
+  <div class="modal-content" style="max-height:90vh;overflow-y:auto;">
+    <div class="modal-header">
+      <h3 id="sysMgmtTitle">⚙️ 管理</h3>
+      <span class="modal-close" onclick="closeModal('sysMgmtModal')">&times;</span>
+    </div>
+    <div class="modal-body">
+      <div id="sysMgmtContent"></div>
+    </div>
+  </div>
+</div>
 <script>
 // ===== 用户数据库 =====
 const USER_DB = [
@@ -1805,6 +1862,112 @@ function hasPermission(perm) {
   return perms.includes(perm);
 }
 // ===== 底部导航切换 =====
+
+// ===== 系统维护 =====
+const SYSTEM_DATA = {
+  personnel: {
+    title: '👥 人员管理',
+    fields: ['工号', '姓名', '岗位', '职称', '组别', '状态'],
+    items: [
+      { id: '001', name: '张三', post: '检验师', title: '主管技师', group: '生化组', status: '在职' },
+      { id: '002', name: '李四', post: '检验师', title: '技师', group: '临检组', status: '在职' },
+      { id: '003', name: '王五', post: '检验士', title: '初级技师', group: '免疫组', status: '休假' }
+    ]
+  },
+  group: {
+    title: '📂 组别管理',
+    fields: ['组别编号', '组别名称', '组长', '成员数', '状态'],
+    items: [
+      { id: 'G01', name: '生化组', leader: '张组长', count: '8人', status: '正常' },
+      { id: 'G02', name: '临检组', leader: '李组长', count: '6人', status: '正常' },
+      { id: 'G03', name: '免疫组', leader: '王组长', count: '5人', status: '正常' },
+      { id: 'G04', name: '微生物组', leader: '赵组长', count: '4人', status: '正常' },
+      { id: 'G05', name: '分子组', leader: '刘组长', count: '3人', status: '正常' }
+    ]
+  },
+  nature: {
+    title: '🏷️ 性质管理',
+    fields: ['编号', '名称', '类别', '说明'],
+    items: [
+      { id: 'N01', name: '血液', type: '标本性质', desc: '全血/血清/血浆' },
+      { id: 'N02', name: '尿液', type: '标本性质', desc: '随机尿/24h尿' },
+      { id: 'N03', name: '粪便', type: '标本性质', desc: '常规/隐血' },
+      { id: 'N04', name: '脑脊液', type: '标本性质', desc: '常规/生化' },
+      { id: 'N05', name: '常规检验', type: '检验性质', desc: '血常规/尿常规' },
+      { id: 'N06', name: '生化检验', type: '检验性质', desc: '肝功能/肾功能' },
+      { id: 'N07', name: '免疫检验', type: '检验性质', desc: '传染病/激素' }
+    ]
+  },
+  instrument: {
+    title: '🔬 仪器管理',
+    fields: ['仪器编号', '仪器名称', '型号', '所属组别', '状态'],
+    items: [
+      { id: 'I01', name: '全自动生化分析仪', model: 'AU5800', group: '生化组', status: '正常' },
+      { id: 'I02', name: '全自动血球分析仪', model: 'XN-9000', group: '临检组', status: '正常' },
+      { id: 'I03', name: '全自动免疫分析仪', model: 'Cobas e601', group: '免疫组', status: '正常' },
+      { id: 'I04', name: '凝血分析仪', model: 'CS-5100', group: '临检组', status: '正常' },
+      { id: 'I05', name: '血培养仪', model: 'BACTEC FX', group: '微生物组', status: '正常' }
+    ]
+  },
+  reagent: {
+    title: '🧪 试剂管理',
+    fields: ['试剂编号', '试剂名称', '规格', '库存', '有效期', '状态'],
+    items: [
+      { id: 'R01', name: 'ALT试剂盒', spec: '500ml', stock: '23盒', expire: '2026-12', status: '正常' },
+      { id: 'R02', name: 'CREA试剂盒', spec: '500ml', stock: '15盒', expire: '2026-11', status: '正常' },
+      { id: 'R03', name: 'GLU试剂盒', spec: '500ml', stock: '8盒', expire: '2026-10', status: '低库存' },
+      { id: 'R04', name: '血球稀释液', spec: '20L', stock: '5桶', expire: '2027-01', status: '正常' },
+      { id: 'R05', name: '乙肝表面抗原试剂', spec: '100T', stock: '3盒', expire: '2026-09', status: '临期' }
+    ]
+  },
+  qc: {
+    title: '📊 质控管理',
+    fields: ['质控编号', '质控品名称', '项目', '批号', '水平', '状态'],
+    items: [
+      { id: 'QC01', name: '生化质控品', project: 'ALT/CREA/GLU', batch: '202608-1', level: '水平1', status: '在控' },
+      { id: 'QC02', name: '生化质控品', project: 'ALT/CREA/GLU', batch: '202608-1', level: '水平2', status: '在控' },
+      { id: 'QC03', name: '血球质控品', project: 'WBC/RBC/HGB', batch: '202608-2', level: '低值', status: '在控' },
+      { id: 'QC04', name: '血球质控品', project: 'WBC/RBC/HGB', batch: '202608-2', level: '高值', status: '在控' },
+      { id: 'QC05', name: '免疫质控品', project: 'HBsAg/HCV/HIV', batch: '202607-3', level: '阳性', status: '在控' }
+    ]
+  }
+};
+function showSysMgmt(type) {
+  const data = SYSTEM_DATA[type];
+  if (!data) return;
+  document.getElementById('sysMgmtTitle').textContent = data.title;
+  const container = document.getElementById('sysMgmtContent');
+  // 构建表格
+  let html = '<div style="margin-bottom:12px;display:flex;gap:8px;">';
+  html += '<button class="btn btn-primary" style="flex:1;" onclick="showToast('✅ 新增功能')">➕ 新增</button>';
+  html += '<button class="btn btn-outline" style="flex:1;" onclick="showToast('🔍 搜索功能')">🔍 搜索</button>';
+  html += '</div>';
+  html += '<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:12px;">';
+  html += '<thead><tr style="background:var(--primary);color:white;">';
+  data.fields.forEach(f => {
+    html += '<th style="padding:8px 6px;text-align:left;white-space:nowrap;">' + f + '</th>';
+  });
+  html += '<th style="padding:8px 6px;text-align:center;">操作</th></tr></thead><tbody>';
+  data.items.forEach((item, i) => {
+    html += '<tr style="border-bottom:1px solid #eee;' + (i % 2 === 0 ? 'background:#FAFAFA;' : '') + '">';
+    data.fields.forEach(f => {
+      const keyMap = { '工号': 'id', '姓名': 'name', '岗位': 'post', '职称': 'title', '组别': 'group', '状态': 'status', '组别编号': 'id', '组别名称': 'name', '组长': 'leader', '成员数': 'count', '编号': 'id', '名称': 'name', '类别': 'type', '说明': 'desc', '仪器编号': 'id', '仪器名称': 'name', '型号': 'model', '所属组别': 'group', '试剂编号': 'id', '试剂名称': 'name', '规格': 'spec', '库存': 'stock', '有效期': 'expire', '质控编号': 'id', '质控品名称': 'name', '项目': 'project', '批号': 'batch', '水平': 'level' };
+      const key = keyMap[f] || f.toLowerCase();
+      let val = item[key] || '-';
+      if (f === '状态') {
+        const statusColors = { '在职': '#4CAF50', '休假': '#FF9800', '离职': '#F44336', '正常': '#4CAF50', '低库存': '#FF9800', '临期': '#F44336', '在控': '#4CAF50' };
+        const color = statusColors[val] || '#666';
+        val = '<span style="background:' + color + ';color:white;padding:2px 8px;border-radius:10px;font-size:11px;">' + val + '</span>';
+      }
+      html += '<td style="padding:8px 6px;">' + val + '</td>';
+    });
+    html += '<td style="padding:8px 6px;text-align:center;"><span style="color:var(--primary);cursor:pointer;" onclick="showToast('✏️ 编辑 ' + (item.name || item.id) + '')">✏️</span> <span style="color:#F44336;cursor:pointer;margin-left:4px;" onclick="showToast('🗑️ 删除 ' + (item.name || item.id) + '')">🗑️</span></td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table></div>';
+  container.innerHTML = html;
+  showModal('sysMgmtModal');
+}
 function switchTab(tab) {
   currentTab = tab;
   document.querySelectorAll('.nav-item').forEach(item => {
