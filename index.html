@@ -3228,46 +3228,7 @@ function downloadWordTemplate(){
   var dateStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
   var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">';
   html += '<head><meta charset="utf-8"><title>检验科试题模板</title>';
-  html += '<style>body{font-family:宋体;font-size:12pt;}table{border-collapse:collapse;width:100%;margin-bottom:20px;}td,th{border:1px solid #000;padding:8px;text-align:left;}th{background:#e0e0e0;font-weight:bold;}h1{text-align:center;font-size:18pt;}h2{font-size:14pt;margin-top:20px;}.note{color:#666;font-size:10pt;margin-bottom:10px;}
-/* 复选框样式 */
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 8px;
-  margin: 2px 0;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  color: var(--text);
-  transition: background 0.2s;
-}
-.checkbox-label:hover {
-  background: #f5f5f5;
-}
-.checkbox-label input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  accent-color: #1976d2;
-  cursor: pointer;
-}
-/* 云端版本列表 */
-.cloud-version-item {
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.cloud-version-item:hover {
-  transform: translateX(3px);
-}
-/* 出控记录样式 */
-.out-control-box {
-  border: 1px solid #ffcdd2;
-  border-radius: 8px;
-  padding: 10px;
-  background: #fff5f5;
-  margin-top: 8px;
-}
-</style></head>';
+  html += '<style>body{font-family:宋体;font-size:12pt;}table{border-collapse:collapse;width:100%;margin-bottom:20px;}td,th{border:1px solid #000;padding:8px;text-align:left;}th{background:#e0e0e0;font-weight:bold;}h1{text-align:center;font-size:18pt;}h2{font-size:14pt;margin-top:20px;}.note{color:#666;font-size:10pt;margin-bottom:10px;}.checkbox-label{display:flex;align-items:center;gap:6px;padding:6px 8px;margin:2px 0;border-radius:6px;cursor:pointer;font-size:14px;color:var(--text);transition:background 0.2s;}.checkbox-label:hover{background:#f5f5f5;}.checkbox-label input[type="checkbox"]{width:16px;height:16px;accent-color:#1976d2;cursor:pointer;}.cloud-version-item{cursor:pointer;transition:all 0.2s;}.cloud-version-item:hover{transform:translateX(3px);}.out-control-box{border:1px solid #ffcdd2;border-radius:8px;padding:10px;background:#fff5f5;margin-top:8px;}</style></head>';
   html += '<body>';
   html += '<h1>📝 医学检验科试题模板</h1>';
   html += '<p style="text-align:center;color:#666;">生成日期：' + dateStr + '</p>';
@@ -3292,46 +3253,18 @@ function downloadWordTemplate(){
   html += '<li>"组别"列填写所属专业组（如：生化组、临检组、免疫组、微生物组、分子组、输血组）。</li>';
   html += '<li>填写完成后，保存此文档，然后在系统中逐题添加。</li>';
   html += '</ol>';
-  html += '
-<script>
-if("serviceWorker" in navigator){
-  navigator.serviceWorker.register("sw.js").then(function(reg){
-    console.log("SW registered:", reg.scope);
-  }).catch(function(err){
-    console.log("SW registration failed:", err);
-  });
+  html += '</body></html>';
+  var blob = new Blob(['\ufeff' + html], {type: 'application/msword'});
+  var link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = '检验科试题模板_' + dateStr + '.doc';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(link.href);
+  showToast('✅ 试题模板已下载');
 }
-</script>
-</body></html>';
-  // 创建下载
-  var blob = new Blob([html], {type: 'application/msword'});
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href = url;
-  a.download = '检验科试题模板_' + dateStr + '.doc';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  showToast('✅ Word模板已下载，请按模板格式填写试题');
-}
-// ===== 手机触摸优化 =====
-// 添加触摸反馈
-document.addEventListener('DOMContentLoaded', function(){
-  // 为所有可点击元素添加触摸反馈
-  var clickableElements = document.querySelectorAll('.menu-card, .nav-item, .list-item, .tab, .action-btn, .btn');
-  for(var i=0;i<clickableElements.length;i++){
-    clickableElements[i].classList.add('touch-ripple');
-  }
-  // 检测是否为移动设备
-  if('ontouchstart' in window || navigator.maxTouchPoints > 0){
-    document.body.classList.add('mobile-device');
-  }
-});
 
-
-// ========== 新增功能函数 ==========
-// 显示保养计划
 function showMaintenancePlan(){
   var records = appData.maintenanceRecords || [];
   var devices = appData.devices || [];
