@@ -231,6 +231,27 @@ tr:nth-child(even){background:#fafafa;}
   .sidebar { display: none; }
   .menu-toggle { display: flex !important; }
 }
+
+/* ===== 统计报表表格样式 ===== */
+.report-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:15px;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.08);}
+.report-table th{background:linear-gradient(135deg,#1976d2,#42a5f5);color:#fff;padding:10px 8px;text-align:center;font-weight:600;white-space:nowrap;}
+.report-table td{padding:8px;text-align:center;border-bottom:1px solid #f0f0f0;}
+.report-table tr:hover td{background:#f5f8ff;}
+.report-table tr:nth-child(even) td{background:#fafbfc;}
+.report-table tr:nth-child(even):hover td{background:#f0f4ff;}
+.report-table .rank-1{background:linear-gradient(135deg,#fff8e1,#ffecb3)!important;font-weight:bold;}
+.report-table .rank-2{background:linear-gradient(135deg,#f5f5f5,#e0e0e0)!important;}
+.report-table .rank-3{background:linear-gradient(135deg,#fff3e0,#ffe0b2)!important;}
+.report-sub-table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0;background:#fafbfc;border-radius:6px;overflow:hidden;}
+.report-sub-table th{background:#e3f2fd;color:#1565c0;padding:6px 8px;text-align:center;font-weight:600;}
+.report-sub-table td{padding:6px 8px;text-align:center;border-bottom:1px solid #e8e8e8;}
+.report-export-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:15px;}
+.report-export-card{background:#fff;border:1px solid #e0e0e0;border-radius:8px;padding:12px;cursor:pointer;transition:all 0.2s;}
+.report-export-card:hover{border-color:#1976d2;box-shadow:0 2px 8px rgba(25,118,210,0.15);transform:translateY(-1px);}
+.report-export-card .icon{font-size:24px;margin-bottom:6px;}
+.report-export-card .title{font-weight:600;font-size:13px;color:#333;}
+.report-export-card .desc{font-size:11px;color:#999;margin-top:4px;}
+.report-section-title{font-size:14px;font-weight:600;color:#333;margin:15px 0 10px;padding-bottom:6px;border-bottom:2px solid #e0e0e0;}
 </style>
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -335,8 +356,8 @@ tr:nth-child(even){background:#fafafa;}
         <div class="menu-card" onclick="showPage('reagent')"><div class="icon">🧪</div><div class="name">试剂管理</div></div>
         <div class="menu-card" onclick="showPage('handover')"><div class="icon">🔄</div><div class="name">交接班</div></div>
         <div class="menu-card" onclick="openAiChat()"><div class="icon">🤖</div><div class="name">AI助手</div></div>
-        <div class="menu-card" onclick="showPage('performance')"><div class="icon">🏆</div>
-    <div class="menu-card" onclick="showPage('report')"><div class="icon">📊</div><div class="name">统计报表</div></div><div class="name">绩效积分</div></div>
+        <div class="menu-card" onclick="showPage('performance')"><div class="icon">🏆</div><div class="name">绩效积分</div></div>
+        <div class="menu-card" onclick="showPage('report')"><div class="icon">📊</div><div class="name">统计报表</div></div>
         <div class="menu-card" onclick="showPage('settings')"><div class="icon">⚙️</div><div class="name">系统设置</div></div>
       </div>
     </div>
@@ -4338,7 +4359,7 @@ function loadReportMonthly(){
   var html = '<div class="card" style="margin-bottom:15px;">';
   html += '<div class="card-header" style="background:linear-gradient(135deg,#1976d2,#42a5f5);color:#fff;padding:12px 15px;font-weight:bold;border-radius:10px 10px 0 0;">📅 ' + year + '年' + month + '月 全院月报表</div>';
   html += '<div style="padding:15px;">';
-  // 全院统计
+  // 全院统计概览
   var totalMaint = 0, totalWorkload = 0, totalQc = 0, totalCritical = 0, totalScore = 0;
   if(appData.maintenanceRecords){
     appData.maintenanceRecords.forEach(function(r){
@@ -4356,43 +4377,20 @@ function loadReportMonthly(){
   if(appData.criticalRecords){
     totalCritical = appData.criticalRecords.filter(function(r){ return r.date && r.date.indexOf(monthPrefix) === 0; }).length;
   }
-  html += '<div class="stats-grid" style="grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-bottom:12px;">';
-  html += '<div class="stat-card" style="padding:10px;"><div class="label">仪器保养</div><div class="value" style="font-size:18px;">'+totalMaint+'</div></div>';
-  html += '<div class="stat-card" style="padding:10px;"><div class="label">工作量</div><div class="value" style="font-size:18px;">'+totalWorkload+'</div></div>';
-  html += '<div class="stat-card" style="padding:10px;"><div class="label">质控记录</div><div class="value" style="font-size:18px;">'+totalQc+'</div></div>';
-  html += '<div class="stat-card" style="padding:10px;"><div class="label">危急值</div><div class="value" style="font-size:18px;">'+totalCritical+'</div></div>';
-  html += '<div class="stat-card" style="padding:10px;background:linear-gradient(135deg,#ff6f00,#ffa726);color:#fff;"><div class="label" style="color:#fff;">总积分</div><div class="value" style="font-size:18px;color:#fff;">'+totalScore+'</div></div>';
-  html += '</div>';
-  // 每人各项月报表 - 表格
-  html += '<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:12px;min-width:600px;">';
-  html += '<tr style="background:#f5f5f5;"><th style="padding:8px;border:1px solid #e0e0e0;">姓名</th><th style="padding:8px;border:1px solid #e0e0e0;">角色</th><th style="padding:8px;border:1px solid #e0e0e0;">组别</th><th style="padding:8px;border:1px solid #e0e0e0;">保养</th><th style="padding:8px;border:1px solid #e0e0e0;">工作量</th><th style="padding:8px;border:1px solid #e0e0e0;">质控</th><th style="padding:8px;border:1px solid #e0e0e0;">危急值</th><th style="padding:8px;border:1px solid #e0e0e0;">总分</th><th style="padding:8px;border:1px solid #e0e0e0;">操作</th></tr>';
-  var users = appData.users || [];
-  var activeUsers = users.filter(function(u){ return u.status === 'active' && u.role !== '系统管理员'; });
-  activeUsers.forEach(function(u){
-    var uMaint = 0, uWorkload = 0, uQc = 0, uCritical = 0, uScore = 0;
-    if(appData.maintenanceRecords){
-      appData.maintenanceRecords.forEach(function(r){
-        if(r.operator === u.name && r.date && r.date.indexOf(monthPrefix) === 0){ uMaint++; uScore += (r.score||0); }
-      });
-    }
-    if(appData.workloadRecords){
-      appData.workloadRecords.forEach(function(r){
-        if(r.operator === u.name && r.date && r.date.indexOf(monthPrefix) === 0){ uWorkload++; uScore += (r.score||0); }
-      });
-    }
-    if(appData.qcRecords){
-      uQc = appData.qcRecords.filter(function(r){ return r.operator === u.name && r.date && r.date.indexOf(monthPrefix) === 0; }).length;
-    }
-    if(appData.criticalRecords){
-      uCritical = appData.criticalRecords.filter(function(r){ return r.operator === u.name && r.date && r.date.indexOf(monthPrefix) === 0; }).length;
-    }
-    html += '<tr><td style="padding:8px;border:1px solid #e0e0e0;font-weight:bold;">'+u.name+'</td><td style="padding:8px;border:1px solid #e0e0e0;">'+u.role+'</td><td style="padding:8px;border:1px solid #e0e0e0;">'+(u.group||'')+'</td><td style="padding:8px;border:1px solid #e0e0e0;text-align:center;">'+uMaint+'</td><td style="padding:8px;border:1px solid #e0e0e0;text-align:center;">'+uWorkload+'</td><td style="padding:8px;border:1px solid #e0e0e0;text-align:center;">'+uQc+'</td><td style="padding:8px;border:1px solid #e0e0e0;text-align:center;">'+uCritical+'</td><td style="padding:8px;border:1px solid #e0e0e0;text-align:center;font-weight:bold;color:#1976d2;">'+uScore+'</td><td style="padding:8px;border:1px solid #e0e0e0;text-align:center;"><button class="btn btn-sm btn-outline" onclick="showPersonReport(\''+u.id+'\')">明细</button></td></tr>';
+  html += '<table class="report-table"><thead><tr><th>📊 指标</th><th>保养</th><th>工作量</th><th>质控</th><th>危急值</th><th>总积分</th></tr></thead><tbody>';
+  html += '<tr><td><b>全院统计</b></td><td>'+totalMaint+'</td><td>'+totalWorkload+'</td><td>'+totalQc+'</td><td>'+totalCritical+'</td><td><b>'+totalScore+'</b></td></tr>';
+  html += '</tbody></table>';
+  // 每人明细表格
+  html += '<div class="report-section-title">👥 每人各项明细</div>';
+  html += '<table class="report-table"><thead><tr><th>排名</th><th>姓名</th><th>角色</th><th>组别</th><th>质控</th><th>效率</th><th>设备</th><th>学习</th><th>综合</th><th>总分</th></tr></thead><tbody>';
+  var reports = generateMonthlyReport(year, month);
+  reports.sort(function(a,b){ return b.total - a.total; });
+  reports.forEach(function(r, idx){
+    var rankClass = idx === 0 ? 'rank-1' : (idx === 1 ? 'rank-2' : (idx === 2 ? 'rank-3' : ''));
+    html += '<tr class="'+rankClass+'"><td>'+(idx+1)+'</td><td><b>'+r.userName+'</b></td><td>'+r.role+'</td><td>'+(r.group||'')+'</td>';
+    html += '<td>'+r.scores.quality.score+'</td><td>'+r.scores.efficiency.score+'</td><td>'+r.scores.device.score+'</td><td>'+r.scores.study.score+'</td><td>'+r.scores.comprehensive.score+'</td><td><b>'+r.total+'</b></td></tr>';
   });
-  html += '</table></div>';
-  html += '<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">';
-  html += '<button class="action-btn action-btn-green" onclick="downloadMonthlyReport()" style="flex:1;">📥 下载月报表(CSV)</button>';
-  html += '<button class="action-btn action-btn-purple" onclick="downloadAllStaffReport()" style="flex:1;">📥 下载全院报表(CSV)</button>';
-  html += '</div>';
+  html += '</tbody></table>';
   html += '</div></div>';
   container.innerHTML = html;
 }
@@ -4414,6 +4412,20 @@ function loadReportStaff(){
     html += '<button class="action-btn" style="font-size:12px;padding:6px 12px;" onclick="showPersonReport(\''+u.id+'\')">'+u.name+'</button>';
   });
   html += '</div>';
+  // 每人明细表格
+  html += '<div class="report-section-title">📋 本月每人积分明细</div>';
+  html += '<table class="report-table"><thead><tr><th>排名</th><th>姓名</th><th>角色</th><th>组别</th><th>质控</th><th>效率</th><th>设备</th><th>学习</th><th>综合</th><th>总分</th><th>操作</th></tr></thead><tbody>';
+  var reports = generateMonthlyReport(year, month);
+  reports.sort(function(a,b){ return b.total - a.total; });
+  reports.forEach(function(r, idx){
+    var rankClass = idx === 0 ? 'rank-1' : (idx === 1 ? 'rank-2' : (idx === 2 ? 'rank-3' : ''));
+    var user = users.find(function(u){ return u.name === r.userName; });
+    var userId = user ? user.id : '';
+    html += '<tr class="'+rankClass+'"><td>'+(idx+1)+'</td><td><b>'+r.userName+'</b></td><td>'+r.role+'</td><td>'+(r.group||'')+'</td>';
+    html += '<td>'+r.scores.quality.score+'</td><td>'+r.scores.efficiency.score+'</td><td>'+r.scores.device.score+'</td><td>'+r.scores.study.score+'</td><td>'+r.scores.comprehensive.score+'</td><td><b>'+r.total+'</b></td>';
+    html += '<td><button class="btn btn-small btn-primary" onclick="showPersonReport(\''+userId+'\')">查看</button></td></tr>';
+  });
+  html += '</tbody></table>';
   html += '<div id="personReportDetail"></div>';
   html += '</div></div>';
   container.innerHTML = html;
@@ -4578,10 +4590,29 @@ function loadReportExport(){
   var html = '<div class="card" style="margin-bottom:15px;">';
   html += '<div class="card-header" style="background:linear-gradient(135deg,#e65100,#ff9800);color:#fff;padding:12px 15px;font-weight:bold;border-radius:10px 10px 0 0;">📥 导出报表 ('+year+'年'+month+'月)</div>';
   html += '<div style="padding:15px;">';
-  html += '<div style="display:flex;flex-direction:column;gap:10px;">';
-  html += '<button class="action-btn action-btn-green" onclick="downloadMonthlyReport()" style="padding:12px;">📅 下载本月全部记录(CSV)</button>';
-  html += '<button class="action-btn action-btn-purple" onclick="downloadAllStaffReport()" style="padding:12px;">👥 下载全院员工报表(CSV)</button>';
-  html += '<button class="action-btn action-btn-blue" onclick="downloadPerformanceReport()" style="padding:12px;">🏆 下载绩效积分报表(CSV)</button>';
+  // 全院报表导出
+  html += '<div class="report-section-title">📊 全院报表</div>';
+  html += '<div class="report-export-grid">';
+  html += '<div class="report-export-card" onclick="downloadMonthlyReport()"><div class="icon">📅</div><div class="title">本月全部记录</div><div class="desc">导出本月所有保养、工作量等记录</div></div>';
+  html += '<div class="report-export-card" onclick="downloadAllStaffReport()"><div class="icon">👥</div><div class="title">全院员工报表</div><div class="desc">导出每人各项积分明细及排名</div></div>';
+  html += '<div class="report-export-card" onclick="downloadPerformanceReport()"><div class="icon">🏆</div><div class="title">绩效积分报表</div><div class="desc">导出绩效积分五大维度得分</div></div>';
+  html += '</div>';
+  // 个人报表导出
+  html += '<div class="report-section-title">👤 个人报表</div>';
+  html += '<div class="report-export-grid">';
+  var users = appData.users || [];
+  var activeUsers = users.filter(function(u){ return u.status === 'active' && u.role !== '系统管理员'; });
+  activeUsers.forEach(function(u){
+    html += '<div class="report-export-card" onclick="exportPersonReport(\''+u.id+'\',\''+u.name+'\')"><div class="icon">👤</div><div class="title">'+u.name+'</div><div class="desc">'+u.role+' · '+(u.group||'')+'</div></div>';
+  });
+  html += '</div>';
+  // 组别报表导出
+  html += '<div class="report-section-title">📂 按组别导出</div>';
+  html += '<div class="report-export-grid">';
+  var groups = ['生化组','临检组','免疫组','微生物组','质控组','管理层'];
+  groups.forEach(function(g){
+    html += '<div class="report-export-card" onclick="exportGroupReport(\''+g+'\')"><div class="icon">📂</div><div class="title">'+g+'</div><div class="desc">导出'+g+'所有成员报表</div></div>';
+  });
   html += '</div>';
   html += '<div style="margin-top:15px;background:#f5f5f5;border-radius:8px;padding:10px;font-size:12px;color:#666;">';
   html += '💡 提示：导出的CSV文件可用Excel打开，方便打印和存档。';
@@ -4589,6 +4620,71 @@ function loadReportExport(){
   html += '</div></div>';
   container.innerHTML = html;
 }
+function exportPersonReport(userId, userName){
+  var now = new Date();
+  var year = now.getFullYear();
+  var month = now.getMonth()+1;
+  var monthPrefix = year + '-' + String(month).padStart(2,'0');
+  var score = calculatePerformanceScore(userId);
+  var user = null;
+  var users = appData.users || [];
+  for(var i=0;i<users.length;i++){ if(users[i].id === userId){ user = users[i]; break; } }
+  if(!user){ showToast('未找到该员工','warning'); return; }
+  var rows = [['姓名','角色','组别','月份','质控','效率','设备','学习','综合','总分']];
+  rows.push([user.name, user.role, user.group||'', monthPrefix, score.quality.score, score.efficiency.score, score.device.score, score.study.score, score.comprehensive.score, (score.quality.score+score.efficiency.score+score.device.score+score.study.score+score.comprehensive.score)]);
+  // 添加明细记录
+  rows.push([]);
+  rows.push(['=== 保养记录 ===']);
+  if(appData.maintenanceRecords){
+    appData.maintenanceRecords.forEach(function(r){
+      if(r.date && r.date.indexOf(monthPrefix) === 0 && r.operator === user.name){
+        rows.push([r.date, '保养', r.device||'', '', r.score||'']);
+      }
+    });
+  }
+  rows.push(['=== 工作量记录 ===']);
+  if(appData.workloadRecords){
+    appData.workloadRecords.forEach(function(r){
+      if(r.date && r.date.indexOf(monthPrefix) === 0 && r.operator === user.name){
+        rows.push([r.date, '工作量', r.type||'', r.samples+'样本', r.score||'']);
+      }
+    });
+  }
+  var csv = rows.map(function(row){ return row.join(','); }).join('\n');
+  var blob = new Blob(['\ufeff'+csv], {type:'text/csv;charset=utf-8;'});
+  var link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = user.name+'_'+year+'年'+month+'月_个人报表.csv';
+  link.click();
+  showToast('✅ '+user.name+'的个人报表已导出');
+}
+function exportGroupReport(groupName){
+  var now = new Date();
+  var year = now.getFullYear();
+  var month = now.getMonth()+1;
+  var monthPrefix = year + '-' + String(month).padStart(2,'0');
+  var users = appData.users || [];
+  var groupUsers = users.filter(function(u){ return u.group === groupName && u.status === 'active'; });
+  if(groupUsers.length === 0){ showToast(groupName+'暂无成员','warning'); return; }
+  var reports = generateMonthlyReport(year, month);
+  var groupReports = reports.filter(function(r){ 
+    var u = users.find(function(us){ return us.name === r.userName; });
+    return u && u.group === groupName;
+  });
+  groupReports.sort(function(a,b){ return b.total - a.total; });
+  var rows = [['排名','姓名','角色','质控','效率','设备','学习','综合','总分']];
+  groupReports.forEach(function(r, idx){
+    rows.push([idx+1, r.userName, r.role, r.scores.quality.score, r.scores.efficiency.score, r.scores.device.score, r.scores.study.score, r.scores.comprehensive.score, r.total]);
+  });
+  var csv = rows.map(function(row){ return row.join(','); }).join('\n');
+  var blob = new Blob(['\ufeff'+csv], {type:'text/csv;charset=utf-8;'});
+  var link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = groupName+'_'+year+'年'+month+'月_报表.csv';
+  link.click();
+  showToast('✅ '+groupName+'报表已导出');
+}
+
 // 下载全院员工报表
 function downloadAllStaffReport(){
   var now = new Date();
