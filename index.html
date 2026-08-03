@@ -378,66 +378,6 @@ tr:nth-child(even){background:#fafafa;}
 var DB_KEY = 'labAppData_v2';
 var currentUser = null;
 var appData = null;
-function initData(){
-  // 全局角色权限配置
-  if(typeof window.rolePermissions === 'undefined'){
-    window.rolePermissions = {
-      '系统管理员': { canManageUsers:true, canConfig:true, canViewAll:true, canAudit:true, canExport:true, canManageDevices:true, canManageSop:true, canManageExam:true, canViewFinance:true, canManagePerformance:true, canViewDashboard:true, canManageMaintenance:true, canManageQuality:true, canManageWorkload:true, canManageCritical:true },
-      '科主任': { canManageUsers:false, canConfig:false, canViewAll:true, canAudit:true, canExport:true, canManageDevices:false, canManageSop:true, canManageExam:true, canViewFinance:true, canManagePerformance:true, canViewDashboard:true, canManageMaintenance:true, canManageQuality:true, canManageWorkload:true, canManageCritical:true },
-      '专业组组长': { canManageUsers:false, canConfig:false, canViewAll:false, canAudit:true, canExport:true, canManageDevices:false, canManageSop:true, canManageExam:true, canViewFinance:false, canManagePerformance:true, canViewDashboard:false, canManageMaintenance:true, canManageQuality:true, canManageWorkload:true, canManageCritical:true },
-      '质控员': { canManageUsers:false, canConfig:false, canViewAll:false, canAudit:true, canExport:true, canManageDevices:false, canManageSop:false, canManageExam:false, canViewFinance:false, canManagePerformance:false, canViewDashboard:false, canManageMaintenance:false, canManageQuality:true, canManageWorkload:false, canManageCritical:true },
-      '设备管理员': { canManageUsers:false, canConfig:false, canViewAll:false, canAudit:false, canExport:true, canManageDevices:true, canManageSop:false, canManageExam:false, canViewFinance:false, canManagePerformance:false, canViewDashboard:false, canManageMaintenance:true, canManageQuality:false, canManageWorkload:false, canManageCritical:false },
-      '检验人员': { canManageUsers:false, canConfig:false, canViewAll:false, canAudit:false, canExport:true, canManageDevices:false, canManageSop:false, canManageExam:false, canViewFinance:false, canManagePerformance:false, canViewDashboard:false, canManageMaintenance:true, canManageQuality:true, canManageWorkload:true, canManageCritical:true }
-    };
-  }
-  // 全局评分权重配置
-  if(typeof window.scoreWeights === 'undefined'){
-    window.scoreWeights = { workload:30, quality:25, study:15, discipline:15, service:15 };
-  }
-  // 从localStorage加载数据，如果没有则使用defaultData
-  var saved = localStorage.getItem(DB_KEY);
-  if(saved){
-    try{
-      appData = JSON.parse(saved);
-      if(!appData || typeof appData !== 'object'){ throw new Error('数据格式错误'); }
-      if(!appData.users || !Array.isArray(appData.users) || appData.users.length === 0){
-        appData.users = defaultData.users;
-      }
-    }catch(e){
-      appData = JSON.parse(JSON.stringify(defaultData));
-      localStorage.setItem(DB_KEY, JSON.stringify(appData));
-    }
-  } else {
-    appData = JSON.parse(JSON.stringify(defaultData));
-    localStorage.setItem(DB_KEY, JSON.stringify(appData));
-  }
-  // 确保新增数据字段存在
-  if(!appData.eqaRecords) appData.eqaRecords = [];
-  if(!appData.examQuestions) appData.examQuestions = [];
-  if(!appData.pdfQuestions) appData.pdfQuestions = [];
-  if(!appData.operationLogs) appData.operationLogs = [];
-  appData.rolePermissions = appData.rolePermissions || window.rolePermissions;
-  appData.scoreWeights = appData.scoreWeights || window.scoreWeights;
-  // 确保每个用户都有status字段
-  if(appData.users){
-    for(var ui=0; ui<appData.users.length; ui++){
-      if(appData.users[ui] && !appData.users[ui].status){
-        appData.users[ui].status = 'active';
-      }
-    }
-  }
-  saveData();
-};
-  // 绩效权重配置 - 符合建设方案V1.0
-  var scoreWeights = {
-    qualityControl: { name:'质量控制', weight:35, desc:'质控在控率、EQA成绩、危急值报告及时率、漏报率' },
-    workEfficiency: { name:'工作效率', weight:30, desc:'加权工作量得分、TAT达标率、标本处理量' },
-    deviceManagement: { name:'设备管理', weight:15, desc:'保养完成率、设备故障处理及时率' },
-    learningGrowth: { name:'学习成长', weight:10, desc:'SOP学习完成率、考试成绩、培训参与度' },
-    comprehensive: { name:'综合表现', weight:10, desc:'出勤率、团队协作、投诉处理、科研贡献' }
-  };
-  // 操作日志和配置将在appData初始化后设置
-
 var defaultData = {
     sops: [
       {id:'S001',name:'全自动生化分析仪SOP',group:'生化组',version:'V2.0',status:'published',date:'2025-01-01',pages:25,pdfName:''},
@@ -525,6 +465,68 @@ var defaultData = {
       '检验人员': ['maintenance','quality','workload','sop','critical','handover','exam','performance_view']
     }
   }
+
+function initData(){
+  // 全局角色权限配置
+  if(typeof window.rolePermissions === 'undefined'){
+    window.rolePermissions = {
+      '系统管理员': { canManageUsers:true, canConfig:true, canViewAll:true, canAudit:true, canExport:true, canManageDevices:true, canManageSop:true, canManageExam:true, canViewFinance:true, canManagePerformance:true, canViewDashboard:true, canManageMaintenance:true, canManageQuality:true, canManageWorkload:true, canManageCritical:true },
+      '科主任': { canManageUsers:false, canConfig:false, canViewAll:true, canAudit:true, canExport:true, canManageDevices:false, canManageSop:true, canManageExam:true, canViewFinance:true, canManagePerformance:true, canViewDashboard:true, canManageMaintenance:true, canManageQuality:true, canManageWorkload:true, canManageCritical:true },
+      '专业组组长': { canManageUsers:false, canConfig:false, canViewAll:false, canAudit:true, canExport:true, canManageDevices:false, canManageSop:true, canManageExam:true, canViewFinance:false, canManagePerformance:true, canViewDashboard:false, canManageMaintenance:true, canManageQuality:true, canManageWorkload:true, canManageCritical:true },
+      '质控员': { canManageUsers:false, canConfig:false, canViewAll:false, canAudit:true, canExport:true, canManageDevices:false, canManageSop:false, canManageExam:false, canViewFinance:false, canManagePerformance:false, canViewDashboard:false, canManageMaintenance:false, canManageQuality:true, canManageWorkload:false, canManageCritical:true },
+      '设备管理员': { canManageUsers:false, canConfig:false, canViewAll:false, canAudit:false, canExport:true, canManageDevices:true, canManageSop:false, canManageExam:false, canViewFinance:false, canManagePerformance:false, canViewDashboard:false, canManageMaintenance:true, canManageQuality:false, canManageWorkload:false, canManageCritical:false },
+      '检验人员': { canManageUsers:false, canConfig:false, canViewAll:false, canAudit:false, canExport:true, canManageDevices:false, canManageSop:false, canManageExam:false, canViewFinance:false, canManagePerformance:false, canViewDashboard:false, canManageMaintenance:true, canManageQuality:true, canManageWorkload:true, canManageCritical:true }
+    };
+  }
+  // 全局评分权重配置
+  if(typeof window.scoreWeights === 'undefined'){
+    window.scoreWeights = { workload:30, quality:25, study:15, discipline:15, service:15 };
+  }
+  // 从localStorage加载数据，如果没有则使用defaultData
+  var saved = localStorage.getItem(DB_KEY);
+  if(saved){
+    try{
+      appData = JSON.parse(saved);
+      if(!appData || typeof appData !== 'object'){ throw new Error('数据格式错误'); }
+      if(!appData.users || !Array.isArray(appData.users) || appData.users.length === 0){
+        appData.users = defaultData.users;
+      }
+    }catch(e){
+      appData = JSON.parse(JSON.stringify(defaultData));
+      localStorage.setItem(DB_KEY, JSON.stringify(appData));
+    }
+  } else {
+    appData = JSON.parse(JSON.stringify(defaultData));
+    localStorage.setItem(DB_KEY, JSON.stringify(appData));
+  }
+  // 确保新增数据字段存在
+  if(!appData.eqaRecords) appData.eqaRecords = [];
+  if(!appData.examQuestions) appData.examQuestions = [];
+  if(!appData.pdfQuestions) appData.pdfQuestions = [];
+  if(!appData.operationLogs) appData.operationLogs = [];
+  appData.rolePermissions = appData.rolePermissions || window.rolePermissions;
+  appData.scoreWeights = appData.scoreWeights || window.scoreWeights;
+  // 确保每个用户都有status字段
+  if(appData.users){
+    for(var ui=0; ui<appData.users.length; ui++){
+      if(appData.users[ui] && !appData.users[ui].status){
+        appData.users[ui].status = 'active';
+      }
+    }
+  }
+  saveData();
+};
+  // 绩效权重配置 - 符合建设方案V1.0
+  var scoreWeights = {
+    qualityControl: { name:'质量控制', weight:35, desc:'质控在控率、EQA成绩、危急值报告及时率、漏报率' },
+    workEfficiency: { name:'工作效率', weight:30, desc:'加权工作量得分、TAT达标率、标本处理量' },
+    deviceManagement: { name:'设备管理', weight:15, desc:'保养完成率、设备故障处理及时率' },
+    learningGrowth: { name:'学习成长', weight:10, desc:'SOP学习完成率、考试成绩、培训参与度' },
+    comprehensive: { name:'综合表现', weight:10, desc:'出勤率、团队协作、投诉处理、科研贡献' }
+  };
+  // 操作日志和配置将在appData初始化后设置
+
+
 function addOperationLog(action, detail){
   if(!appData.operationLogs) appData.operationLogs = [];
   appData.operationLogs.push({
@@ -821,6 +823,7 @@ function renderCloudVersions(){
 }
 
 function handleLogin(){
+  console.log('📌 点击登录按钮');
   try{
     var usernameInput = document.getElementById('loginUsername');
     var passwordInput = document.getElementById('loginPassword');
@@ -2354,7 +2357,14 @@ function showToast(msg){
   setTimeout(function(){ if(toast) toast.classList.remove('show'); }, 2500);
 }
 document.addEventListener('DOMContentLoaded', function(){
-  initData();
+  console.log('📌 APP启动: DOMContentLoaded触发');
+  try{
+    initData();
+    console.log('✅ initData执行成功, 用户数:', appData ? (appData.users ? appData.users.length : 0) : 0);
+  }catch(e){
+    console.error('❌ initData执行失败:', e);
+    showToast('数据初始化失败: '+e.message);
+  }
   var loginPage = document.getElementById('loginPage');
   var appPage = document.getElementById('appPage');
   if(loginPage) loginPage.style.display = 'flex';
