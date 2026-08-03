@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>检验科工作日志 - 加载中...</title>
+<style>
+body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background: #f0f2f5; }
+.loading { text-align: center; padding: 40px; }
+.spinner { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.error { color: #e74c3c; }
+</style>
+</head>
+<body>
+<div class="loading">
+    <h2>📋 检验科工作日志</h2>
+    <div class="spinner"></div>
+    <p>正在加载应用...</p>
+    <p style="font-size: 12px; color: #999;">
+        <a href="https://github.com/shpeibing/lab-daily-log" target="_blank">查看源码</a> | 
+        <a href="http://localhost:8082/" target="_blank">本地访问</a>
+    </p>
+</div>
+<script>
+// 从raw.githubusercontent.com加载应用
+fetch('https://raw.githubusercontent.com/shpeibing/lab-daily-log/gh-pages/index.html')
+    .then(r => r.text())
+    .then(html => {
+        document.open();
+        document.write(html);
+        document.close();
+    })
+    .catch(err => {
+        document.querySelector('.loading').innerHTML = '<h2 class="error">❌ 加载失败</h2><p>' + err.message + '</p><p>请尝试 <a href="http://localhost:8082/">本地访问</a></p>';
+    });
+</script>
+</body>
+</html>

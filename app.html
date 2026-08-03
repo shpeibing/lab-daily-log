@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>检验科工作日志 - 加载中...</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #f0f2f5; }
+.loading { text-align: center; padding: 40px; }
+.spinner { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 20px auto; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.logo { font-size: 48px; margin-bottom: 10px; }
+.title { font-size: 20px; color: #333; margin-bottom: 5px; }
+.subtitle { font-size: 14px; color: #999; margin-bottom: 20px; }
+.progress { width: 200px; height: 4px; background: #e0e0e0; border-radius: 2px; margin: 20px auto; overflow: hidden; }
+.progress-bar { height: 100%; background: #3498db; width: 0%; transition: width 0.3s; border-radius: 2px; }
+.links { margin-top: 30px; font-size: 13px; color: #999; }
+.links a { color: #3498db; text-decoration: none; margin: 0 8px; }
+.links a:hover { text-decoration: underline; }
+.error-box { background: #fff; border-radius: 12px; padding: 30px; box-shadow: 0 2px 20px rgba(0,0,0,0.1); max-width: 400px; margin: 0 auto; }
+.error-box h2 { color: #e74c3c; margin-bottom: 10px; }
+.error-box p { color: #666; margin-bottom: 15px; line-height: 1.6; }
+.error-box .btn { display: inline-block; padding: 10px 24px; background: #3498db; color: #fff; border-radius: 6px; text-decoration: none; margin: 5px; }
+.error-box .btn:hover { background: #2980b9; }
+</style>
+</head>
+<body>
+<div class="loading" id="loadingScreen">
+    <div class="logo">📋</div>
+    <div class="title">检验科工作日志</div>
+    <div class="subtitle">正在加载应用...</div>
+    <div class="spinner"></div>
+    <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="links">
+        <a href="https://github.com/shpeibing/lab-daily-log" target="_blank">查看源码</a>
+    </div>
+</div>
+<script>
+(function() {
+    var progress = 0;
+    var bar = document.getElementById('progressBar');
+    var timer = setInterval(function() {
+        progress += Math.random() * 15;
+        if (progress > 85) progress = 85;
+        bar.style.width = progress + '%';
+    }, 300);
+    
+    function loadApp() {
+        // 通过jsDelivr CDN加载GitHub仓库内容（国内可访问）
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://cdn.jsdelivr.net/gh/shpeibing/lab-daily-log@gh-pages/index.html', true);
+        xhr.timeout = 30000;
+        
+        xhr.onprogress = function(e) {
+            if (e.lengthComputable) {
+                var pct = Math.min(90, 10 + (e.loaded / e.total) * 80);
+                bar.style.width = pct + '%';
+            }
+        };
+        
+        xhr.onload = function() {
+            clearInterval(timer);
+            bar.style.width = '100%';
+            setTimeout(function() {
+                document.open();
+                document.write(xhr.responseText);
+                document.close();
+            }, 300);
+        };
+        
+        xhr.onerror = function() {
+            clearInterval(timer);
+            bar.style.width = '100%';
+            document.getElementById('loadingScreen').innerHTML = 
+                '<div class="error-box">' +
+                '<h2>⚠️ 加载失败</h2>' +
+                '<p>无法从 CDN 加载应用，请检查网络后刷新重试。</p>' +
+                '<a class="btn" href="http://localhost:8082/" target="_blank">本地访问</a>' +
+                '<a class="btn" href="https://github.com/shpeibing/lab-daily-log" target="_blank">查看源码</a>' +
+                '</div>';
+        };
+        
+        xhr.ontimeout = function() {
+            xhr.abort();
+            loadApp(); // 重试
+        };
+        
+        xhr.send();
+    }
+    
+    loadApp();
+})();
+</script>
+</body>
+</html>

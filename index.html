@@ -314,12 +314,18 @@ tr:nth-child(even){background:#fafafa;}
   <div class="content" id="contentArea">
     <div class="page active" id="page-home">
       <div class="page-title">工作台 <span class="sub" id="todayDate"></span></div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+        <button class="action-btn action-btn-blue" onclick="showMonthlyReport()" style="flex:1;min-width:120px;">📊 月报表</button>
+        <button class="action-btn action-btn-green" onclick="showMonthlyAnalysis()" style="flex:1;min-width:120px;">📈 月度分析</button>
+      </div>
       <div class="stats-grid">
         <div class="stat-card"><div class="label">今日积分</div><div class="value" id="statScore">0</div></div>
         <div class="stat-card"><div class="label">本月积分</div><div class="value" id="statMonthScore">0</div></div>
         <div class="stat-card"><div class="label">本月排名</div><div class="value" id="statRank">-</div></div>
         <div class="stat-card"><div class="label">待办事项</div><div class="value" id="statTodo">0</div></div>
       </div>
+      <div id="monthlyReportArea" style="display:none;margin-bottom:15px;"></div>
+      <div id="monthlyAnalysisArea" style="display:none;margin-bottom:15px;"></div>
       <div class="menu-grid">
         <div class="menu-card" onclick="showPage('maintenance')"><div class="icon">🔧</div><div class="name">仪器保养</div></div>
         <div class="menu-card" onclick="showPage('quality')"><div class="icon">📊</div><div class="name">质控管理</div></div>
@@ -329,7 +335,8 @@ tr:nth-child(even){background:#fafafa;}
         <div class="menu-card" onclick="showPage('reagent')"><div class="icon">🧪</div><div class="name">试剂管理</div></div>
         <div class="menu-card" onclick="showPage('handover')"><div class="icon">🔄</div><div class="name">交接班</div></div>
         <div class="menu-card" onclick="openAiChat()"><div class="icon">🤖</div><div class="name">AI助手</div></div>
-        <div class="menu-card" onclick="showPage('performance')"><div class="icon">🏆</div><div class="name">绩效积分</div></div>
+        <div class="menu-card" onclick="showPage('performance')"><div class="icon">🏆</div>
+    <div class="menu-card" onclick="showPage('report')"><div class="icon">📊</div><div class="name">统计报表</div></div><div class="name">绩效积分</div></div>
         <div class="menu-card" onclick="showPage('settings')"><div class="icon">⚙️</div><div class="name">系统设置</div></div>
       </div>
     </div>
@@ -371,7 +378,20 @@ tr:nth-child(even){background:#fafafa;}
       </select>
     </div>
     <div class="tabs"><div class="tab active" onclick="switchHandoverTab('list',this)">交接记录</div><div class="tab" onclick="switchHandoverTab('add',this)">填写交接</div></div><div id="handoverList"></div><div id="handoverAdd" style="display:none;"><div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e8f5e9;">📝</div><div><div class="item-title">填写交接班记录</div><div class="item-desc">记录白班/夜班交接内容</div></div></div><div class="item-right"><button class="btn btn-primary btn-sm" onclick="openHandoverModal()">填写</button></div></div></div></div></div>
-    <div class="page" id="page-performance"><div class="page-title">🏆 绩效积分 <span class="sub">量化考核 · 公平透明</span></div><div class="stats-grid"><div class="stat-card"><div class="label">本月总积分</div><div class="value" id="perfTotal">0</div></div><div class="stat-card"><div class="label">科室排名</div><div class="value" id="perfRank">-</div></div><div class="stat-card"><div class="label">达标率</div><div class="value" id="perfRate">0%</div></div><div class="stat-card"><div class="label">评级</div><div class="value" id="perfGrade">-</div></div></div><div class="tabs"><div class="tab active" onclick="switchPerfTab('detail',this)">积分明细</div><div class="tab" onclick="switchPerfTab('rank',this)">科室排名</div><div class="tab" onclick="switchPerfTab('rules',this)">积分规则</div></div><div id="perfDetail"></div><div id="perfRank" style="display:none;"></div><div id="perfRules" style="display:none;"></div></div>
+    <div class="page" id="page-performance"><div class="page-title">🏆 绩效积分 <span class="sub">量化考核 · 公平透明</span></div><div class="stats-grid"><div class="stat-card"><div class="label">本月总积分</div><div class="value" id="perfTotal">0</div></div><div class="stat-card"><div class="label">科室排名</div><div class="value" id="perfRank">-</div></div><div class="stat-card"><div class="label">达标率</div><div class="value" id="perfRate">0%</div></div><div class="stat-card"><div class="label">评级</div><div class="value" id="perfGrade">-</div></div></div><div class="tabs"><div class="tab active" onclick="switchPerfTab('detail',this)">我的积分</div><div class="tab" onclick="switchPerfTab('staff',this)">员工汇总</div><div class="tab" onclick="switchPerfTab('rank',this)">科室排名</div><div class="tab" onclick="switchPerfTab('rules',this)">积分规则</div></div><div id="perfDetail"></div><div id="perfStaff" style="display:none;"></div><div id="perfRank" style="display:none;"></div><div id="perfRules" style="display:none;"></div></div>
+    <div class="page" id="page-report">
+      <div class="page-title">📊 统计报表 <span class="sub">每人各项月报表 · 积分明细 · 报表分析</span></div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+        <button class="action-btn action-btn-blue" onclick="switchReportTab('monthly',this)" style="flex:1;min-width:80px;">📅 月报表</button>
+        <button class="action-btn action-btn-green" onclick="switchReportTab('staff',this)" style="flex:1;min-width:80px;">👤 个人报表</button>
+        <button class="action-btn action-btn-purple" onclick="switchReportTab('analysis',this)" style="flex:1;min-width:80px;">📈 分析</button>
+        <button class="action-btn action-btn-orange" onclick="switchReportTab('export',this)" style="flex:1;min-width:80px;">📥 导出</button>
+      </div>
+      <div id="reportMonthly" style="display:block;"></div>
+      <div id="reportStaff" style="display:none;"></div>
+      <div id="reportAnalysis" style="display:none;"></div>
+      <div id="reportExport" style="display:none;"></div>
+    </div>
     <div class="page" id="page-settings"><div class="page-title">⚙️ 系统设置 <span class="sub">管理配置中心</span></div><div class="tabs" id="settingsTabs"><div class="tab active" onclick="switchSettingsTab('staff',this)">员工管理</div><div class="tab" onclick="switchSettingsTab('device',this)">设备管理</div><div class="tab" onclick="switchSettingsTab('reagent',this)">试剂管理</div><div class="tab" onclick="switchSettingsTab('sop',this)">检验知识管理</div><div class="tab" onclick="switchSettingsTab('cloud',this)">☁️ 云端管理</div></div><div id="settingsStaff"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openStaffModal()">➕ 新增员工</button><button class="action-btn action-btn-purple" onclick="showToast('权限配置功能开发中')">🔐 权限配置</button></div><div class="search-bar"><input type="text" placeholder="搜索员工姓名/工号..." id="staffSearch" oninput="filterStaff()"></div><div id="staffList"></div></div><div id="settingsDevice" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openDeviceModal()">➕ 新增设备</button></div><div id="deviceList"></div></div><div id="settingsReagent" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openReagentModal()">➕ 新增试剂</button><button class="action-btn action-btn-green" onclick="openReagentInOutModal()">📦 出入库</button></div><div id="settingsReagentList"></div></div><div id="settingsCloud" style="display:none;"><div class="cloud-card"><div class="icon">☁️</div><div class="title">云端数据管理</div><div class="desc">上传数据到云端备份，或从云端下载恢复数据，多设备同步</div><div style="margin-top:10px;padding:10px;background:rgba(255,255,255,0.15);border-radius:8px;font-size:12px;text-align:left;"><div style="margin-bottom:6px;">📡 云端状态: <span id="cloudStatus">检测中...</span></div><div style="display:flex;gap:6px;margin-bottom:6px;"><input id="cloudApiKeyInput" type="password" placeholder="JSONBin API Key(可选)" style="flex:1;padding:6px;border:none;border-radius:4px;font-size:12px;background:rgba(255,255,255,0.9);color:#333;"><button class="btn" style="padding:6px 10px;font-size:12px;" onclick="saveCloudConfig()">保存</button></div><div style="font-size:11px;opacity:0.8;">💡 使用JSONBin免费API，无需注册即可使用，数据保留30天</div></div><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;"><button class="btn" onclick="uploadToCloud()">☁️ 上传到云端</button><button class="btn" onclick="downloadFromCloud()">📥 从云端下载</button></div><div style="margin-top:12px;font-size:12px;opacity:0.8;">💡 数据自动同步到JSONBin云端服务器，支持多设备访问</div></div><div class="cloud-status"><span class="dot offline" id="cloudStatusDot"></span><span id="cloudStatusText">未连接云端</span><span id="cloudVersionInfo" style="margin-left:10px;font-size:12px;color:var(--text-light);"></span></div><div style="margin-top:15px;"><h4 style="margin-bottom:10px;color:var(--text);">📋 数据统计</h4><div class="stats-grid"><div class="stat-card"><div class="label">员工数</div><div class="value" id="cloudStaffCount">0</div></div><div class="stat-card"><div class="label">设备数</div><div class="value" id="cloudDeviceCount">0</div></div><div class="stat-card"><div class="label">试剂数</div><div class="value" id="cloudReagentCount">0</div></div><div class="stat-card"><div class="label">试题数</div><div class="value" id="cloudExamCount">0</div></div></div></div></div><div id="settingsSop" style="display:none;"><div class="tabs" style="margin-bottom:10px;"><div class="tab active" onclick="switchSopSettingsTab('sop',this)">检验知识管理</div><div class="tab" onclick="switchSopSettingsTab('exam',this)">试题管理</div></div><div id="sopSettingsSop"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openSopManageModal()">➕ 新增知识</button></div><div id="sopManageList"></div></div><div id="sopSettingsExam" style="display:none;"><div class="tabs" style="margin-bottom:10px;"><div class="tab active" onclick="switchExamSubTab('questions',this)">📝 选择题</div><div class="tab" onclick="switchExamSubTab('pdf',this)">📄 PDF试题</div></div><div id="examSubQuestions"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openExamQuestionModal()">➕ 新增试题</button><button class="action-btn action-btn-green" onclick="downloadWordTemplate()">📄 下载Word模板</button></div><div id="examQuestionList"></div></div><div id="examSubPdf" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-green" onclick="openPdfUploadModal()">📄 上传PDF试题</button></div><div id="pdfQuestionList"></div></div></div></div></div>
   </div>
 </div>
@@ -475,6 +495,7 @@ function initData(){
     window.rolePermissions = {
       '系统管理员': { canManageUsers:true, canConfig:true, canViewAll:true, canAudit:true, canExport:true, canManageDevices:true, canManageSop:true, canManageExam:true, canViewFinance:true, canManagePerformance:true, canViewDashboard:true, canManageMaintenance:true, canManageQuality:true, canManageWorkload:true, canManageCritical:true },
       '科主任': { canManageUsers:false, canConfig:false, canViewAll:true, canAudit:true, canExport:true, canManageDevices:false, canManageSop:true, canManageExam:true, canViewFinance:true, canManagePerformance:true, canViewDashboard:true, canManageMaintenance:true, canManageQuality:true, canManageWorkload:true, canManageCritical:true },
+      '副主任': { canManageUsers:false, canConfig:false, canViewAll:true, canAudit:true, canExport:true, canManageDevices:false, canManageSop:true, canManageExam:true, canViewFinance:true, canManagePerformance:true, canViewDashboard:true, canManageMaintenance:true, canManageQuality:true, canManageWorkload:true, canManageCritical:true },
       '专业组组长': { canManageUsers:false, canConfig:false, canViewAll:false, canAudit:true, canExport:true, canManageDevices:false, canManageSop:true, canManageExam:true, canViewFinance:false, canManagePerformance:true, canViewDashboard:false, canManageMaintenance:true, canManageQuality:true, canManageWorkload:true, canManageCritical:true },
       '质控员': { canManageUsers:false, canConfig:false, canViewAll:false, canAudit:true, canExport:true, canManageDevices:false, canManageSop:false, canManageExam:false, canViewFinance:false, canManagePerformance:false, canViewDashboard:false, canManageMaintenance:false, canManageQuality:true, canManageWorkload:false, canManageCritical:true },
       '设备管理员': { canManageUsers:false, canConfig:false, canViewAll:false, canAudit:false, canExport:true, canManageDevices:true, canManageSop:false, canManageExam:false, canViewFinance:false, canManagePerformance:false, canViewDashboard:false, canManageMaintenance:true, canManageQuality:false, canManageWorkload:false, canManageCritical:false },
@@ -625,69 +646,63 @@ function uploadToCloud(){
     versions.unshift({time: timeStr, size: dataStr.length, desc: '手动上传'});
     if(versions.length > 20) versions = versions.slice(0, 20);
     localStorage.setItem('cloudVersions', JSON.stringify(versions));
-    // 上传到云端 - 使用多种方案提高成功率
+    // 上传到云端 - 使用JSONBin免费API
     var uploadSuccess = false;
-    // 方案1: 使用GitHub Gist API（需要用户配置token）
-    var gistToken = localStorage.getItem('cloudGistToken');
-    var gistId = localStorage.getItem('cloudGistId');
-    if(gistToken){
-      var gistBody = JSON.stringify({
-        description: '检验科工作日志APP - 云端备份 ' + timeStr,
-        files: {
-          'lab-daily-log-backup.json': { content: dataStr }
-        }
-      });
-      if(gistId){
-        // 更新已有Gist
-        fetch('https://api.github.com/gists/' + gistId, {
-          method: 'PATCH',
-          headers: {'Authorization': 'token ' + gistToken, 'Content-Type': 'application/json'},
-          body: gistBody
-        }).then(function(r){ return r.json(); }).then(function(d){
-          if(d && d.id){ showToast('✅ 上传成功！'); uploadSuccess = true; }
-        }).catch(function(e){ console.error('Gist update error:', e); });
-      } else {
-        // 创建新Gist
-        fetch('https://api.github.com/gists', {
-          method: 'POST',
-          headers: {'Authorization': 'token ' + gistToken, 'Content-Type': 'application/json'},
-          body: gistBody
-        }).then(function(r){ return r.json(); }).then(function(d){
-          if(d && d.id){
-            localStorage.setItem('cloudGistId', d.id);
-            showToast('✅ 上传成功！');
-            uploadSuccess = true;
-          }
-        }).catch(function(e){ console.error('Gist create error:', e); });
-      }
-    }
-    // 方案2: 使用JSONBin（备用）
     var binId = localStorage.getItem('cloudBinId') || '';
     var apiKey = localStorage.getItem('cloudApiKey') || '';
-    if(binId && apiKey){
+    // 如果没有binId，先创建
+    if(!binId){
+      // 创建新的Bin
+      fetch('https://api.jsonbin.io/v3/b', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', 'X-Bin-Name': '检验科APP数据', 'X-Bin-Private': 'false'},
+        body: dataStr
+      }).then(function(r){ return r.json(); }).then(function(result){
+        if(result && result.metadata && result.metadata.id){
+          binId = result.metadata.id;
+          localStorage.setItem('cloudBinId', binId);
+          localStorage.setItem('cloudConnected', 'true');
+          localStorage.setItem('cloudLastUpload', timeStr);
+          showToast('✅ 云端上传成功！Bin ID: ' + binId.substring(0,8) + '...');
+          uploadSuccess = true;
+          updateCloudStatus(timeStr, versions.length);
+        } else {
+          showToast('⚠️ 云端创建失败，数据已保存到本地');
+        }
+      }).catch(function(e){
+        console.error('JSONBin create error:', e);
+        showToast('⚠️ 云端连接失败，数据已保存到本地');
+      });
+    } else {
+      // 更新已有Bin
+      var headers = {'Content-Type': 'application/json', 'X-Bin-Versioning': 'false'};
+      if(apiKey) headers['X-Master-Key'] = apiKey;
       fetch('https://api.jsonbin.io/v3/b/' + binId, {
         method: 'PUT',
-        headers: {'Content-Type': 'application/json', 'X-Master-Key': apiKey, 'X-Bin-Versioning': 'false'},
+        headers: headers,
         body: dataStr
       }).then(function(r){ return r.json(); }).then(function(d){
-        if(d && d.metadata){ showToast('✅ 上传成功！'); uploadSuccess = true; }
-      }).catch(function(e){ console.error('JSONBin update error:', e); });
-    } else if(!gistToken && !binId){
-      // 方案3: 无配置时，直接保存到本地并提示
-      showToast('✅ 已保存到本地！如需云端同步，请先配置GitHub Token');
+        if(d && d.metadata){
+          localStorage.setItem('cloudConnected', 'true');
+          localStorage.setItem('cloudLastUpload', timeStr);
+          showToast('✅ 云端上传成功！');
+          uploadSuccess = true;
+          updateCloudStatus(timeStr, versions.length);
+        } else {
+          showToast('⚠️ 云端更新失败，数据已保存到本地');
+        }
+      }).catch(function(e){
+        console.error('JSONBin update error:', e);
+        showToast('⚠️ 云端连接失败，数据已保存到本地');
+      });
     }
     // 延迟检查上传结果
     setTimeout(function(){
-      if(!uploadSuccess && (gistToken || binId)){
-        showToast('⚠️ 云端上传可能失败，数据已保存到本地');
+      if(!uploadSuccess){
+        showToast('✅ 数据已保存到本地，云端同步进行中...');
       }
-      // 更新版本信息显示
-      var versionInfo = document.getElementById('cloudVersionInfo');
-      if(versionInfo){
-        versionInfo.innerHTML = '<div style="color:#4CAF50;margin-top:8px;">✅ 已保存<br><small>时间: ' + timeStr + '<br>版本: ' + versions.length + '</small></div>';
-      }
-      if(typeof renderCloudVersions === 'function'){ renderCloudVersions(); }
-    }, 5000);
+      updateCloudStatus(timeStr, versions.length);
+    }, 3000);
   }catch(e){
     console.error('uploadToCloud error:', e);
     showToast('❌ 上传失败：' + e.message);
@@ -697,6 +712,7 @@ function uploadToCloud(){
 function downloadFromCloud(){
   try{
     if(currentUser.role !== '系统管理员'){ showToast('⚠️ 仅系统管理员可操作云端管理'); return; }
+    // 先从本地备份恢复
     var saved = localStorage.getItem('labAppData_cloud');
     if(saved){
       try{
@@ -705,39 +721,54 @@ function downloadFromCloud(){
         showToast('✅ 已从本地云端备份恢复');
         if(typeof loadDashboard === 'function') loadDashboard();
         if(typeof renderCloudVersions === 'function') renderCloudVersions();
+        return;
       }catch(e){
-        showToast('❌ 备份数据损坏');
+        showToast('❌ 本地备份数据损坏');
       }
-      return;
     }
-    // 尝试从GitHub Gist下载
-    var gistToken = localStorage.getItem('cloudGistToken');
-    var gistId = localStorage.getItem('cloudGistId');
-    if(gistToken && gistId){
+    // 从JSONBin云端下载
+    var binId = localStorage.getItem('cloudBinId');
+    var apiKey = localStorage.getItem('cloudApiKey') || '';
+    if(binId){
       showToast('📥 正在从云端下载...');
-      fetch('https://api.github.com/gists/' + gistId, {
+      var headers = {};
+      if(apiKey) headers['X-Master-Key'] = apiKey;
+      fetch('https://api.jsonbin.io/v3/b/' + binId + '/latest', {
         method: 'GET',
-        headers: {'Authorization': 'token ' + gistToken}
+        headers: headers
       }).then(function(r){
         if(!r.ok) throw new Error('HTTP ' + r.status);
         return r.json();
       }).then(function(d){
-        if(d && d.files){
-          var fileKey = Object.keys(d.files)[0];
-          if(fileKey && d.files[fileKey].content){
-            var cloudData = JSON.parse(d.files[fileKey].content);
-            var merged = Object.assign({}, appData, cloudData);
-            appData = merged;
-            localStorage.setItem('labAppData', JSON.stringify(appData));
-            localStorage.setItem('labAppData_cloud', JSON.stringify(appData));
-            showToast('✅ 云端数据下载成功！');
-            if(typeof loadDashboard === 'function') loadDashboard();
-            if(typeof renderCloudVersions === 'function') renderCloudVersions();
+        if(d && d.record){
+          var cloudData = d.record;
+          // 合并数据（保留本地用户数据，覆盖其他数据）
+          var localUsers = appData.users;
+          appData = cloudData;
+          // 保留本地用户数据（避免覆盖新增用户）
+          if(localUsers && localUsers.length > 0){
+            // 合并用户
+            for(var ui=0; ui<localUsers.length; ui++){
+              var exists = false;
+              for(var ci=0; ci<appData.users.length; ci++){
+                if(appData.users[ci].id === localUsers[ui].id){ exists = true; break; }
+              }
+              if(!exists) appData.users.push(localUsers[ui]);
+            }
           }
+          localStorage.setItem('labAppData', JSON.stringify(appData));
+          localStorage.setItem('labAppData_cloud', JSON.stringify(appData));
+          localStorage.setItem('cloudConnected', 'true');
+          showToast('✅ 云端数据下载成功！共' + appData.users.length + '名员工');
+          if(typeof loadDashboard === 'function') loadDashboard();
+          if(typeof renderCloudVersions === 'function') renderCloudVersions();
+          if(typeof loadSettings === 'function') loadSettings();
+        } else {
+          showToast('❌ 云端数据格式异常');
         }
       }).catch(function(e){
-        console.error('Gist download error:', e);
-        showToast('❌ 下载失败：' + e.message);
+        console.error('JSONBin download error:', e);
+        showToast('❌ 下载失败：' + e.message + '，请检查网络连接');
       });
     } else {
       showToast('❌ 云端暂无备份数据，请先上传');
@@ -803,6 +834,23 @@ function saveCloudConfig(){
   }
 }
 // 渲染云端版本列表
+
+function updateCloudStatus(timeStr, versionCount){
+  var versionInfo = document.getElementById('cloudVersionInfo');
+  if(versionInfo){
+    versionInfo.innerHTML = '<div style="color:#4CAF50;margin-top:8px;">✅ 已同步<br><small>时间: ' + timeStr + '<br>版本: ' + versionCount + '</small></div>';
+  }
+  var statusEl = document.getElementById('cloudStatus');
+  if(statusEl){
+    statusEl.innerHTML = '<span style="color:#4CAF50;">✅ 已连接云端</span>';
+  }
+  var dot = document.getElementById('cloudStatusDot');
+  if(dot) dot.className = 'dot online';
+  var text = document.getElementById('cloudStatusText');
+  if(text) text.textContent = '✅ 已连接云端';
+  if(typeof renderCloudVersions === 'function'){ renderCloudVersions(); }
+}
+
 function renderCloudVersions(){
   try{
     var versions = JSON.parse(localStorage.getItem('cloudVersions') || '[]');
@@ -938,6 +986,7 @@ function buildSidebar(){
   }
   html += '<div class="nav-group">考核</div>';
   html += '<div class="nav-item" onclick="showPage(\'performance\')"><span class="icon">🏆</span>绩效积分</div>';
+  html += '<div class="nav-item" onclick="showPage(\'report\')"><span class="icon">📊</span>统计报表</div>';
   var isManager = currentUser.role === '系统管理员' || currentUser.role === '科主任' || currentUser.role === '副主任';
   if(perms.indexOf('settings') >= 0 || perms.indexOf('all') >= 0 || isManager){
     html += '<div class="nav-group">管理</div>';
@@ -954,6 +1003,16 @@ function setActiveBottomNav(index){
   if(items[index]) items[index].classList.add('active');
 }
 function showPage(pageId){
+  // 权限控制：统计报表仅管理层可见
+  if(pageId === 'report' && currentUser){
+    var isManager = currentUser.role === '系统管理员' || currentUser.role === '科主任' || currentUser.role === '副主任';
+    var perms = currentUser.permissions || (appData && appData.permissions && appData.permissions[currentUser.role]) || [];
+    var canSeeReport = perms.indexOf('report') >= 0 || perms.indexOf('all') >= 0 || isManager;
+    if(!canSeeReport){
+      showToast('⚠️ 无权限访问统计报表');
+      return;
+    }
+  }
   // 权限控制：系统设置仅管理层可见
   if(pageId === 'settings' && currentUser){
     var isManager = currentUser.role === '系统管理员' || currentUser.role === '科主任' || currentUser.role === '副主任';
@@ -965,7 +1024,7 @@ function showPage(pageId){
     }
   }
   // 同步底部导航
-  var navMap = {maintenance:0, quality:1, workload:2, handover:3, settings:4};
+  var navMap = {maintenance:0, quality:1, workload:2, handover:3, settings:4, report:5};
   if(navMap[pageId] !== undefined) setActiveBottomNav(navMap[pageId]);
   var pages = document.querySelectorAll('.page');
   for(var i=0;i<pages.length;i++){ pages[i].classList.remove('active'); }
@@ -981,6 +1040,7 @@ function showPage(pageId){
   if(pageId === 'reagent') loadReagent();
   if(pageId === 'handover') loadHandover();
   if(pageId === 'performance') loadPerformance();
+  if(pageId === 'report') loadReportMonthly();
   if(pageId === 'settings') loadSettings();
 }
 function toggleSidebar(){
@@ -1840,8 +1900,10 @@ function switchPerfTab(tab, el){
   for(var i=0;i<tabs.length;i++){ tabs[i].classList.remove('active'); }
   el.classList.add('active');
   document.getElementById('perfDetail').style.display = tab === 'detail' ? 'block' : 'none';
+  document.getElementById('perfStaff').style.display = tab === 'staff' ? 'block' : 'none';
   document.getElementById('perfRank').style.display = tab === 'rank' ? 'block' : 'none';
   document.getElementById('perfRules').style.display = tab === 'rules' ? 'block' : 'none';
+  if(tab === 'staff'){ loadPerfStaffSummary(); }
 }
 function loadSettings(){
   var isManager = currentUser.role === '系统管理员' || currentUser.role === '科主任' || currentUser.role === '副主任';
@@ -2598,6 +2660,8 @@ function saveHandover(){
     showToast('⚠️ 保存失败: ' + e.message);
   }
 }
+
+
 function openChangePwdModal(){
   var modal = document.getElementById('modalContent');
   modal.innerHTML = '<div class="modal-header"><h3>🔑 修改密码</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">当前密码</label><input type="password" class="form-input" id="oldPwd" placeholder="请输入当前密码"></div><div class="form-group"><label class="form-label">新密码</label><input type="password" class="form-input" id="newPwd" placeholder="请输入新密码（至少6位）"></div><div class="form-group"><label class="form-label">确认新密码</label><input type="password" class="form-input" id="confirmPwd" placeholder="请再次输入新密码"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveChangePwd()">确认修改</button></div>';
@@ -2633,38 +2697,7 @@ function editHandover(id){
     '<div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveHandoverEdit(\'' + id + '\')">💾 保存修改</button></div>';
   document.getElementById('modalOverlay').classList.add('active');
 }
-function saveHandoverEdit(id){
-  try{
-  var r = null;
-  for(var i=0;i<appData.handoverRecords.length;i++){
-    if(appData.handoverRecords[i].id === id){ r = appData.handoverRecords[i]; break; }
-  }
-  if(!r){ showToast('❌ 未找到该记录'); return; }
-  var oldShift = r.shift;
-  r.shift = document.getElementById('hShift').value;
-  r.equip = document.getElementById('hEquip').value;
-  r.specimen = document.getElementById('hSpecimen').value;
-  r.reagent = document.getElementById('hReagent').value;
-  r.qc = document.getElementById('hQc').value;
-  r.abnormal = document.getElementById('hAbnormal').value;
-  r.content = document.getElementById('hContent').value;
-  r.toUser = document.getElementById('hToUser').value;
-  var dt = document.getElementById('hDate').value;
-  if(dt){
-    var parts = dt.split('T');
-    r.date = parts[0];
-    r.time = parts[1] || '';
-  }
-  saveData();
-  closeModal();
-  loadHandover();
-  addOperationLog('编辑交接班记录', currentUser.name+'编辑了'+r.shift+'交接记录（'+r.fromUser+'→'+r.toUser+'）');
-  showToast('✅ 交接班记录已更新');
 
-  }catch(err){
-    console.error('saveHandoverEdit执行出错:', err);
-    showToast('⚠️ 操作失败: ' + err.message);
-  }}
 function confirmHandover(id){
   try{
     if(!currentUser){ showToast('⚠️ 请先登录'); return; }
@@ -2696,6 +2729,48 @@ function confirmHandover(id){
     showToast('⚠️ 确认失败: ' + e.message);
   }
 }
+function loadHandoverRecords(){
+  try{
+    var list = document.getElementById('handoverRecordsList');
+    if(!list){ return; }
+    if(!appData || !appData.handoverRecords || !Array.isArray(appData.handoverRecords)){
+      list.innerHTML = '<div class="empty-tip">暂无交接班记录</div>';
+      return;
+    }
+    var records = appData.handoverRecords;
+    if(records.length === 0){
+      list.innerHTML = '<div class="empty-tip">暂无交接班记录</div>';
+      return;
+    }
+    var html = '';
+    for(var i=0;i<records.length;i++){
+      var r = records[i];
+      var statusText = r.status === 'completed' ? '<span class="tag tag-green">已确认</span>' : '<span class="tag tag-orange">待确认</span>';
+      var confirmBtn = (r.status !== 'completed' && currentUser && r.receiver === currentUser.name) ? '<button class="btn btn-small btn-primary" onclick="confirmHandover(\'' + r.id + '\')">确认</button>' : '';
+      var editBtn = '<button class="btn btn-small" onclick="saveHandoverEdit(\'' + r.id + '\')">编辑</button>';
+      html += '<div class="record-card">';
+      html += '<div class="record-header"><span class="record-title">' + (r.shift || '') + '班交接</span>' + statusText + '</div>';
+      html += '<div class="record-body">';
+      html += '<div class="record-item"><span class="label">日期:</span>' + (r.date || '') + '</div>';
+      html += '<div class="record-item"><span class="label">仪器:</span>' + (r.instruments || '') + '</div>';
+      html += '<div class="record-item"><span class="label">标本:</span>' + (r.samples || '') + '</div>';
+      html += '<div class="record-item"><span class="label">试剂:</span>' + (r.reagents || '') + '</div>';
+      html += '<div class="record-item"><span class="label">质控:</span>' + (r.quality || '') + '</div>';
+      html += '<div class="record-item"><span class="label">异常:</span>' + (r.abnormal || '') + '</div>';
+      html += '<div class="record-item"><span class="label">备注:</span>' + (r.notes || '') + '</div>';
+      html += '<div class="record-item"><span class="label">交接人:</span>' + (r.sender || '') + ' → ' + (r.receiver || '') + '</div>';
+      if(r.confirmedBy){
+        html += '<div class="record-item"><span class="label">确认人:</span>' + r.confirmedBy + ' (' + (r.confirmedAt || '') + ')</div>';
+      }
+      html += '<div class="record-actions">' + editBtn + ' ' + confirmBtn + '</div>';
+      html += '</div></div>';
+    }
+    list.innerHTML = html;
+  }catch(e){
+    console.error('loadHandoverRecords error:', e);
+  }
+}
+
 
 function deleteHandover(id){
   var r = null;
@@ -3785,6 +3860,734 @@ function showStudyTimeStats(){
   if(examRecords.length===0) html += '<div style="color:#999">暂无考试记录</div>';
   html += '</div></div>';
   showModal('学习时长统计', html);
+}
+
+// ===== V2.5 新增功能：月报表、月度分析、员工积分汇总 =====
+// 月报表：显示当前月份的详细报告
+function showMonthlyReport(){
+  var area = document.getElementById('monthlyReportArea');
+  if(!area) return;
+  area.style.display = area.style.display === 'none' ? 'block' : 'none';
+  if(area.style.display === 'none') return;
+  var now = new Date();
+  var year = now.getFullYear();
+  var month = now.getMonth()+1;
+  var monthPrefix = year + '-' + String(month).padStart(2,'0');
+  var html = '<div class="card" style="margin-bottom:15px;">';
+  html += '<div class="card-header" style="background:linear-gradient(135deg,#1976d2,#42a5f5);color:#fff;padding:12px 15px;font-weight:bold;border-radius:10px 10px 0 0;">📊 ' + year + '年' + month + '月报表</div>';
+  html += '<div style="padding:15px;">';
+  // 当月统计
+  var maintCount = 0, workloadCount = 0, qcCount = 0, criticalCount = 0;
+  var maintScore = 0, workloadScore = 0;
+  var totalScore = 0;
+  if(appData.maintenanceRecords){
+    appData.maintenanceRecords.forEach(function(r){
+      if(r.date && r.date.indexOf(monthPrefix) === 0){
+        maintCount++; maintScore += (r.score||0); totalScore += (r.score||0);
+      }
+    });
+  }
+  if(appData.workloadRecords){
+    appData.workloadRecords.forEach(function(r){
+      if(r.date && r.date.indexOf(monthPrefix) === 0){
+        workloadCount++; workloadScore += (r.score||0); totalScore += (r.score||0);
+      }
+    });
+  }
+  if(appData.qcRecords){
+    qcCount = appData.qcRecords.filter(function(r){ return r.date && r.date.indexOf(monthPrefix) === 0; }).length;
+  }
+  if(appData.criticalRecords){
+    criticalCount = appData.criticalRecords.filter(function(r){ return r.date && r.date.indexOf(monthPrefix) === 0; }).length;
+  }
+  // 统计卡片
+  html += '<div class="stats-grid" style="grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-bottom:12px;">';
+  html += '<div class="stat-card" style="padding:10px;"><div class="label">仪器保养</div><div class="value" style="font-size:18px;">'+maintCount+'</div><div style="font-size:10px;color:#666;">'+maintScore+'分</div></div>';
+  html += '<div class="stat-card" style="padding:10px;"><div class="label">工作量</div><div class="value" style="font-size:18px;">'+workloadCount+'</div><div style="font-size:10px;color:#666;">'+workloadScore+'分</div></div>';
+  html += '<div class="stat-card" style="padding:10px;"><div class="label">质控记录</div><div class="value" style="font-size:18px;">'+qcCount+'</div></div>';
+  html += '<div class="stat-card" style="padding:10px;"><div class="label">危急值</div><div class="value" style="font-size:18px;">'+criticalCount+'</div></div>';
+  html += '<div class="stat-card" style="padding:10px;background:linear-gradient(135deg,#ff6f00,#ffa726);color:#fff;"><div class="label" style="color:#fff;">总积分</div><div class="value" style="font-size:18px;color:#fff;">'+totalScore+'</div></div>';
+  html += '</div>';
+  // 本月明细列表
+  if(currentUser && (currentUser.role === '系统管理员' || currentUser.role === '科主任' || currentUser.role === '副主任')){
+    html += '<div style="margin-bottom:10px;"><button class="action-btn action-btn-green" onclick="downloadMonthlyReport()" style="width:100%;">📥 下载月报表(CSV)</button></div>';
+  }
+  html += '<div style="max-height:400px;overflow-y:auto;">';
+  // 保养记录
+  if(appData.maintenanceRecords){
+    var hasMaint = false;
+    appData.maintenanceRecords.forEach(function(r){
+      if(r.date && r.date.indexOf(monthPrefix) === 0){
+        hasMaint = true;
+        html += '<div class="list-item" style="border-bottom:1px solid #f0f0f0;padding:8px 0;"><div class="item-left"><div class="item-icon" style="background:#e3f2fd;">🔧</div><div><div class="item-title">'+r.device+'</div><div class="item-desc">'+r.date+' · '+r.operator+'</div></div></div><div class="item-right"><span class="badge badge-green">+'+r.score+'</span></div></div>';
+      }
+    });
+    if(!hasMaint) html += '<div style="text-align:center;padding:20px;color:#999;">本月暂无保养记录</div>';
+  }
+  // 工作量记录
+  if(appData.workloadRecords){
+    appData.workloadRecords.forEach(function(r){
+      if(r.date && r.date.indexOf(monthPrefix) === 0){
+        html += '<div class="list-item" style="border-bottom:1px solid #f0f0f0;padding:8px 0;"><div class="item-left"><div class="item-icon" style="background:#e8f5e9;">📝</div><div><div class="item-title">'+r.type+' · '+r.samples+'样本</div><div class="item-desc">'+r.date+' · '+r.operator+'</div></div></div><div class="item-right"><span class="badge badge-green">+'+r.score+'</span></div></div>';
+      }
+    });
+  }
+  html += '</div>';
+  // 员工绩效汇总表
+  html += '<div style="margin-top:15px;border-top:2px solid #e0e0e0;padding-top:10px;">';
+  html += '<h4 style="margin-bottom:10px;">👥 员工绩效汇总</h4>';
+  html += '<table style="width:100%;border-collapse:collapse;font-size:12px;">';
+  html += '<tr style="background:#f5f5f5;"><th style="padding:6px;border:1px solid #e0e0e0;">排名</th><th style="padding:6px;border:1px solid #e0e0e0;">姓名</th><th style="padding:6px;border:1px solid #e0e0e0;">角色</th><th style="padding:6px;border:1px solid #e0e0e0;">组别</th><th style="padding:6px;border:1px solid #e0e0e0;">总分</th></tr>';
+  var reports = generateMonthlyReport(year, month);
+  reports.forEach(function(r, idx){
+    var medal = idx===0?'🥇':(idx===1?'🥈':(idx===2?'🥉':''));
+    html += '<tr'+(idx<3?' style="background:#fff8e1;"':'')+'><td style="padding:6px;border:1px solid #e0e0e0;text-align:center;">'+medal+' '+(idx+1)+'</td><td style="padding:6px;border:1px solid #e0e0e0;">'+r.userName+'</td><td style="padding:6px;border:1px solid #e0e0e0;">'+r.role+'</td><td style="padding:6px;border:1px solid #e0e0e0;">'+r.group+'</td><td style="padding:6px;border:1px solid #e0e0e0;text-align:center;font-weight:bold;color:#1976d2;">'+r.total+'</td></tr>';
+  });
+  html += '</table>';
+  html += '</div>';
+  html += '</div></div>';
+  area.innerHTML = html;
+}
+// 下载月报表
+function downloadMonthlyReport(){
+  var now = new Date();
+  var year = now.getFullYear();
+  var month = now.getMonth()+1;
+  var monthPrefix = year + '-' + String(month).padStart(2,'0');
+  // 生成CSV数据
+  var rows = [];
+  // 保养记录
+  if(appData.maintenanceRecords){
+    appData.maintenanceRecords.forEach(function(r){
+      if(r.date && r.date.indexOf(monthPrefix) === 0){
+        rows.push({日期:r.date, 类型:'仪器保养', 内容:r.device, 操作人:r.operator, 积分:r.score});
+      }
+    });
+  }
+  // 工作量记录
+  if(appData.workloadRecords){
+    appData.workloadRecords.forEach(function(r){
+      if(r.date && r.date.indexOf(monthPrefix) === 0){
+        rows.push({日期:r.date, 类型:'工作量', 内容:r.type+' '+r.samples+'样本', 操作人:r.operator, 积分:r.score});
+      }
+    });
+  }
+  // 员工绩效汇总
+  var reports = generateMonthlyReport(year, month);
+  reports.forEach(function(r){
+    rows.push({日期:year+'-'+String(month).padStart(2,'0'), 类型:'绩效汇总', 内容:r.userName+' ('+r.role+')', 操作人:r.userName, 积分:r.total});
+  });
+  if(rows.length === 0){ showToast('暂无数据可导出','warning'); return; }
+  exportToCsv(rows, '月报表_' + year + '_' + String(month).padStart(2,'0') + '.csv');
+}
+// 月度分析：显示趋势图和统计
+function showMonthlyAnalysis(){
+  var area = document.getElementById('monthlyAnalysisArea');
+  if(!area) return;
+  area.style.display = area.style.display === 'none' ? 'block' : 'none';
+  if(area.style.display === 'none') return;
+  var now = new Date();
+  var year = now.getFullYear();
+  var month = now.getMonth()+1;
+  var html = '<div class="card" style="margin-bottom:15px;">';
+  html += '<div class="card-header" style="background:linear-gradient(135deg,#2e7d32,#66bb6a);color:#fff;padding:12px 15px;font-weight:bold;border-radius:10px 10px 0 0;">📈 ' + year + '年' + month + '月 月度分析</div>';
+  html += '<div style="padding:15px;">';
+  // 按周统计
+  var weekData = [0,0,0,0,0,0]; // 6周
+  var maintByWeek = [0,0,0,0,0,0];
+  var workloadByWeek = [0,0,0,0,0,0];
+  var monthPrefix = year + '-' + String(month).padStart(2,'0');
+  var daysInMonth = new Date(year, month, 0).getDate();
+  function getWeek(d){
+    return Math.min(5, Math.floor((d-1)/7));
+  }
+  if(appData.maintenanceRecords){
+    appData.maintenanceRecords.forEach(function(r){
+      if(r.date && r.date.indexOf(monthPrefix) === 0){
+        var d = parseInt(r.date.split('-')[2]);
+        var w = getWeek(d);
+        maintByWeek[w]++; weekData[w] += (r.score||0);
+      }
+    });
+  }
+  if(appData.workloadRecords){
+    appData.workloadRecords.forEach(function(r){
+      if(r.date && r.date.indexOf(monthPrefix) === 0){
+        var d = parseInt(r.date.split('-')[2]);
+        var w = getWeek(d);
+        workloadByWeek[w]++; weekData[w] += (r.score||0);
+      }
+    });
+  }
+  // 周统计图表（CSS条形图）
+  html += '<h4 style="margin-bottom:10px;">📅 每周积分趋势</h4>';
+  html += '<div style="display:flex;align-items:flex-end;gap:6px;height:150px;padding:10px;background:#f8f9fa;border-radius:8px;margin-bottom:15px;">';
+  var maxScore = Math.max.apply(null, weekData);
+  if(maxScore === 0) maxScore = 1;
+  for(var i=0;i<6;i++){
+    var h = Math.max(4, Math.round(weekData[i]/maxScore*120));
+    var label = '第'+(i+1)+'周';
+    html += '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;">';
+    html += '<div style="font-size:10px;color:#666;margin-bottom:3px;">'+weekData[i]+'</div>';
+    html += '<div style="width:100%;background:linear-gradient(180deg,#42a5f5,#1976d2);border-radius:4px 4px 0 0;height:'+h+'px;min-height:4px;"></div>';
+    html += '<div style="font-size:10px;color:#999;margin-top:3px;">'+label+'</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+  // 类型占比分析
+  var totalMaint = 0, totalWorkload = 0;
+  weekData.forEach(function(v){ totalMaint += v; });
+  maintByWeek.forEach(function(v){ totalWorkload += v; });
+  var totalAll = 0;
+  if(appData.maintenanceRecords){
+    appData.maintenanceRecords.forEach(function(r){ if(r.date && r.date.indexOf(monthPrefix) === 0) totalAll += (r.score||0); });
+  }
+  if(appData.workloadRecords){
+    appData.workloadRecords.forEach(function(r){ if(r.date && r.date.indexOf(monthPrefix) === 0) totalAll += (r.score||0); });
+  }
+  html += '<h4 style="margin-bottom:10px;">📊 积分构成分析</h4>';
+  if(totalAll > 0){
+    var maintPct = Math.round((totalMaint/totalAll)*100);
+    var workPct = 100 - maintPct;
+    html += '<div style="background:#f8f9fa;border-radius:8px;padding:15px;margin-bottom:15px;">';
+    html += '<div style="display:flex;gap:10px;margin-bottom:10px;">';
+    html += '<div style="flex:1;text-align:center;background:#e3f2fd;border-radius:8px;padding:10px;"><div style="font-size:20px;font-weight:bold;color:#1976d2;">'+maintPct+'%</div><div style="font-size:11px;color:#666;">仪器保养积分</div></div>';
+    html += '<div style="flex:1;text-align:center;background:#e8f5e9;border-radius:8px;padding:10px;"><div style="font-size:20px;font-weight:bold;color:#2e7d32;">'+workPct+'%</div><div style="font-size:11px;color:#666;">工作量积分</div></div>';
+    html += '</div>';
+    html += '<div style="display:flex;height:10px;border-radius:5px;overflow:hidden;">';
+    html += '<div style="width:'+maintPct+'%;background:#1976d2;"></div>';
+    html += '<div style="width:'+workPct+'%;background:#4caf50;"></div>';
+    html += '</div>';
+    html += '</div>';
+  }
+  // 员工排名分析
+  html += '<h4 style="margin-bottom:10px;">🏆 员工排名分析</h4>';
+  var reports = generateMonthlyReport(year, month);
+  if(reports.length > 0){
+    html += '<div style="background:#f8f9fa;border-radius:8px;padding:15px;">';
+    var avg = 0;
+    reports.forEach(function(r){ avg += r.total; });
+    avg = Math.round(avg / reports.length);
+    html += '<div style="display:flex;gap:10px;margin-bottom:10px;">';
+    html += '<div style="flex:1;text-align:center;background:#fff;border-radius:8px;padding:10px;border:1px solid #e0e0e0;"><div style="font-size:18px;font-weight:bold;color:#ff6f00;">'+reports[0].userName+'</div><div style="font-size:11px;color:#666;">第一名 · '+reports[0].total+'分</div></div>';
+    html += '<div style="flex:1;text-align:center;background:#fff;border-radius:8px;padding:10px;border:1px solid #e0e0e0;"><div style="font-size:18px;font-weight:bold;color:#1976d2;">'+avg+'</div><div style="font-size:11px;color:#666;">平均分</div></div>';
+    html += '<div style="flex:1;text-align:center;background:#fff;border-radius:8px;padding:10px;border:1px solid #e0e0e0;"><div style="font-size:18px;font-weight:bold;color:#d32f2f;">'+reports[reports.length-1].userName+'</div><div style="font-size:11px;color:#666;">最后一名 · '+reports[reports.length-1].total+'分</div></div>';
+    html += '</div>';
+    // 分析建议
+    var top = reports[0], bottom = reports[reports.length-1];
+    if(bottom.total < avg * 0.6){
+      html += '<div style="background:#fff3e0;border-radius:8px;padding:10px;font-size:12px;color:#e65100;">⚠️ 建议：'+bottom.userName+'积分偏低（'+bottom.total+'分），建议加强工作指导和培训。</div>';
+    }
+    if(top.total > avg * 1.5){
+      html += '<div style="background:#e8f5e9;border-radius:8px;padding:10px;font-size:12px;color:#2e7d32;margin-top:8px;">🏅 表扬：'+top.userName+'表现优秀（'+top.total+'分），建议给予表彰。</div>';
+    }
+    html += '</div>';
+  }
+  html += '</div></div>';
+  area.innerHTML = html;
+}
+// 绩效员工汇总：显示所有在职员工的积分明细及汇总
+function loadPerfStaffSummary(){
+  var container = document.getElementById('perfStaff');
+  if(!container) return;
+  if(!currentUser || (currentUser.role !== '系统管理员' && currentUser.role !== '科主任' && currentUser.role !== '副主任')){
+    container.innerHTML = '<div class="card"><div style="padding:20px;text-align:center;color:#999;">⚠️ 仅系统管理员、科主任、副主任可查看员工积分汇总</div></div>';
+    return;
+  }
+  var now = new Date();
+  var year = now.getFullYear();
+  var month = now.getMonth()+1;
+  var monthPrefix = year + '-' + String(month).padStart(2,'0');
+  var users = appData.users || [];
+  var activeUsers = users.filter(function(u){ return u.status === 'active' && u.role !== '系统管理员'; });
+  var html = '<div class="card" style="margin-bottom:15px;">';
+  html += '<div class="card-header" style="background:linear-gradient(135deg,#7b1fa2,#ab47bc);color:#fff;padding:12px 15px;font-weight:bold;border-radius:10px 10px 0 0;">👥 在职员工积分汇总 ('+year+'年'+month+'月)</div>';
+  html += '<div style="padding:15px;">';
+  html += '<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">';
+  html += '<button class="action-btn action-btn-green" onclick="downloadStaffSummary()" style="flex:1;min-width:120px;">📥 下载汇总(CSV)</button>';
+  html += '</div>';
+  // 汇总表格
+  html += '<div style="overflow-x:auto;">';
+  html += '<table style="width:100%;border-collapse:collapse;font-size:12px;min-width:600px;">';
+  html += '<tr style="background:#f5f5f5;">';
+  html += '<th style="padding:8px;border:1px solid #e0e0e0;">排名</th>';
+  html += '<th style="padding:8px;border:1px solid #e0e0e0;">姓名</th>';
+  html += '<th style="padding:8px;border:1px solid #e0e0e0;">角色</th>';
+  html += '<th style="padding:8px;border:1px solid #e0e0e0;">组别</th>';
+  html += '<th style="padding:8px;border:1px solid #e0e0e0;">质控</th>';
+  html += '<th style="padding:8px;border:1px solid #e0e0e0;">效率</th>';
+  html += '<th style="padding:8px;border:1px solid #e0e0e0;">设备</th>';
+  html += '<th style="padding:8px;border:1px solid #e0e0e0;">学习</th>';
+  html += '<th style="padding:8px;border:1px solid #e0e0e0;">综合</th>';
+  html += '<th style="padding:8px;border:1px solid #e0e0e0;">总分</th>';
+  html += '</tr>';
+  var staffReports = [];
+  activeUsers.forEach(function(u){
+    var score = calculatePerformanceScore(u.id);
+    staffReports.push({
+      userId: u.id, userName: u.name, role: u.role, group: u.group || '',
+      quality: score.quality.score, efficiency: score.efficiency.score,
+      device: score.device.score, study: score.study.score,
+      comprehensive: score.comprehensive.score, total: score.total
+    });
+  });
+  staffReports.sort(function(a,b){ return b.total - a.total; });
+  staffReports.forEach(function(r, idx){
+    var medal = idx===0?'🥇':(idx===1?'🥈':(idx===2?'🥉':''));
+    var bg = idx < 3 ? ' style="background:#fff8e1;"' : '';
+    html += '<tr'+bg+'><td style="padding:8px;border:1px solid #e0e0e0;text-align:center;">'+medal+' '+(idx+1)+'</td>';
+    html += '<td style="padding:8px;border:1px solid #e0e0e0;font-weight:bold;">'+r.userName+'</td>';
+    html += '<td style="padding:8px;border:1px solid #e0e0e0;">'+r.role+'</td>';
+    html += '<td style="padding:8px;border:1px solid #e0e0e0;">'+r.group+'</td>';
+    html += '<td style="padding:8px;border:1px solid #e0e0e0;text-align:center;">'+r.quality+'</td>';
+    html += '<td style="padding:8px;border:1px solid #e0e0e0;text-align:center;">'+r.efficiency+'</td>';
+    html += '<td style="padding:8px;border:1px solid #e0e0e0;text-align:center;">'+r.device+'</td>';
+    html += '<td style="padding:8px;border:1px solid #e0e0e0;text-align:center;">'+r.study+'</td>';
+    html += '<td style="padding:8px;border:1px solid #e0e0e0;text-align:center;">'+r.comprehensive+'</td>';
+    html += '<td style="padding:8px;border:1px solid #e0e0e0;text-align:center;font-weight:bold;color:#1976d2;">'+r.total+'</td></tr>';
+  });
+  html += '</table></div>';
+  // 点击员工查看明细
+  html += '<div style="margin-top:12px;"><h4 style="margin-bottom:8px;">📋 点击员工查看积分明细</h4>';
+  html += '<div style="display:flex;flex-wrap:wrap;gap:6px;">';
+  staffReports.forEach(function(r){    html += '<button class="action-btn" style="font-size:11px;padding:4px 8px;" onclick="showStaffPerfDetail(\'' + r.userId + '\')">' + r.userName + '</button>';
+  });
+  html += '</div></div>';
+  html += '<div id="staffPerfDetailArea" style="margin-top:12px;"></div>';
+  html += '</div></div>';
+  container.innerHTML = html;
+}
+// 显示单个员工的积分明细
+function showStaffPerfDetail(userId){
+  var area = document.getElementById('staffPerfDetailArea');
+  if(!area) return;
+  var users = appData.users || [];
+  var user = users.find(function(u){ return u.id === userId; });
+  if(!user){ showToast('未找到该员工','warning'); return; }
+  var now = new Date();
+  var monthPrefix = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+  var html = '<div class="card" style="margin-top:10px;">';
+  html += '<div class="card-header" style="background:#f5f5f5;padding:10px 15px;font-weight:bold;">📋 '+user.name+' 积分明细 ('+now.getFullYear()+'年'+(now.getMonth()+1)+'月)</div>';
+  html += '<div style="padding:12px;">';
+  var score = calculatePerformanceScore(userId);
+  html += '<div class="stats-grid" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:6px;margin-bottom:10px;">';
+  html += '<div class="stat-card" style="padding:8px;"><div class="label">质控</div><div class="value" style="font-size:16px;">'+score.quality.score+'</div></div>';
+  html += '<div class="stat-card" style="padding:8px;"><div class="label">效率</div><div class="value" style="font-size:16px;">'+score.efficiency.score+'</div></div>';
+  html += '<div class="stat-card" style="padding:8px;"><div class="label">设备</div><div class="value" style="font-size:16px;">'+score.device.score+'</div></div>';
+  html += '<div class="stat-card" style="padding:8px;"><div class="label">学习</div><div class="value" style="font-size:16px;">'+score.study.score+'</div></div>';
+  html += '<div class="stat-card" style="padding:8px;"><div class="label">综合</div><div class="value" style="font-size:16px;">'+score.comprehensive.score+'</div></div>';
+  html += '<div class="stat-card" style="padding:8px;background:linear-gradient(135deg,#ff6f00,#ffa726);"><div class="label" style="color:#fff;">总分</div><div class="value" style="font-size:16px;color:#fff;">'+score.total+'</div></div>';
+  html += '</div>';
+  // 明细列表
+  var hasRecords = false;
+  // 保养记录
+  if(appData.maintenanceRecords){
+    appData.maintenanceRecords.forEach(function(r){
+      if(r.operator === user.name && r.date && r.date.indexOf(monthPrefix) === 0){
+        hasRecords = true;
+        html += '<div class="list-item" style="border-bottom:1px solid #f0f0f0;padding:6px 0;"><div class="item-left"><div class="item-icon" style="background:#e3f2fd;">🔧</div><div><div class="item-title">'+r.device+'</div><div class="item-desc">'+r.date+'</div></div></div><div class="item-right"><span class="badge badge-green">+'+r.score+'</span></div></div>';
+      }
+    });
+  }
+  // 工作量记录
+  if(appData.workloadRecords){
+    appData.workloadRecords.forEach(function(r){
+      if(r.operator === user.name && r.date && r.date.indexOf(monthPrefix) === 0){
+        hasRecords = true;
+        html += '<div class="list-item" style="border-bottom:1px solid #f0f0f0;padding:6px 0;"><div class="item-left"><div class="item-icon" style="background:#e8f5e9;">📝</div><div><div class="item-title">'+r.type+' · '+r.samples+'样本</div><div class="item-desc">'+r.date+'</div></div></div><div class="item-right"><span class="badge badge-green">+'+r.score+'</span></div></div>';
+      }
+    });
+  }
+  if(!hasRecords) html += '<div style="text-align:center;padding:15px;color:#999;">本月暂无积分记录</div>';
+  html += '</div></div>';
+  area.innerHTML = html;
+}
+// 下载员工积分汇总
+function downloadStaffSummary(){
+  var now = new Date();
+  var year = now.getFullYear();
+  var month = now.getMonth()+1;
+  var users = appData.users || [];
+  var activeUsers = users.filter(function(u){ return u.status === 'active' && u.role !== '系统管理员'; });
+  var exportData = [];
+  activeUsers.forEach(function(u){
+    var score = calculatePerformanceScore(u.id);
+    exportData.push({
+      姓名: u.name, 角色: u.role, 组别: u.group || '',
+      质量控制: score.quality.score, 工作效率: score.efficiency.score,
+      设备管理: score.device.score, 学习成长: score.study.score,
+      综合表现: score.comprehensive.score, 总分: score.total
+    });
+  });
+  exportData.sort(function(a,b){ return b.总分 - a.总分; });
+  exportData.forEach(function(r, idx){ r['排名'] = idx+1; });
+  if(exportData.length === 0){ showToast('暂无数据可导出','warning'); return; }
+  exportToCsv(exportData, '员工积分汇总_' + year + '_' + String(month).padStart(2,'0') + '.csv');
+}
+// 确保所有保存操作都同步到云端
+function ensureCloudSync(){
+  try{
+    // 检查所有数据源
+    var dataStr = JSON.stringify(appData);
+    localStorage.setItem('labAppData', dataStr);
+    localStorage.setItem('labAppData_cloud', dataStr);
+    // 触发云端同步
+    if(typeof autoSyncToCloud === 'function') autoSyncToCloud();
+    return true;
+  }catch(e){
+    console.error('ensureCloudSync error:', e);
+    return false;
+  }
+}
+// 在所有保存函数中增加云端同步
+function patchAllSaves(){
+  try{
+    // 查找所有saveXxx函数，确保调用ensureCloudSync
+    var funcNames = ['saveMaintenance','saveQc','saveEqa','saveWorkload','saveCritical','saveReagent','saveReagentInOut','saveHandover','saveStaff','saveDevice','saveSopManage','saveExamQuestion','saveExamQuestionEdit','savePdfQuestion','saveEditMaintenance','saveEditQc','saveEditWorkload','saveEditCritical','saveEditReagent','saveEditStaff','saveEditDevice','saveEditSop','saveChangePwd','saveResetPwd','savePerm','saveCloudConfig'];
+    funcNames.forEach(function(fn){
+      if(typeof window[fn] === 'function'){
+        var orig = window[fn];
+        window[fn] = function(){
+          var result = orig.apply(this, arguments);
+          try{
+            ensureCloudSync();
+          }catch(e){
+            console.error('Cloud sync after ' + fn + ' failed:', e);
+          }
+          return result;
+        };
+      }
+    });
+    console.log('✅ 已为所有保存函数添加云端同步');
+  }catch(e){
+    console.error('patchAllSaves error:', e);
+  }
+}
+// 初始化时调用patchAllSaves
+if(typeof window !== 'undefined'){
+  window.addEventListener('DOMContentLoaded', function(){
+    setTimeout(function(){
+      try{ patchAllSaves(); }catch(e){ console.error('patchAllSaves init error:', e); }
+    }, 500);
+  });
+}
+
+
+// ===== V2.6 统计报表功能 =====
+// 切换统计报表Tab
+function switchReportTab(tab, el){
+  var tabs = document.querySelectorAll('#page-report .action-btn');
+  for(var i=0;i<tabs.length;i++){ tabs[i].style.opacity = '0.7'; tabs[i].style.border = '2px solid transparent'; }
+  el.style.opacity = '1'; el.style.border = '2px solid #1976d2';
+  document.getElementById('reportMonthly').style.display = tab === 'monthly' ? 'block' : 'none';
+  document.getElementById('reportStaff').style.display = tab === 'staff' ? 'block' : 'none';
+  document.getElementById('reportAnalysis').style.display = tab === 'analysis' ? 'block' : 'none';
+  document.getElementById('reportExport').style.display = tab === 'export' ? 'block' : 'none';
+  if(tab === 'monthly'){ loadReportMonthly(); }
+  else if(tab === 'staff'){ loadReportStaff(); }
+  else if(tab === 'analysis'){ loadReportAnalysis(); }
+  else if(tab === 'export'){ loadReportExport(); }
+}
+// 加载月报表
+function loadReportMonthly(){
+  var container = document.getElementById('reportMonthly');
+  if(!container) return;
+  var now = new Date();
+  var year = now.getFullYear();
+  var month = now.getMonth()+1;
+  var monthPrefix = year + '-' + String(month).padStart(2,'0');
+  var html = '<div class="card" style="margin-bottom:15px;">';
+  html += '<div class="card-header" style="background:linear-gradient(135deg,#1976d2,#42a5f5);color:#fff;padding:12px 15px;font-weight:bold;border-radius:10px 10px 0 0;">📅 ' + year + '年' + month + '月 全院月报表</div>';
+  html += '<div style="padding:15px;">';
+  // 全院统计
+  var totalMaint = 0, totalWorkload = 0, totalQc = 0, totalCritical = 0, totalScore = 0;
+  if(appData.maintenanceRecords){
+    appData.maintenanceRecords.forEach(function(r){
+      if(r.date && r.date.indexOf(monthPrefix) === 0){ totalMaint++; totalScore += (r.score||0); }
+    });
+  }
+  if(appData.workloadRecords){
+    appData.workloadRecords.forEach(function(r){
+      if(r.date && r.date.indexOf(monthPrefix) === 0){ totalWorkload++; totalScore += (r.score||0); }
+    });
+  }
+  if(appData.qcRecords){
+    totalQc = appData.qcRecords.filter(function(r){ return r.date && r.date.indexOf(monthPrefix) === 0; }).length;
+  }
+  if(appData.criticalRecords){
+    totalCritical = appData.criticalRecords.filter(function(r){ return r.date && r.date.indexOf(monthPrefix) === 0; }).length;
+  }
+  html += '<div class="stats-grid" style="grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-bottom:12px;">';
+  html += '<div class="stat-card" style="padding:10px;"><div class="label">仪器保养</div><div class="value" style="font-size:18px;">'+totalMaint+'</div></div>';
+  html += '<div class="stat-card" style="padding:10px;"><div class="label">工作量</div><div class="value" style="font-size:18px;">'+totalWorkload+'</div></div>';
+  html += '<div class="stat-card" style="padding:10px;"><div class="label">质控记录</div><div class="value" style="font-size:18px;">'+totalQc+'</div></div>';
+  html += '<div class="stat-card" style="padding:10px;"><div class="label">危急值</div><div class="value" style="font-size:18px;">'+totalCritical+'</div></div>';
+  html += '<div class="stat-card" style="padding:10px;background:linear-gradient(135deg,#ff6f00,#ffa726);color:#fff;"><div class="label" style="color:#fff;">总积分</div><div class="value" style="font-size:18px;color:#fff;">'+totalScore+'</div></div>';
+  html += '</div>';
+  // 每人各项月报表 - 表格
+  html += '<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:12px;min-width:600px;">';
+  html += '<tr style="background:#f5f5f5;"><th style="padding:8px;border:1px solid #e0e0e0;">姓名</th><th style="padding:8px;border:1px solid #e0e0e0;">角色</th><th style="padding:8px;border:1px solid #e0e0e0;">组别</th><th style="padding:8px;border:1px solid #e0e0e0;">保养</th><th style="padding:8px;border:1px solid #e0e0e0;">工作量</th><th style="padding:8px;border:1px solid #e0e0e0;">质控</th><th style="padding:8px;border:1px solid #e0e0e0;">危急值</th><th style="padding:8px;border:1px solid #e0e0e0;">总分</th><th style="padding:8px;border:1px solid #e0e0e0;">操作</th></tr>';
+  var users = appData.users || [];
+  var activeUsers = users.filter(function(u){ return u.status === 'active' && u.role !== '系统管理员'; });
+  activeUsers.forEach(function(u){
+    var uMaint = 0, uWorkload = 0, uQc = 0, uCritical = 0, uScore = 0;
+    if(appData.maintenanceRecords){
+      appData.maintenanceRecords.forEach(function(r){
+        if(r.operator === u.name && r.date && r.date.indexOf(monthPrefix) === 0){ uMaint++; uScore += (r.score||0); }
+      });
+    }
+    if(appData.workloadRecords){
+      appData.workloadRecords.forEach(function(r){
+        if(r.operator === u.name && r.date && r.date.indexOf(monthPrefix) === 0){ uWorkload++; uScore += (r.score||0); }
+      });
+    }
+    if(appData.qcRecords){
+      uQc = appData.qcRecords.filter(function(r){ return r.operator === u.name && r.date && r.date.indexOf(monthPrefix) === 0; }).length;
+    }
+    if(appData.criticalRecords){
+      uCritical = appData.criticalRecords.filter(function(r){ return r.operator === u.name && r.date && r.date.indexOf(monthPrefix) === 0; }).length;
+    }
+    html += '<tr><td style="padding:8px;border:1px solid #e0e0e0;font-weight:bold;">'+u.name+'</td><td style="padding:8px;border:1px solid #e0e0e0;">'+u.role+'</td><td style="padding:8px;border:1px solid #e0e0e0;">'+(u.group||'')+'</td><td style="padding:8px;border:1px solid #e0e0e0;text-align:center;">'+uMaint+'</td><td style="padding:8px;border:1px solid #e0e0e0;text-align:center;">'+uWorkload+'</td><td style="padding:8px;border:1px solid #e0e0e0;text-align:center;">'+uQc+'</td><td style="padding:8px;border:1px solid #e0e0e0;text-align:center;">'+uCritical+'</td><td style="padding:8px;border:1px solid #e0e0e0;text-align:center;font-weight:bold;color:#1976d2;">'+uScore+'</td><td style="padding:8px;border:1px solid #e0e0e0;text-align:center;"><button class="btn btn-sm btn-outline" onclick="showPersonReport(\''+u.id+'\')">明细</button></td></tr>';
+  });
+  html += '</table></div>';
+  html += '<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">';
+  html += '<button class="action-btn action-btn-green" onclick="downloadMonthlyReport()" style="flex:1;">📥 下载月报表(CSV)</button>';
+  html += '<button class="action-btn action-btn-purple" onclick="downloadAllStaffReport()" style="flex:1;">📥 下载全院报表(CSV)</button>';
+  html += '</div>';
+  html += '</div></div>';
+  container.innerHTML = html;
+}
+// 加载个人报表
+function loadReportStaff(){
+  var container = document.getElementById('reportStaff');
+  if(!container) return;
+  var now = new Date();
+  var year = now.getFullYear();
+  var month = now.getMonth()+1;
+  var monthPrefix = year + '-' + String(month).padStart(2,'0');
+  var users = appData.users || [];
+  var activeUsers = users.filter(function(u){ return u.status === 'active' && u.role !== '系统管理员'; });
+  var html = '<div class="card" style="margin-bottom:15px;">';
+  html += '<div class="card-header" style="background:linear-gradient(135deg,#7b1fa2,#ab47bc);color:#fff;padding:12px 15px;font-weight:bold;border-radius:10px 10px 0 0;">👤 个人报表 · 点击查看每人明细</div>';
+  html += '<div style="padding:15px;">';
+  html += '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:15px;">';
+  activeUsers.forEach(function(u){
+    html += '<button class="action-btn" style="font-size:12px;padding:6px 12px;" onclick="showPersonReport(\''+u.id+'\')">'+u.name+'</button>';
+  });
+  html += '</div>';
+  html += '<div id="personReportDetail"></div>';
+  html += '</div></div>';
+  container.innerHTML = html;
+}
+// 显示个人报表明细
+function showPersonReport(userId){
+  var area = document.getElementById('personReportDetail');
+  if(!area) return;
+  var users = appData.users || [];
+  var user = users.find(function(u){ return u.id === userId; });
+  if(!user){ showToast('未找到该员工','warning'); return; }
+  var now = new Date();
+  var year = now.getFullYear();
+  var month = now.getMonth()+1;
+  var monthPrefix = year + '-' + String(month).padStart(2,'0');
+  var score = calculatePerformanceScore(userId);
+  var html = '<div class="card" style="margin-top:10px;">';
+  html += '<div class="card-header" style="background:#f5f5f5;padding:10px 15px;font-weight:bold;">📋 '+user.name+' ('+user.role+') - '+year+'年'+month+'月 报表</div>';
+  html += '<div style="padding:12px;">';
+  // 积分概览
+  html += '<div class="stats-grid" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:6px;margin-bottom:12px;">';
+  html += '<div class="stat-card" style="padding:8px;"><div class="label">质控</div><div class="value" style="font-size:16px;">'+score.quality.score+'</div></div>';
+  html += '<div class="stat-card" style="padding:8px;"><div class="label">效率</div><div class="value" style="font-size:16px;">'+score.efficiency.score+'</div></div>';
+  html += '<div class="stat-card" style="padding:8px;"><div class="label">设备</div><div class="value" style="font-size:16px;">'+score.device.score+'</div></div>';
+  html += '<div class="stat-card" style="padding:8px;"><div class="label">学习</div><div class="value" style="font-size:16px;">'+score.study.score+'</div></div>';
+  html += '<div class="stat-card" style="padding:8px;"><div class="label">综合</div><div class="value" style="font-size:16px;">'+score.comprehensive.score+'</div></div>';
+  html += '<div class="stat-card" style="padding:8px;background:linear-gradient(135deg,#ff6f00,#ffa726);"><div class="label" style="color:#fff;">总分</div><div class="value" style="font-size:16px;color:#fff;">'+score.total+'</div></div>';
+  html += '</div>';
+  // 各项明细
+  html += '<h4 style="margin-bottom:8px;">📝 本月记录明细</h4>';
+  var hasRecords = false;
+  // 保养记录
+  if(appData.maintenanceRecords){
+    appData.maintenanceRecords.forEach(function(r){
+      if(r.operator === user.name && r.date && r.date.indexOf(monthPrefix) === 0){
+        hasRecords = true;
+        html += '<div class="list-item" style="border-bottom:1px solid #f0f0f0;padding:6px 0;"><div class="item-left"><div class="item-icon" style="background:#e3f2fd;">🔧</div><div><div class="item-title">'+r.device+'</div><div class="item-desc">'+r.date+' · '+r.type+'</div></div></div><div class="item-right"><span class="badge badge-green">+'+r.score+'</span></div></div>';
+      }
+    });
+  }
+  // 工作量记录
+  if(appData.workloadRecords){
+    appData.workloadRecords.forEach(function(r){
+      if(r.operator === user.name && r.date && r.date.indexOf(monthPrefix) === 0){
+        hasRecords = true;
+        html += '<div class="list-item" style="border-bottom:1px solid #f0f0f0;padding:6px 0;"><div class="item-left"><div class="item-icon" style="background:#e8f5e9;">📝</div><div><div class="item-title">'+r.type+' · '+r.samples+'样本</div><div class="item-desc">'+r.date+' · 审核'+r.audit+' 发布'+r.publish+'</div></div></div><div class="item-right"><span class="badge badge-green">+'+r.score+'</span></div></div>';
+      }
+    });
+  }
+  // 质控记录
+  if(appData.qcRecords){
+    appData.qcRecords.forEach(function(r){
+      if(r.operator === user.name && r.date && r.date.indexOf(monthPrefix) === 0){
+        hasRecords = true;
+        html += '<div class="list-item" style="border-bottom:1px solid #f0f0f0;padding:6px 0;"><div class="item-left"><div class="item-icon" style="background:#fff3e0;">📊</div><div><div class="item-title">质控: '+r.project+'</div><div class="item-desc">'+r.date+' · '+r.level+'</div></div></div><div class="item-right"><span class="badge badge-blue">+'+r.score+'</span></div></div>';
+      }
+    });
+  }
+  if(!hasRecords) html += '<div style="text-align:center;padding:15px;color:#999;">本月暂无记录</div>';
+  html += '</div></div>';
+  area.innerHTML = html;
+}
+// 加载分析
+function loadReportAnalysis(){
+  var container = document.getElementById('reportAnalysis');
+  if(!container) return;
+  var now = new Date();
+  var year = now.getFullYear();
+  var month = now.getMonth()+1;
+  var monthPrefix = year + '-' + String(month).padStart(2,'0');
+  var html = '<div class="card" style="margin-bottom:15px;">';
+  html += '<div class="card-header" style="background:linear-gradient(135deg,#2e7d32,#66bb6a);color:#fff;padding:12px 15px;font-weight:bold;border-radius:10px 10px 0 0;">📈 报表分析 ('+year+'年'+month+'月)</div>';
+  html += '<div style="padding:15px;">';
+  // 1. 每周趋势
+  var weekData = [0,0,0,0,0,0];
+  var weekMaint = [0,0,0,0,0,0];
+  var weekWorkload = [0,0,0,0,0,0];
+  function getWeek(d){ return Math.min(5, Math.floor((d-1)/7)); }
+  if(appData.maintenanceRecords){
+    appData.maintenanceRecords.forEach(function(r){
+      if(r.date && r.date.indexOf(monthPrefix) === 0){
+        var d = parseInt(r.date.split('-')[2]); var w = getWeek(d);
+        weekMaint[w]++; weekData[w] += (r.score||0);
+      }
+    });
+  }
+  if(appData.workloadRecords){
+    appData.workloadRecords.forEach(function(r){
+      if(r.date && r.date.indexOf(monthPrefix) === 0){
+        var d = parseInt(r.date.split('-')[2]); var w = getWeek(d);
+        weekWorkload[w]++; weekData[w] += (r.score||0);
+      }
+    });
+  }
+  html += '<h4 style="margin-bottom:10px;">📅 每周积分趋势</h4>';
+  html += '<div style="display:flex;align-items:flex-end;gap:6px;height:150px;padding:10px;background:#f8f9fa;border-radius:8px;margin-bottom:15px;">';
+  var maxScore = Math.max.apply(null, weekData) || 1;
+  for(var i=0;i<6;i++){
+    var h = Math.max(4, Math.round(weekData[i]/maxScore*120));
+    html += '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;">';
+    html += '<div style="font-size:10px;color:#666;margin-bottom:3px;">'+weekData[i]+'</div>';
+    html += '<div style="width:100%;background:linear-gradient(180deg,#42a5f5,#1976d2);border-radius:4px 4px 0 0;height:'+h+'px;min-height:4px;"></div>';
+    html += '<div style="font-size:10px;color:#999;margin-top:3px;">第'+(i+1)+'周</div></div>';
+  }
+  html += '</div>';
+  // 2. 类型占比
+  var totalAll = weekData.reduce(function(a,b){return a+b;}, 0);
+  var maintTotal = weekMaint.reduce(function(a,b){return a+b;}, 0);
+  var workTotal = weekWorkload.reduce(function(a,b){return a+b;}, 0);
+  if(totalAll > 0){
+    var maintPct = Math.round((maintTotal/totalAll)*100);
+    var workPct = 100 - maintPct;
+    html += '<h4 style="margin-bottom:10px;">📊 积分构成</h4>';
+    html += '<div style="background:#f8f9fa;border-radius:8px;padding:15px;margin-bottom:15px;">';
+    html += '<div style="display:flex;gap:10px;margin-bottom:10px;">';
+    html += '<div style="flex:1;text-align:center;background:#e3f2fd;border-radius:8px;padding:10px;"><div style="font-size:20px;font-weight:bold;color:#1976d2;">'+maintPct+'%</div><div style="font-size:11px;color:#666;">保养积分</div></div>';
+    html += '<div style="flex:1;text-align:center;background:#e8f5e9;border-radius:8px;padding:10px;"><div style="font-size:20px;font-weight:bold;color:#2e7d32;">'+workPct+'%</div><div style="font-size:11px;color:#666;">工作量积分</div></div>';
+    html += '</div><div style="display:flex;height:10px;border-radius:5px;overflow:hidden;">';
+    html += '<div style="width:'+maintPct+'%;background:#1976d2;"></div><div style="width:'+workPct+'%;background:#4caf50;"></div></div></div>';
+  }
+  // 3. 员工排名分析
+  html += '<h4 style="margin-bottom:10px;">🏆 员工排名分析</h4>';
+  var reports = generateMonthlyReport(year, month);
+  if(reports.length > 0){
+    var avg = Math.round(reports.reduce(function(a,r){return a+r.total;}, 0) / reports.length);
+    html += '<div style="background:#f8f9fa;border-radius:8px;padding:15px;margin-bottom:15px;">';
+    html += '<div style="display:flex;gap:10px;margin-bottom:10px;">';
+    html += '<div style="flex:1;text-align:center;background:#fff;border-radius:8px;padding:10px;border:1px solid #e0e0e0;"><div style="font-size:14px;font-weight:bold;color:#ff6f00;">🥇 '+reports[0].userName+'</div><div style="font-size:11px;color:#666;">第一名 '+reports[0].total+'分</div></div>';
+    html += '<div style="flex:1;text-align:center;background:#fff;border-radius:8px;padding:10px;border:1px solid #e0e0e0;"><div style="font-size:18px;font-weight:bold;color:#1976d2;">'+avg+'</div><div style="font-size:11px;color:#666;">平均分</div></div>';
+    html += '<div style="flex:1;text-align:center;background:#fff;border-radius:8px;padding:10px;border:1px solid #e0e0e0;"><div style="font-size:14px;font-weight:bold;color:#d32f2f;">'+reports[reports.length-1].userName+'</div><div style="font-size:11px;color:#666;">最后一名 '+reports[reports.length-1].total+'分</div></div>';
+    html += '</div>';
+    // 分析建议
+    var bottom = reports[reports.length-1];
+    if(bottom.total < avg * 0.6){
+      html += '<div style="background:#fff3e0;border-radius:8px;padding:10px;font-size:12px;color:#e65100;">⚠️ 建议：'+bottom.userName+'积分偏低（'+bottom.total+'分），建议加强工作指导和培训。</div>';
+    }
+    if(reports[0].total > avg * 1.5){
+      html += '<div style="background:#e8f5e9;border-radius:8px;padding:10px;font-size:12px;color:#2e7d32;margin-top:8px;">🏅 表扬：'+reports[0].userName+'表现优秀（'+reports[0].total+'分），建议给予表彰。</div>';
+    }
+    // 排名表格
+    html += '<table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:10px;">';
+    html += '<tr style="background:#f5f5f5;"><th style="padding:6px;border:1px solid #e0e0e0;">排名</th><th style="padding:6px;border:1px solid #e0e0e0;">姓名</th><th style="padding:6px;border:1px solid #e0e0e0;">角色</th><th style="padding:6px;border:1px solid #e0e0e0;">组别</th><th style="padding:6px;border:1px solid #e0e0e0;">质控</th><th style="padding:6px;border:1px solid #e0e0e0;">效率</th><th style="padding:6px;border:1px solid #e0e0e0;">设备</th><th style="padding:6px;border:1px solid #e0e0e0;">学习</th><th style="padding:6px;border:1px solid #e0e0e0;">综合</th><th style="padding:6px;border:1px solid #e0e0e0;">总分</th></tr>';
+    reports.forEach(function(r, idx){
+      var medal = idx===0?'🥇':(idx===1?'🥈':(idx===2?'🥉':''));
+      html += '<tr><td style="padding:6px;border:1px solid #e0e0e0;text-align:center;">'+(idx+1)+' '+medal+'</td><td style="padding:6px;border:1px solid #e0e0e0;font-weight:bold;">'+r.userName+'</td><td style="padding:6px;border:1px solid #e0e0e0;">'+r.role+'</td><td style="padding:6px;border:1px solid #e0e0e0;">'+(r.group||'')+'</td><td style="padding:6px;border:1px solid #e0e0e0;text-align:center;">'+r.scores.quality.score+'</td><td style="padding:6px;border:1px solid #e0e0e0;text-align:center;">'+r.scores.efficiency.score+'</td><td style="padding:6px;border:1px solid #e0e0e0;text-align:center;">'+r.scores.device.score+'</td><td style="padding:6px;border:1px solid #e0e0e0;text-align:center;">'+r.scores.study.score+'</td><td style="padding:6px;border:1px solid #e0e0e0;text-align:center;">'+r.scores.comprehensive.score+'</td><td style="padding:6px;border:1px solid #e0e0e0;text-align:center;font-weight:bold;color:#1976d2;">'+r.total+'</td></tr>';
+    });
+    html += '</table>';
+    html += '</div>';
+  } else {
+    html += '<div style="text-align:center;padding:15px;color:#999;">暂无数据</div>';
+  }
+  html += '</div></div>';
+  container.innerHTML = html;
+}
+// 加载导出
+function loadReportExport(){
+  var container = document.getElementById('reportExport');
+  if(!container) return;
+  var now = new Date();
+  var year = now.getFullYear();
+  var month = now.getMonth()+1;
+  var html = '<div class="card" style="margin-bottom:15px;">';
+  html += '<div class="card-header" style="background:linear-gradient(135deg,#e65100,#ff9800);color:#fff;padding:12px 15px;font-weight:bold;border-radius:10px 10px 0 0;">📥 导出报表 ('+year+'年'+month+'月)</div>';
+  html += '<div style="padding:15px;">';
+  html += '<div style="display:flex;flex-direction:column;gap:10px;">';
+  html += '<button class="action-btn action-btn-green" onclick="downloadMonthlyReport()" style="padding:12px;">📅 下载本月全部记录(CSV)</button>';
+  html += '<button class="action-btn action-btn-purple" onclick="downloadAllStaffReport()" style="padding:12px;">👥 下载全院员工报表(CSV)</button>';
+  html += '<button class="action-btn action-btn-blue" onclick="downloadPerformanceReport()" style="padding:12px;">🏆 下载绩效积分报表(CSV)</button>';
+  html += '</div>';
+  html += '<div style="margin-top:15px;background:#f5f5f5;border-radius:8px;padding:10px;font-size:12px;color:#666;">';
+  html += '💡 提示：导出的CSV文件可用Excel打开，方便打印和存档。';
+  html += '</div>';
+  html += '</div></div>';
+  container.innerHTML = html;
+}
+// 下载全院员工报表
+function downloadAllStaffReport(){
+  var now = new Date();
+  var year = now.getFullYear();
+  var month = now.getMonth()+1;
+  var monthPrefix = year + '-' + String(month).padStart(2,'0');
+  var reports = generateMonthlyReport(year, month);
+  if(reports.length === 0){ showToast('暂无数据','warning'); return; }
+  var rows = [['姓名','角色','组别','质控','效率','设备','学习','综合','总分','排名']];
+  reports.forEach(function(r, idx){
+    rows.push([r.userName, r.role, r.group||'', r.scores.quality.score, r.scores.efficiency.score, r.scores.device.score, r.scores.study.score, r.scores.comprehensive.score, r.total, idx+1]);
+  });
+  var csv = rows.map(function(row){ return row.join(','); }).join('\n');
+  var blob = new Blob(['﻿'+csv], {type:'text/csv;charset=utf-8;'});
+  var link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = year+'年'+month+'月_全院员工报表.csv';
+  link.click();
+  showToast('✅ 全院报表已导出');
+}
+// 下载绩效积分报表
+function downloadPerformanceReport(){
+  var now = new Date();
+  var year = now.getFullYear();
+  var month = now.getMonth()+1;
+  var reports = generateMonthlyReport(year, month);
+  if(reports.length === 0){ showToast('暂无数据','warning'); return; }
+  var rows = [['姓名','角色','组别','质控得分','效率得分','设备得分','学习得分','综合得分','总分']];
+  reports.forEach(function(r){
+    rows.push([r.userName, r.role, r.group||'', r.scores.quality.score, r.scores.efficiency.score, r.scores.device.score, r.scores.study.score, r.scores.comprehensive.score, r.total]);
+  });
+  var csv = rows.map(function(row){ return row.join(','); }).join('\n');
+  var blob = new Blob(['﻿'+csv], {type:'text/csv;charset=utf-8;'});
+  var link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = year+'年'+month+'月_绩效积分报表.csv';
+  link.click();
+  showToast('✅ 绩效积分报表已导出');
 }
 </script>
 </body>
