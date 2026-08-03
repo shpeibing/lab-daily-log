@@ -1447,7 +1447,7 @@ function checkWestgardRules(value, mean, sd){
 }
 function saveQc(){
   try{
-  addOperationLog('新增质控记录', '项目：'+document.getElementById('qcItem').value+'，结果：'+document.getElementById('qcValue').value);
+  addOperationLog('新增质控记录', '项目：'+document.getElementById('qProject').value+'，结果：'+document.getElementById('qValue').value);
 
   var project = document.getElementById('qProject').value;
   var level = document.getElementById('qLevel').value;
@@ -2698,6 +2698,45 @@ function editHandover(id){
   document.getElementById('modalOverlay').classList.add('active');
 }
 
+
+function saveHandoverEdit(id){
+  try{
+    var record = null;
+    for(var i=0;i<appData.handoverRecords.length;i++){
+      if(appData.handoverRecords[i].id === id){ record = appData.handoverRecords[i]; break; }
+    }
+    if(!record){ showToast('❌ 未找到该记录'); return; }
+    var shift = document.getElementById('hShift').value;
+    var equip = document.getElementById('hEquip').value;
+    var specimen = document.getElementById('hSpecimen').value;
+    var reagent = document.getElementById('hReagent').value;
+    var qc = document.getElementById('hQc').value;
+    var abnormal = document.getElementById('hAbnormal').value;
+    var hContentVal = document.getElementById('hContent').value;
+    var toUser = document.getElementById('hToUser').value;
+    var date = document.getElementById('hDate').value;
+    if(!equip && !specimen && !reagent && !qc && !hContentVal){ showToast('请至少填写一项交接内容'); return; }
+    if(!toUser){ showToast('请选择交接人'); return; }
+    if(date && date.indexOf('T') > -1){ date = date.replace('T', ' '); }
+    record.shift = shift;
+    record.equip = equip;
+    record.specimen = specimen;
+    record.reagent = reagent;
+    record.qc = qc;
+    record.abnormal = abnormal;
+    record.content = hContentVal;
+    record.toUser = toUser;
+    record.date = date;
+    saveData();
+    try{ loadHandover(); }catch(e){ console.error('刷新交接列表失败:', e); }
+    try{ addOperationLog('编辑交接班记录', currentUser.name+'编辑了交接记录'); }catch(e){}
+    try{ closeModal(); }catch(e){}
+    showToast('✅ 交接班记录已更新！');
+  }catch(e){
+    console.error('编辑交接班记录出错:', e);
+    showToast('⚠️ 保存失败: ' + e.message);
+  }
+}
 function confirmHandover(id){
   try{
     if(!currentUser){ showToast('⚠️ 请先登录'); return; }
@@ -4452,7 +4491,7 @@ function loadReportAnalysis(){
   var weekData = [0,0,0,0,0,0];
   var weekMaint = [0,0,0,0,0,0];
   var weekWorkload = [0,0,0,0,0,0];
-  function getWeek(d){ return Math.min(5, Math.floor((d-1)/7)); }
+  
   if(appData.maintenanceRecords){
     appData.maintenanceRecords.forEach(function(r){
       if(r.date && r.date.indexOf(monthPrefix) === 0){
