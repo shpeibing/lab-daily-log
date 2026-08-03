@@ -413,7 +413,7 @@ tr:nth-child(even){background:#fafafa;}
       <div id="reportAnalysis" style="display:none;"></div>
       <div id="reportExport" style="display:none;"></div>
     </div>
-    <div class="page" id="page-settings"><div class="page-title">⚙️ 系统设置 <span class="sub">管理配置中心</span></div><div class="tabs" id="settingsTabs"><div class="tab active" onclick="switchSettingsTab('staff',this)">员工管理</div><div class="tab" onclick="switchSettingsTab('device',this)">设备管理</div><div class="tab" onclick="switchSettingsTab('reagent',this)">试剂管理</div><div class="tab" onclick="switchSettingsTab('sop',this)">检验知识管理</div><div class="tab" onclick="switchSettingsTab('cloud',this)">☁️ 云端管理</div></div><div id="settingsStaff"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openStaffModal()">➕ 新增员工</button><button class="action-btn action-btn-purple" onclick="showToast('权限配置功能开发中')">🔐 权限配置</button></div><div class="search-bar"><input type="text" placeholder="搜索员工姓名/工号..." id="staffSearch" oninput="filterStaff()"></div><div id="staffList"></div></div><div id="settingsDevice" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openDeviceModal()">➕ 新增设备</button></div><div id="deviceList"></div></div><div id="settingsReagent" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openReagentModal()">➕ 新增试剂</button><button class="action-btn action-btn-green" onclick="openReagentInOutModal()">📦 出入库</button></div><div id="settingsReagentList"></div></div><div id="settingsCloud" style="display:none;"><div class="cloud-card"><div class="icon">☁️</div><div class="title">云端数据管理</div><div class="desc">上传数据到云端备份，或从云端下载恢复数据，多设备同步</div><div style="margin-top:10px;padding:10px;background:rgba(255,255,255,0.15);border-radius:8px;font-size:12px;text-align:left;"><div style="margin-bottom:6px;">📡 云端状态: <span id="cloudStatus">检测中...</span></div><div style="display:flex;gap:6px;margin-bottom:6px;"><input id="cloudApiKeyInput" type="password" placeholder="JSONBin API Key(可选)" style="flex:1;padding:6px;border:none;border-radius:4px;font-size:12px;background:rgba(255,255,255,0.9);color:#333;"><button class="btn" style="padding:6px 10px;font-size:12px;" onclick="saveCloudConfig()">保存</button></div><div style="font-size:11px;opacity:0.8;">💡 使用JSONBin免费API，无需注册即可使用，数据保留30天</div></div><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;"><button class="btn" onclick="uploadToCloud()">☁️ 上传到云端</button><button class="btn" onclick="downloadFromCloud()">📥 从云端下载</button></div><div style="margin-top:12px;font-size:12px;opacity:0.8;">💡 数据自动同步到JSONBin云端服务器，支持多设备访问</div></div><div class="cloud-status"><span class="dot offline" id="cloudStatusDot"></span><span id="cloudStatusText">未连接云端</span><span id="cloudVersionInfo" style="margin-left:10px;font-size:12px;color:var(--text-light);"></span></div><div style="margin-top:15px;"><h4 style="margin-bottom:10px;color:var(--text);">📋 数据统计</h4><div class="stats-grid"><div class="stat-card"><div class="label">员工数</div><div class="value" id="cloudStaffCount">0</div></div><div class="stat-card"><div class="label">设备数</div><div class="value" id="cloudDeviceCount">0</div></div><div class="stat-card"><div class="label">试剂数</div><div class="value" id="cloudReagentCount">0</div></div><div class="stat-card"><div class="label">试题数</div><div class="value" id="cloudExamCount">0</div></div></div></div></div><div id="settingsSop" style="display:none;"><div class="tabs" style="margin-bottom:10px;"><div class="tab active" onclick="switchSopSettingsTab('sop',this)">检验知识管理</div><div class="tab" onclick="switchSopSettingsTab('exam',this)">试题管理</div></div><div id="sopSettingsSop"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openSopManageModal()">➕ 新增知识</button></div><div id="sopManageList"></div></div><div id="sopSettingsExam" style="display:none;"><div class="tabs" style="margin-bottom:10px;"><div class="tab active" onclick="switchExamSubTab('questions',this)">📝 选择题</div><div class="tab" onclick="switchExamSubTab('pdf',this)">📄 PDF试题</div></div><div id="examSubQuestions"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openExamQuestionModal()">➕ 新增试题</button><button class="action-btn action-btn-green" onclick="downloadWordTemplate()">📄 下载Word模板</button></div><div id="examQuestionList"></div></div><div id="examSubPdf" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-green" onclick="openPdfUploadModal()">📄 上传PDF试题</button></div><div id="pdfQuestionList"></div></div></div></div></div>
+    <div class="page" id="page-settings"><div class="page-title">⚙️ 系统设置 <span class="sub">管理配置中心</span></div><div class="tabs" id="settingsTabs"><div class="tab active" onclick="switchSettingsTab('staff',this)">员工管理</div><div class="tab" onclick="switchSettingsTab('device',this)">设备管理</div><div class="tab" onclick="switchSettingsTab('reagent',this)">试剂管理</div><div class="tab" onclick="switchSettingsTab('sop',this)">检验知识管理</div><div class="tab" onclick="switchSettingsTab('cloud',this)">☁️ 云端管理</div></div><div id="settingsStaff"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openStaffModal()">➕ 新增员工</button><button class="action-btn action-btn-purple" onclick="showToast('权限配置功能开发中')">🔐 权限配置</button></div><div class="search-bar"><input type="text" placeholder="搜索员工姓名/工号..." id="staffSearch" oninput="filterStaff()"></div><div id="staffList"></div></div><div id="settingsDevice" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openDeviceModal()">➕ 新增设备</button></div><div id="deviceList"></div></div><div id="settingsReagent" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openReagentModal()">➕ 新增试剂</button><button class="action-btn action-btn-green" onclick="openReagentInOutModal()">📦 出入库</button></div><div id="settingsReagentList"></div></div><div id="settingsCloud" style="display:none;"><div class="cloud-card"><div class="icon">☁️</div><div class="title">云端数据管理</div><div class="desc">备份/恢复数据，支持多设备同步</div><div style="margin-top:10px;padding:10px;background:rgba(255,255,255,0.15);border-radius:8px;font-size:12px;text-align:left;"><div style="margin-bottom:6px;">📡 云端状态: <span id="cloudStatus">检测中...</span></div><div style="display:flex;gap:6px;margin-bottom:6px;"><input id="cloudApiKeyInput" type="password" placeholder="JSONBin API Key(可选)" style="flex:1;padding:6px;border:none;border-radius:4px;font-size:12px;background:rgba(255,255,255,0.9);color:#333;"><button class="btn" style="padding:6px 10px;font-size:12px;" onclick="saveCloudConfig()">保存</button></div><div style="font-size:11px;opacity:0.8;">💡 免费注册JSONBin获取API Key，数据永久保存</div></div><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:10px;"><button class="btn btn-primary" onclick="uploadToCloud()" style="padding:10px 20px;">☁️ 上传备份</button><button class="btn btn-success" onclick="downloadFromCloud()" style="padding:10px 20px;">📥 恢复数据</button><button class="btn btn-warning" onclick="exportAppData()" style="padding:10px 20px;">💾 导出数据</button><button class="btn btn-info" onclick="importAppData()" style="padding:10px 20px;">📂 导入数据</button></div><div style="margin-top:10px;font-size:12px;opacity:0.8;">💡 上传备份：数据保存到本地+云端；恢复数据：从本地或云端恢复；导出数据：下载JSON文件保存到电脑</div></div><div class="cloud-status" style="margin-top:12px;padding:10px;background:rgba(255,255,255,0.1);border-radius:8px;"><span class="dot offline" id="cloudStatusDot"></span><span id="cloudStatusText" style="margin-left:6px;">未连接云端</span><span id="cloudVersionInfo" style="margin-left:10px;font-size:12px;color:var(--text-light);"></span></div><div style="margin-top:15px;"><h4 style="margin-bottom:10px;color:var(--text);">📋 数据统计</h4><div class="stats-grid"><div class="stat-card"><div class="label">员工数</div><div class="value" id="cloudStaffCount">0</div></div><div class="stat-card"><div class="label">设备数</div><div class="value" id="cloudDeviceCount">0</div></div><div class="stat-card"><div class="label">试剂数</div><div class="value" id="cloudReagentCount">0</div></div><div class="stat-card"><div class="label">试题数</div><div class="value" id="cloudExamCount">0</div></div></div></div></div><div id="settingsSop" style="display:none;"><div class="tabs" style="margin-bottom:10px;"><div class="tab active" onclick="switchSopSettingsTab('sop',this)">检验知识管理</div><div class="tab" onclick="switchSopSettingsTab('exam',this)">试题管理</div></div><div id="sopSettingsSop"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openSopManageModal()">➕ 新增知识</button></div><div id="sopManageList"></div></div><div id="sopSettingsExam" style="display:none;"><div class="tabs" style="margin-bottom:10px;"><div class="tab active" onclick="switchExamSubTab('questions',this)">📝 选择题</div><div class="tab" onclick="switchExamSubTab('pdf',this)">📄 PDF试题</div></div><div id="examSubQuestions"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openExamQuestionModal()">➕ 新增试题</button><button class="action-btn action-btn-green" onclick="downloadWordTemplate()">📄 下载Word模板</button></div><div id="examQuestionList"></div></div><div id="examSubPdf" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-green" onclick="openPdfUploadModal()">📄 上传PDF试题</button></div><div id="pdfQuestionList"></div></div></div></div></div>
   </div>
 </div>
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)"><div class="modal" id="modalContent"></div></div>
@@ -654,26 +654,39 @@ function getOrCreateCloudBin(){
 function uploadToCloud(){
   try{
     if(currentUser.role !== '系统管理员'){ showToast('⚠️ 仅系统管理员可操作云端管理'); return; }
-    showToast('☁️ 正在上传到云端...');
+    showToast('☁️ 正在备份数据...');
     var dataStr = JSON.stringify(appData);
-    // 保存到本地
+    // 1. 保存到本地
     localStorage.setItem('labAppData', dataStr);
     localStorage.setItem('labAppData_cloud', dataStr);
     localStorage.setItem('cloudConnected', 'true');
     var now = new Date();
     var timeStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0') + ':' + String(now.getSeconds()).padStart(2,'0');
-    // 记录版本
+    // 2. 记录版本
     var versions = JSON.parse(localStorage.getItem('cloudVersions') || '[]');
-    versions.unshift({time: timeStr, size: dataStr.length, desc: '手动上传'});
+    versions.unshift({time: timeStr, size: dataStr.length, desc: '手动备份'});
     if(versions.length > 20) versions = versions.slice(0, 20);
     localStorage.setItem('cloudVersions', JSON.stringify(versions));
-    // 上传到云端 - 使用JSONBin免费API
-    var uploadSuccess = false;
+    localStorage.setItem('cloudLastUpload', timeStr);
+    // 3. 尝试JSONBin云端上传（不阻塞用户操作）
     var binId = localStorage.getItem('cloudBinId') || '';
     var apiKey = localStorage.getItem('cloudApiKey') || '';
-    // 如果没有binId，先创建
-    if(!binId){
-      // 创建新的Bin
+    if(binId){
+      var headers = {'Content-Type': 'application/json', 'X-Bin-Versioning': 'false'};
+      if(apiKey) headers['X-Master-Key'] = apiKey;
+      fetch('https://api.jsonbin.io/v3/b/' + binId, {
+        method: 'PUT', headers: headers, body: dataStr
+      }).then(function(r){ return r.json(); }).then(function(d){
+        if(d && d.metadata){
+          showToast('✅ 本地备份+云端同步成功！');
+        } else {
+          showToast('✅ 已保存到本地（云端同步需配置API Key）');
+        }
+      }).catch(function(e){
+        showToast('✅ 已保存到本地（云端离线）');
+      });
+    } else {
+      // 尝试创建新Bin
       fetch('https://api.jsonbin.io/v3/b', {
         method: 'POST',
         headers: {'Content-Type': 'application/json', 'X-Bin-Name': '检验科APP数据', 'X-Bin-Private': 'false'},
@@ -682,48 +695,18 @@ function uploadToCloud(){
         if(result && result.metadata && result.metadata.id){
           binId = result.metadata.id;
           localStorage.setItem('cloudBinId', binId);
-          localStorage.setItem('cloudConnected', 'true');
-          localStorage.setItem('cloudLastUpload', timeStr);
-          showToast('✅ 云端上传成功！Bin ID: ' + binId.substring(0,8) + '...');
-          uploadSuccess = true;
-          updateCloudStatus(timeStr, versions.length);
+          showToast('✅ 本地备份+云端同步成功！');
         } else {
-          showToast('⚠️ 云端创建失败，数据已保存到本地');
+          showToast('✅ 已保存到本地（云端创建失败，可配置API Key）');
         }
       }).catch(function(e){
-        console.error('JSONBin create error:', e);
-        showToast('⚠️ 云端连接失败，数据已保存到本地');
-      });
-    } else {
-      // 更新已有Bin
-      var headers = {'Content-Type': 'application/json', 'X-Bin-Versioning': 'false'};
-      if(apiKey) headers['X-Master-Key'] = apiKey;
-      fetch('https://api.jsonbin.io/v3/b/' + binId, {
-        method: 'PUT',
-        headers: headers,
-        body: dataStr
-      }).then(function(r){ return r.json(); }).then(function(d){
-        if(d && d.metadata){
-          localStorage.setItem('cloudConnected', 'true');
-          localStorage.setItem('cloudLastUpload', timeStr);
-          showToast('✅ 云端上传成功！');
-          uploadSuccess = true;
-          updateCloudStatus(timeStr, versions.length);
-        } else {
-          showToast('⚠️ 云端更新失败，数据已保存到本地');
-        }
-      }).catch(function(e){
-        console.error('JSONBin update error:', e);
-        showToast('⚠️ 云端连接失败，数据已保存到本地');
+        showToast('✅ 已保存到本地（云端不可用）');
       });
     }
-    // 延迟检查上传结果
-    setTimeout(function(){
-      if(!uploadSuccess){
-        showToast('✅ 数据已保存到本地，云端同步进行中...');
-      }
-      updateCloudStatus(timeStr, versions.length);
-    }, 3000);
+    // 4. 更新状态
+    updateCloudStatus(timeStr, versions.length);
+    if(typeof renderCloudVersions === 'function') renderCloudVersions();
+    if(typeof loadCloudData === 'function') loadCloudData();
   }catch(e){
     console.error('uploadToCloud error:', e);
     showToast('❌ 上传失败：' + e.message);
@@ -733,21 +716,26 @@ function uploadToCloud(){
 function downloadFromCloud(){
   try{
     if(currentUser.role !== '系统管理员'){ showToast('⚠️ 仅系统管理员可操作云端管理'); return; }
-    // 先从本地备份恢复
+    // 1. 优先从本地备份恢复
     var saved = localStorage.getItem('labAppData_cloud');
     if(saved){
       try{
-        appData = JSON.parse(saved);
-        saveData();
-        showToast('✅ 已从本地云端备份恢复');
-        if(typeof loadDashboard === 'function') loadDashboard();
-        if(typeof renderCloudVersions === 'function') renderCloudVersions();
-        return;
-      }catch(e){
-        showToast('❌ 本地备份数据损坏');
-      }
+        var data = JSON.parse(saved);
+        if(data && data.users){
+          if(confirm('确定从本地备份恢复数据吗？当前数据将被覆盖！')){
+            appData = data;
+            saveData();
+            showToast('✅ 已从本地备份恢复！共' + (data.users ? data.users.length : 0) + '名员工');
+            if(typeof loadDashboard === 'function') loadDashboard();
+            if(typeof renderCloudVersions === 'function') renderCloudVersions();
+            if(typeof loadSettings === 'function') loadSettings();
+            if(typeof loadCloudData === 'function') loadCloudData();
+          }
+          return;
+        }
+      }catch(e){ showToast('❌ 本地备份数据损坏'); }
     }
-    // 从JSONBin云端下载
+    // 2. 尝试从JSONBin云端下载
     var binId = localStorage.getItem('cloudBinId');
     var apiKey = localStorage.getItem('cloudApiKey') || '';
     if(binId){
@@ -755,44 +743,42 @@ function downloadFromCloud(){
       var headers = {};
       if(apiKey) headers['X-Master-Key'] = apiKey;
       fetch('https://api.jsonbin.io/v3/b/' + binId + '/latest', {
-        method: 'GET',
-        headers: headers
+        method: 'GET', headers: headers
       }).then(function(r){
         if(!r.ok) throw new Error('HTTP ' + r.status);
         return r.json();
       }).then(function(d){
         if(d && d.record){
           var cloudData = d.record;
-          // 合并数据（保留本地用户数据，覆盖其他数据）
-          var localUsers = appData.users;
-          appData = cloudData;
-          // 保留本地用户数据（避免覆盖新增用户）
-          if(localUsers && localUsers.length > 0){
-            // 合并用户
-            for(var ui=0; ui<localUsers.length; ui++){
-              var exists = false;
-              for(var ci=0; ci<appData.users.length; ci++){
-                if(appData.users[ci].id === localUsers[ui].id){ exists = true; break; }
+          if(confirm('确定从云端恢复数据吗？当前数据将被覆盖！')){
+            var localUsers = appData.users;
+            appData = cloudData;
+            if(localUsers && localUsers.length > 0){
+              for(var ui=0; ui<localUsers.length; ui++){
+                var exists = false;
+                for(var ci=0; ci<appData.users.length; ci++){
+                  if(appData.users[ci].id === localUsers[ui].id){ exists = true; break; }
+                }
+                if(!exists) appData.users.push(localUsers[ui]);
               }
-              if(!exists) appData.users.push(localUsers[ui]);
             }
+            localStorage.setItem('labAppData', JSON.stringify(appData));
+            localStorage.setItem('labAppData_cloud', JSON.stringify(appData));
+            localStorage.setItem('cloudConnected', 'true');
+            showToast('✅ 云端数据下载成功！共' + appData.users.length + '名员工');
+            if(typeof loadDashboard === 'function') loadDashboard();
+            if(typeof renderCloudVersions === 'function') renderCloudVersions();
+            if(typeof loadSettings === 'function') loadSettings();
+            if(typeof loadCloudData === 'function') loadCloudData();
           }
-          localStorage.setItem('labAppData', JSON.stringify(appData));
-          localStorage.setItem('labAppData_cloud', JSON.stringify(appData));
-          localStorage.setItem('cloudConnected', 'true');
-          showToast('✅ 云端数据下载成功！共' + appData.users.length + '名员工');
-          if(typeof loadDashboard === 'function') loadDashboard();
-          if(typeof renderCloudVersions === 'function') renderCloudVersions();
-          if(typeof loadSettings === 'function') loadSettings();
         } else {
           showToast('❌ 云端数据格式异常');
         }
       }).catch(function(e){
-        console.error('JSONBin download error:', e);
-        showToast('❌ 下载失败：' + e.message + '，请检查网络连接');
+        showToast('❌ 云端下载失败：' + e.message + '，请检查网络或配置API Key');
       });
     } else {
-      showToast('❌ 云端暂无备份数据，请先上传');
+      showToast('❌ 暂无云端备份，请先上传数据');
     }
   }catch(e){
     console.error('downloadFromCloud error:', e);
@@ -3380,6 +3366,60 @@ function restoreCloudVersion(idx){
     showToast('❌ 恢复失败：' + e.message);
   }
 }
+function exportAppData(){
+  try{
+    if(currentUser.role !== '系统管理员'){ showToast('⚠️ 仅系统管理员可操作'); return; }
+    var dataStr = JSON.stringify(appData, null, 2);
+    var blob = new Blob(['\ufeff' + dataStr], {type:'application/json;charset=utf-8;'});
+    var link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    var now = new Date();
+    var timeStr = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+    link.download = '检验科APP数据备份_'+timeStr+'.json';
+    link.click();
+    URL.revokeObjectURL(link.href);
+    showToast('✅ 数据已导出，请妥善保存JSON文件');
+  }catch(e){
+    showToast('❌ 导出失败：'+e.message);
+  }
+}
+function importAppData(){
+  try{
+    if(currentUser.role !== '系统管理员'){ showToast('⚠️ 仅系统管理员可操作'); return; }
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = function(e){
+      var file = e.target.files[0];
+      if(!file) return;
+      var reader = new FileReader();
+      reader.onload = function(ev){
+        try{
+          var data = JSON.parse(ev.target.result);
+          if(data && data.users){
+            if(confirm('确定导入该数据文件吗？当前数据将被覆盖！')){
+              appData = data;
+              saveData();
+              showToast('✅ 数据导入成功！共'+(data.users?data.users.length:0)+'名员工');
+              if(typeof loadDashboard === 'function') loadDashboard();
+              if(typeof loadSettings === 'function') loadSettings();
+              if(typeof loadCloudData === 'function') loadCloudData();
+            }
+          } else {
+            showToast('❌ 文件格式无效，请选择正确的备份文件');
+          }
+        }catch(e){
+          showToast('❌ 文件解析失败：'+e.message);
+        }
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  }catch(e){
+    showToast('❌ 导入失败：'+e.message);
+  }
+}
+
 // ===== 📄 Word模板下载功能 =====
 function downloadWordTemplate(){
   // 生成Word文档（HTML格式，Word可打开）
