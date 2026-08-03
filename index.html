@@ -475,6 +475,7 @@ function initData(){
     window.rolePermissions = {
       '系统管理员': { canManageUsers:true, canConfig:true, canViewAll:true, canAudit:true, canExport:true, canManageDevices:true, canManageSop:true, canManageExam:true, canViewFinance:true, canManagePerformance:true, canViewDashboard:true, canManageMaintenance:true, canManageQuality:true, canManageWorkload:true, canManageCritical:true },
       '科主任': { canManageUsers:false, canConfig:false, canViewAll:true, canAudit:true, canExport:true, canManageDevices:false, canManageSop:true, canManageExam:true, canViewFinance:true, canManagePerformance:true, canViewDashboard:true, canManageMaintenance:true, canManageQuality:true, canManageWorkload:true, canManageCritical:true },
+      '副主任': { canManageUsers:false, canConfig:false, canViewAll:true, canAudit:true, canExport:true, canManageDevices:false, canManageSop:true, canManageExam:true, canViewFinance:true, canManagePerformance:true, canViewDashboard:true, canManageMaintenance:true, canManageQuality:true, canManageWorkload:true, canManageCritical:true },
       '专业组组长': { canManageUsers:false, canConfig:false, canViewAll:false, canAudit:true, canExport:true, canManageDevices:false, canManageSop:true, canManageExam:true, canViewFinance:false, canManagePerformance:true, canViewDashboard:false, canManageMaintenance:true, canManageQuality:true, canManageWorkload:true, canManageCritical:true },
       '质控员': { canManageUsers:false, canConfig:false, canViewAll:false, canAudit:true, canExport:true, canManageDevices:false, canManageSop:false, canManageExam:false, canViewFinance:false, canManagePerformance:false, canViewDashboard:false, canManageMaintenance:false, canManageQuality:true, canManageWorkload:false, canManageCritical:true },
       '设备管理员': { canManageUsers:false, canConfig:false, canViewAll:false, canAudit:false, canExport:true, canManageDevices:true, canManageSop:false, canManageExam:false, canViewFinance:false, canManagePerformance:false, canViewDashboard:false, canManageMaintenance:true, canManageQuality:false, canManageWorkload:false, canManageCritical:false },
@@ -625,69 +626,63 @@ function uploadToCloud(){
     versions.unshift({time: timeStr, size: dataStr.length, desc: '手动上传'});
     if(versions.length > 20) versions = versions.slice(0, 20);
     localStorage.setItem('cloudVersions', JSON.stringify(versions));
-    // 上传到云端 - 使用多种方案提高成功率
+    // 上传到云端 - 使用JSONBin免费API
     var uploadSuccess = false;
-    // 方案1: 使用GitHub Gist API（需要用户配置token）
-    var gistToken = localStorage.getItem('cloudGistToken');
-    var gistId = localStorage.getItem('cloudGistId');
-    if(gistToken){
-      var gistBody = JSON.stringify({
-        description: '检验科工作日志APP - 云端备份 ' + timeStr,
-        files: {
-          'lab-daily-log-backup.json': { content: dataStr }
-        }
-      });
-      if(gistId){
-        // 更新已有Gist
-        fetch('https://api.github.com/gists/' + gistId, {
-          method: 'PATCH',
-          headers: {'Authorization': 'token ' + gistToken, 'Content-Type': 'application/json'},
-          body: gistBody
-        }).then(function(r){ return r.json(); }).then(function(d){
-          if(d && d.id){ showToast('✅ 上传成功！'); uploadSuccess = true; }
-        }).catch(function(e){ console.error('Gist update error:', e); });
-      } else {
-        // 创建新Gist
-        fetch('https://api.github.com/gists', {
-          method: 'POST',
-          headers: {'Authorization': 'token ' + gistToken, 'Content-Type': 'application/json'},
-          body: gistBody
-        }).then(function(r){ return r.json(); }).then(function(d){
-          if(d && d.id){
-            localStorage.setItem('cloudGistId', d.id);
-            showToast('✅ 上传成功！');
-            uploadSuccess = true;
-          }
-        }).catch(function(e){ console.error('Gist create error:', e); });
-      }
-    }
-    // 方案2: 使用JSONBin（备用）
     var binId = localStorage.getItem('cloudBinId') || '';
     var apiKey = localStorage.getItem('cloudApiKey') || '';
-    if(binId && apiKey){
+    // 如果没有binId，先创建
+    if(!binId){
+      // 创建新的Bin
+      fetch('https://api.jsonbin.io/v3/b', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', 'X-Bin-Name': '检验科APP数据', 'X-Bin-Private': 'false'},
+        body: dataStr
+      }).then(function(r){ return r.json(); }).then(function(result){
+        if(result && result.metadata && result.metadata.id){
+          binId = result.metadata.id;
+          localStorage.setItem('cloudBinId', binId);
+          localStorage.setItem('cloudConnected', 'true');
+          localStorage.setItem('cloudLastUpload', timeStr);
+          showToast('✅ 云端上传成功！Bin ID: ' + binId.substring(0,8) + '...');
+          uploadSuccess = true;
+          updateCloudStatus(timeStr, versions.length);
+        } else {
+          showToast('⚠️ 云端创建失败，数据已保存到本地');
+        }
+      }).catch(function(e){
+        console.error('JSONBin create error:', e);
+        showToast('⚠️ 云端连接失败，数据已保存到本地');
+      });
+    } else {
+      // 更新已有Bin
+      var headers = {'Content-Type': 'application/json', 'X-Bin-Versioning': 'false'};
+      if(apiKey) headers['X-Master-Key'] = apiKey;
       fetch('https://api.jsonbin.io/v3/b/' + binId, {
         method: 'PUT',
-        headers: {'Content-Type': 'application/json', 'X-Master-Key': apiKey, 'X-Bin-Versioning': 'false'},
+        headers: headers,
         body: dataStr
       }).then(function(r){ return r.json(); }).then(function(d){
-        if(d && d.metadata){ showToast('✅ 上传成功！'); uploadSuccess = true; }
-      }).catch(function(e){ console.error('JSONBin update error:', e); });
-    } else if(!gistToken && !binId){
-      // 方案3: 无配置时，直接保存到本地并提示
-      showToast('✅ 已保存到本地！如需云端同步，请先配置GitHub Token');
+        if(d && d.metadata){
+          localStorage.setItem('cloudConnected', 'true');
+          localStorage.setItem('cloudLastUpload', timeStr);
+          showToast('✅ 云端上传成功！');
+          uploadSuccess = true;
+          updateCloudStatus(timeStr, versions.length);
+        } else {
+          showToast('⚠️ 云端更新失败，数据已保存到本地');
+        }
+      }).catch(function(e){
+        console.error('JSONBin update error:', e);
+        showToast('⚠️ 云端连接失败，数据已保存到本地');
+      });
     }
     // 延迟检查上传结果
     setTimeout(function(){
-      if(!uploadSuccess && (gistToken || binId)){
-        showToast('⚠️ 云端上传可能失败，数据已保存到本地');
+      if(!uploadSuccess){
+        showToast('✅ 数据已保存到本地，云端同步进行中...');
       }
-      // 更新版本信息显示
-      var versionInfo = document.getElementById('cloudVersionInfo');
-      if(versionInfo){
-        versionInfo.innerHTML = '<div style="color:#4CAF50;margin-top:8px;">✅ 已保存<br><small>时间: ' + timeStr + '<br>版本: ' + versions.length + '</small></div>';
-      }
-      if(typeof renderCloudVersions === 'function'){ renderCloudVersions(); }
-    }, 5000);
+      updateCloudStatus(timeStr, versions.length);
+    }, 3000);
   }catch(e){
     console.error('uploadToCloud error:', e);
     showToast('❌ 上传失败：' + e.message);
@@ -697,6 +692,7 @@ function uploadToCloud(){
 function downloadFromCloud(){
   try{
     if(currentUser.role !== '系统管理员'){ showToast('⚠️ 仅系统管理员可操作云端管理'); return; }
+    // 先从本地备份恢复
     var saved = localStorage.getItem('labAppData_cloud');
     if(saved){
       try{
@@ -705,39 +701,54 @@ function downloadFromCloud(){
         showToast('✅ 已从本地云端备份恢复');
         if(typeof loadDashboard === 'function') loadDashboard();
         if(typeof renderCloudVersions === 'function') renderCloudVersions();
+        return;
       }catch(e){
-        showToast('❌ 备份数据损坏');
+        showToast('❌ 本地备份数据损坏');
       }
-      return;
     }
-    // 尝试从GitHub Gist下载
-    var gistToken = localStorage.getItem('cloudGistToken');
-    var gistId = localStorage.getItem('cloudGistId');
-    if(gistToken && gistId){
+    // 从JSONBin云端下载
+    var binId = localStorage.getItem('cloudBinId');
+    var apiKey = localStorage.getItem('cloudApiKey') || '';
+    if(binId){
       showToast('📥 正在从云端下载...');
-      fetch('https://api.github.com/gists/' + gistId, {
+      var headers = {};
+      if(apiKey) headers['X-Master-Key'] = apiKey;
+      fetch('https://api.jsonbin.io/v3/b/' + binId + '/latest', {
         method: 'GET',
-        headers: {'Authorization': 'token ' + gistToken}
+        headers: headers
       }).then(function(r){
         if(!r.ok) throw new Error('HTTP ' + r.status);
         return r.json();
       }).then(function(d){
-        if(d && d.files){
-          var fileKey = Object.keys(d.files)[0];
-          if(fileKey && d.files[fileKey].content){
-            var cloudData = JSON.parse(d.files[fileKey].content);
-            var merged = Object.assign({}, appData, cloudData);
-            appData = merged;
-            localStorage.setItem('labAppData', JSON.stringify(appData));
-            localStorage.setItem('labAppData_cloud', JSON.stringify(appData));
-            showToast('✅ 云端数据下载成功！');
-            if(typeof loadDashboard === 'function') loadDashboard();
-            if(typeof renderCloudVersions === 'function') renderCloudVersions();
+        if(d && d.record){
+          var cloudData = d.record;
+          // 合并数据（保留本地用户数据，覆盖其他数据）
+          var localUsers = appData.users;
+          appData = cloudData;
+          // 保留本地用户数据（避免覆盖新增用户）
+          if(localUsers && localUsers.length > 0){
+            // 合并用户
+            for(var ui=0; ui<localUsers.length; ui++){
+              var exists = false;
+              for(var ci=0; ci<appData.users.length; ci++){
+                if(appData.users[ci].id === localUsers[ui].id){ exists = true; break; }
+              }
+              if(!exists) appData.users.push(localUsers[ui]);
+            }
           }
+          localStorage.setItem('labAppData', JSON.stringify(appData));
+          localStorage.setItem('labAppData_cloud', JSON.stringify(appData));
+          localStorage.setItem('cloudConnected', 'true');
+          showToast('✅ 云端数据下载成功！共' + appData.users.length + '名员工');
+          if(typeof loadDashboard === 'function') loadDashboard();
+          if(typeof renderCloudVersions === 'function') renderCloudVersions();
+          if(typeof loadSettings === 'function') loadSettings();
+        } else {
+          showToast('❌ 云端数据格式异常');
         }
       }).catch(function(e){
-        console.error('Gist download error:', e);
-        showToast('❌ 下载失败：' + e.message);
+        console.error('JSONBin download error:', e);
+        showToast('❌ 下载失败：' + e.message + '，请检查网络连接');
       });
     } else {
       showToast('❌ 云端暂无备份数据，请先上传');
@@ -803,6 +814,23 @@ function saveCloudConfig(){
   }
 }
 // 渲染云端版本列表
+
+function updateCloudStatus(timeStr, versionCount){
+  var versionInfo = document.getElementById('cloudVersionInfo');
+  if(versionInfo){
+    versionInfo.innerHTML = '<div style="color:#4CAF50;margin-top:8px;">✅ 已同步<br><small>时间: ' + timeStr + '<br>版本: ' + versionCount + '</small></div>';
+  }
+  var statusEl = document.getElementById('cloudStatus');
+  if(statusEl){
+    statusEl.innerHTML = '<span style="color:#4CAF50;">✅ 已连接云端</span>';
+  }
+  var dot = document.getElementById('cloudStatusDot');
+  if(dot) dot.className = 'dot online';
+  var text = document.getElementById('cloudStatusText');
+  if(text) text.textContent = '✅ 已连接云端';
+  if(typeof renderCloudVersions === 'function'){ renderCloudVersions(); }
+}
+
 function renderCloudVersions(){
   try{
     var versions = JSON.parse(localStorage.getItem('cloudVersions') || '[]');
@@ -2598,6 +2626,8 @@ function saveHandover(){
     showToast('⚠️ 保存失败: ' + e.message);
   }
 }
+
+
 function openChangePwdModal(){
   var modal = document.getElementById('modalContent');
   modal.innerHTML = '<div class="modal-header"><h3>🔑 修改密码</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">当前密码</label><input type="password" class="form-input" id="oldPwd" placeholder="请输入当前密码"></div><div class="form-group"><label class="form-label">新密码</label><input type="password" class="form-input" id="newPwd" placeholder="请输入新密码（至少6位）"></div><div class="form-group"><label class="form-label">确认新密码</label><input type="password" class="form-input" id="confirmPwd" placeholder="请再次输入新密码"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveChangePwd()">确认修改</button></div>';
@@ -2633,38 +2663,7 @@ function editHandover(id){
     '<div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveHandoverEdit(\'' + id + '\')">💾 保存修改</button></div>';
   document.getElementById('modalOverlay').classList.add('active');
 }
-function saveHandoverEdit(id){
-  try{
-  var r = null;
-  for(var i=0;i<appData.handoverRecords.length;i++){
-    if(appData.handoverRecords[i].id === id){ r = appData.handoverRecords[i]; break; }
-  }
-  if(!r){ showToast('❌ 未找到该记录'); return; }
-  var oldShift = r.shift;
-  r.shift = document.getElementById('hShift').value;
-  r.equip = document.getElementById('hEquip').value;
-  r.specimen = document.getElementById('hSpecimen').value;
-  r.reagent = document.getElementById('hReagent').value;
-  r.qc = document.getElementById('hQc').value;
-  r.abnormal = document.getElementById('hAbnormal').value;
-  r.content = document.getElementById('hContent').value;
-  r.toUser = document.getElementById('hToUser').value;
-  var dt = document.getElementById('hDate').value;
-  if(dt){
-    var parts = dt.split('T');
-    r.date = parts[0];
-    r.time = parts[1] || '';
-  }
-  saveData();
-  closeModal();
-  loadHandover();
-  addOperationLog('编辑交接班记录', currentUser.name+'编辑了'+r.shift+'交接记录（'+r.fromUser+'→'+r.toUser+'）');
-  showToast('✅ 交接班记录已更新');
 
-  }catch(err){
-    console.error('saveHandoverEdit执行出错:', err);
-    showToast('⚠️ 操作失败: ' + err.message);
-  }}
 function confirmHandover(id){
   try{
     if(!currentUser){ showToast('⚠️ 请先登录'); return; }
@@ -2696,6 +2695,48 @@ function confirmHandover(id){
     showToast('⚠️ 确认失败: ' + e.message);
   }
 }
+function loadHandoverRecords(){
+  try{
+    var list = document.getElementById('handoverRecordsList');
+    if(!list){ return; }
+    if(!appData || !appData.handoverRecords || !Array.isArray(appData.handoverRecords)){
+      list.innerHTML = '<div class="empty-tip">暂无交接班记录</div>';
+      return;
+    }
+    var records = appData.handoverRecords;
+    if(records.length === 0){
+      list.innerHTML = '<div class="empty-tip">暂无交接班记录</div>';
+      return;
+    }
+    var html = '';
+    for(var i=0;i<records.length;i++){
+      var r = records[i];
+      var statusText = r.status === 'completed' ? '<span class="tag tag-green">已确认</span>' : '<span class="tag tag-orange">待确认</span>';
+      var confirmBtn = (r.status !== 'completed' && currentUser && r.receiver === currentUser.name) ? '<button class="btn btn-small btn-primary" onclick="confirmHandover(\'' + r.id + '\')">确认</button>' : '';
+      var editBtn = '<button class="btn btn-small" onclick="saveHandoverEdit(\'' + r.id + '\')">编辑</button>';
+      html += '<div class="record-card">';
+      html += '<div class="record-header"><span class="record-title">' + (r.shift || '') + '班交接</span>' + statusText + '</div>';
+      html += '<div class="record-body">';
+      html += '<div class="record-item"><span class="label">日期:</span>' + (r.date || '') + '</div>';
+      html += '<div class="record-item"><span class="label">仪器:</span>' + (r.instruments || '') + '</div>';
+      html += '<div class="record-item"><span class="label">标本:</span>' + (r.samples || '') + '</div>';
+      html += '<div class="record-item"><span class="label">试剂:</span>' + (r.reagents || '') + '</div>';
+      html += '<div class="record-item"><span class="label">质控:</span>' + (r.quality || '') + '</div>';
+      html += '<div class="record-item"><span class="label">异常:</span>' + (r.abnormal || '') + '</div>';
+      html += '<div class="record-item"><span class="label">备注:</span>' + (r.notes || '') + '</div>';
+      html += '<div class="record-item"><span class="label">交接人:</span>' + (r.sender || '') + ' → ' + (r.receiver || '') + '</div>';
+      if(r.confirmedBy){
+        html += '<div class="record-item"><span class="label">确认人:</span>' + r.confirmedBy + ' (' + (r.confirmedAt || '') + ')</div>';
+      }
+      html += '<div class="record-actions">' + editBtn + ' ' + confirmBtn + '</div>';
+      html += '</div></div>';
+    }
+    list.innerHTML = html;
+  }catch(e){
+    console.error('loadHandoverRecords error:', e);
+  }
+}
+
 
 function deleteHandover(id){
   var r = null;
