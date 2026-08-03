@@ -254,6 +254,9 @@ tr:nth-child(even){background:#fafafa;}
     </div>
     <div class="login-options">
       <label class="login-remember"><input type="checkbox" id="rememberMe"> 记住密码</label>
+                <label>GitHub Token（推荐）</label>
+                <input type="password" id="cloudGistTokenInput" placeholder="输入GitHub Personal Token" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;margin-bottom:5px;">
+                <div style="font-size:12px;color:#666;margin-bottom:10px;">🔑 在GitHub Settings → Developer settings → Personal access tokens 创建，勾选 gist 权限</div>
       <span class="login-forgot" onclick="showToast('请联系系统管理员重置密码')">忘记密码？</span>
     </div>
     <button class="btn btn-primary" onclick="handleLogin()" id="loginBtn">登 录</button>
@@ -622,60 +625,69 @@ function uploadToCloud(){
     versions.unshift({time: timeStr, size: dataStr.length, desc: '手动上传'});
     if(versions.length > 20) versions = versions.slice(0, 20);
     localStorage.setItem('cloudVersions', JSON.stringify(versions));
-    // 真正上传到云端 - 使用JSONBin免费API
-    // 使用公开的JSONBin bin ID（如果已配置）
+    // 上传到云端 - 使用多种方案提高成功率
+    var uploadSuccess = false;
+    // 方案1: 使用GitHub Gist API（需要用户配置token）
+    var gistToken = localStorage.getItem('cloudGistToken');
+    var gistId = localStorage.getItem('cloudGistId');
+    if(gistToken){
+      var gistBody = JSON.stringify({
+        description: '检验科工作日志APP - 云端备份 ' + timeStr,
+        files: {
+          'lab-daily-log-backup.json': { content: dataStr }
+        }
+      });
+      if(gistId){
+        // 更新已有Gist
+        fetch('https://api.github.com/gists/' + gistId, {
+          method: 'PATCH',
+          headers: {'Authorization': 'token ' + gistToken, 'Content-Type': 'application/json'},
+          body: gistBody
+        }).then(function(r){ return r.json(); }).then(function(d){
+          if(d && d.id){ showToast('✅ 上传成功！'); uploadSuccess = true; }
+        }).catch(function(e){ console.error('Gist update error:', e); });
+      } else {
+        // 创建新Gist
+        fetch('https://api.github.com/gists', {
+          method: 'POST',
+          headers: {'Authorization': 'token ' + gistToken, 'Content-Type': 'application/json'},
+          body: gistBody
+        }).then(function(r){ return r.json(); }).then(function(d){
+          if(d && d.id){
+            localStorage.setItem('cloudGistId', d.id);
+            showToast('✅ 上传成功！');
+            uploadSuccess = true;
+          }
+        }).catch(function(e){ console.error('Gist create error:', e); });
+      }
+    }
+    // 方案2: 使用JSONBin（备用）
     var binId = localStorage.getItem('cloudBinId') || '';
     var apiKey = localStorage.getItem('cloudApiKey') || '';
-    var uploadPromise;
     if(binId && apiKey){
-      // 更新已有bin
-      uploadPromise = fetch('https://api.jsonbin.io/v3/b/' + binId, {
+      fetch('https://api.jsonbin.io/v3/b/' + binId, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Master-Key': apiKey,
-          'X-Bin-Versioning': 'false'
-        },
+        headers: {'Content-Type': 'application/json', 'X-Master-Key': apiKey, 'X-Bin-Versioning': 'false'},
         body: dataStr
-      }).then(function(resp){ return resp.json(); });
-    } else {
-      // 创建新bin（匿名，30天有效）
-      uploadPromise = fetch('https://api.jsonbin.io/v3/b', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Bin-Private': 'false',
-          'X-Bin-Name': 'lab-daily-log-' + timeStr
-        },
-        body: dataStr
-      }).then(function(resp){ return resp.json(); });
+      }).then(function(r){ return r.json(); }).then(function(d){
+        if(d && d.metadata){ showToast('✅ 上传成功！'); uploadSuccess = true; }
+      }).catch(function(e){ console.error('JSONBin update error:', e); });
+    } else if(!gistToken && !binId){
+      // 方案3: 无配置时，直接保存到本地并提示
+      showToast('✅ 已保存到本地！如需云端同步，请先配置GitHub Token');
     }
-    uploadPromise.then(function(data){
-      if(data && data.metadata){
-        var newBinId = data.metadata.id;
-        if(newBinId){
-          localStorage.setItem('cloudBinId', newBinId);
-          // 保存分享链接
-          var shareUrl = 'https://api.jsonbin.io/v3/b/' + newBinId + '/latest';
-          localStorage.setItem('cloudShareUrl', shareUrl);
-          showToast('✅ 上传成功！云端ID: ' + newBinId.substring(0,8) + '...');
-          // 更新版本信息显示
-          var versionInfo = document.getElementById('cloudVersionInfo');
-          if(versionInfo){
-            versionInfo.innerHTML = '<div style="color:#4CAF50;margin-top:8px;">✅ 已同步至云端<br><small>云端ID: ' + newBinId.substring(0,12) + '...<br>时间: ' + timeStr + '</small></div>';
-          }
-        }
-      } else {
-        showToast('⚠️ 已保存到本地（云端可能需要配置API Key）');
+    // 延迟检查上传结果
+    setTimeout(function(){
+      if(!uploadSuccess && (gistToken || binId)){
+        showToast('⚠️ 云端上传可能失败，数据已保存到本地');
       }
-    }).catch(function(e){
-      console.error('Cloud upload error:', e);
-      showToast('⚠️ 已保存到本地，云端上传失败');
-    });
-    // 同时更新版本列表显示
-    if(typeof renderCloudVersions === 'function'){
-      renderCloudVersions();
-    }
+      // 更新版本信息显示
+      var versionInfo = document.getElementById('cloudVersionInfo');
+      if(versionInfo){
+        versionInfo.innerHTML = '<div style="color:#4CAF50;margin-top:8px;">✅ 已保存<br><small>时间: ' + timeStr + '<br>版本: ' + versions.length + '</small></div>';
+      }
+      if(typeof renderCloudVersions === 'function'){ renderCloudVersions(); }
+    }, 5000);
   }catch(e){
     console.error('uploadToCloud error:', e);
     showToast('❌ 上传失败：' + e.message);
@@ -685,60 +697,51 @@ function uploadToCloud(){
 function downloadFromCloud(){
   try{
     if(currentUser.role !== '系统管理员'){ showToast('⚠️ 仅系统管理员可操作云端管理'); return; }
-    var binId = localStorage.getItem('cloudBinId');
-    if(!binId){
-      // 尝试从本地备份恢复
-      var saved = localStorage.getItem('labAppData_cloud');
-      if(saved){
-        try{
-          appData = JSON.parse(saved);
-          saveData();
-          showToast('✅ 已从本地云端备份恢复');
-        }catch(e){
-          showToast('❌ 备份数据损坏');
-        }
-      } else {
-        showToast('❌ 云端暂无备份数据，请先上传');
+    var saved = localStorage.getItem('labAppData_cloud');
+    if(saved){
+      try{
+        appData = JSON.parse(saved);
+        saveData();
+        showToast('✅ 已从本地云端备份恢复');
+        if(typeof loadDashboard === 'function') loadDashboard();
+        if(typeof renderCloudVersions === 'function') renderCloudVersions();
+      }catch(e){
+        showToast('❌ 备份数据损坏');
       }
       return;
     }
-    showToast('📥 正在从云端下载...');
-    var apiKey = localStorage.getItem('cloudApiKey') || '';
-    var headers = {'Content-Type': 'application/json'};
-    if(apiKey) headers['X-Master-Key'] = apiKey;
-    fetch('https://api.jsonbin.io/v3/b/' + binId + '/latest', {
-      method: 'GET',
-      headers: headers
-    }).then(function(resp){
-      if(!resp.ok) throw new Error('HTTP ' + resp.status);
-      return resp.json();
-    }).then(function(data){
-      var cloudData = data.record || data;
-      if(cloudData && typeof cloudData === 'object'){
-        // 合并数据
-        var merged = Object.assign({}, appData, cloudData);
-        appData = merged;
-        // 保存到本地
-        localStorage.setItem('labAppData', JSON.stringify(appData));
-        localStorage.setItem('labAppData_cloud', JSON.stringify(appData));
-        // 记录版本
-        var now = new Date();
-        var timeStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-        var versions = JSON.parse(localStorage.getItem('cloudVersions') || '[]');
-        versions.unshift({time: timeStr, size: JSON.stringify(appData).length, desc: '从云端下载'});
-        if(versions.length > 20) versions = versions.slice(0, 20);
-        localStorage.setItem('cloudVersions', JSON.stringify(versions));
-        showToast('✅ 云端数据下载成功！');
-        // 刷新界面
-        if(typeof loadDashboard === 'function') loadDashboard();
-        if(typeof renderCloudVersions === 'function') renderCloudVersions();
-      } else {
-        showToast('❌ 云端数据格式错误');
-      }
-    }).catch(function(e){
-      console.error('Cloud download error:', e);
-      showToast('❌ 下载失败：' + e.message);
-    });
+    // 尝试从GitHub Gist下载
+    var gistToken = localStorage.getItem('cloudGistToken');
+    var gistId = localStorage.getItem('cloudGistId');
+    if(gistToken && gistId){
+      showToast('📥 正在从云端下载...');
+      fetch('https://api.github.com/gists/' + gistId, {
+        method: 'GET',
+        headers: {'Authorization': 'token ' + gistToken}
+      }).then(function(r){
+        if(!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      }).then(function(d){
+        if(d && d.files){
+          var fileKey = Object.keys(d.files)[0];
+          if(fileKey && d.files[fileKey].content){
+            var cloudData = JSON.parse(d.files[fileKey].content);
+            var merged = Object.assign({}, appData, cloudData);
+            appData = merged;
+            localStorage.setItem('labAppData', JSON.stringify(appData));
+            localStorage.setItem('labAppData_cloud', JSON.stringify(appData));
+            showToast('✅ 云端数据下载成功！');
+            if(typeof loadDashboard === 'function') loadDashboard();
+            if(typeof renderCloudVersions === 'function') renderCloudVersions();
+          }
+        }
+      }).catch(function(e){
+        console.error('Gist download error:', e);
+        showToast('❌ 下载失败：' + e.message);
+      });
+    } else {
+      showToast('❌ 云端暂无备份数据，请先上传');
+    }
   }catch(e){
     console.error('downloadFromCloud error:', e);
     showToast('❌ 下载失败：' + e.message);
@@ -751,26 +754,37 @@ function autoSyncToCloud(){
     localStorage.setItem('labAppData', dataStr);
     localStorage.setItem('labAppData_cloud', dataStr);
     localStorage.setItem('cloudConnected', 'true');
-    // 自动同步到JSONBin云端（如果已配置binId）
-    var binId = localStorage.getItem('cloudBinId');
-    if(binId){
-      var apiKey = localStorage.getItem('cloudApiKey') || '';
-      var headers = {'Content-Type': 'application/json'};
-      if(apiKey) headers['X-Master-Key'] = apiKey;
-      // 使用防抖，避免频繁请求
-      if(window._cloudSyncTimer) clearTimeout(window._cloudSyncTimer);
-      window._cloudSyncTimer = setTimeout(function(){
+    // 自动同步到云端（使用防抖，避免频繁请求）
+    if(window._cloudSyncTimer) clearTimeout(window._cloudSyncTimer);
+    window._cloudSyncTimer = setTimeout(function(){
+      // 方案1: GitHub Gist
+      var gistToken = localStorage.getItem('cloudGistToken');
+      var gistId = localStorage.getItem('cloudGistId');
+      if(gistToken && gistId){
+        var gistBody = JSON.stringify({
+          files: { 'lab-daily-log-backup.json': { content: dataStr } }
+        });
+        fetch('https://api.github.com/gists/' + gistId, {
+          method: 'PATCH',
+          headers: {'Authorization': 'token ' + gistToken, 'Content-Type': 'application/json'},
+          body: gistBody
+        }).then(function(r){ return r.json(); }).then(function(d){
+          console.log('Cloud auto-sync OK via Gist');
+        }).catch(function(e){ console.error('Gist auto-sync failed:', e); });
+      }
+      // 方案2: JSONBin（备用）
+      var binId = localStorage.getItem('cloudBinId');
+      var apiKey = localStorage.getItem('cloudApiKey');
+      if(binId && apiKey){
         fetch('https://api.jsonbin.io/v3/b/' + binId, {
           method: 'PUT',
-          headers: headers,
+          headers: {'Content-Type': 'application/json', 'X-Master-Key': apiKey, 'X-Bin-Versioning': 'false'},
           body: dataStr
-        }).then(function(resp){ return resp.json(); }).then(function(data){
-          console.log('Cloud auto-sync OK');
-        }).catch(function(e){
-          console.error('Cloud auto-sync failed:', e);
-        });
-      }, 3000);
-    }
+        }).then(function(r){ return r.json(); }).then(function(d){
+          console.log('Cloud auto-sync OK via JSONBin');
+        }).catch(function(e){ console.error('JSONBin auto-sync failed:', e); });
+      }
+    }, 3000);
   }catch(e){
     console.error('autoSyncToCloud error:', e);
   }
