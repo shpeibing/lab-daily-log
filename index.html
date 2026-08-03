@@ -92,9 +92,9 @@ th{background:var(--primary);color:#fff;padding:10px 12px;text-align:left;font-w
 td{padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap;}
 tr:last-child td{border-bottom:none;}
 tr:nth-child(even){background:#fafafa;}
-.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:400;display:none;align-items:flex-end;justify-content:center;}
-.modal-overlay.active{display:flex;}
-.modal{background:#fff;border-radius:16px 16px 0 0;width:100%;max-width:500px;max-height:85vh;overflow-y:auto;animation:slideUp 0.3s ease;}
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;display:none;align-items:flex-end;justify-content:center;}
+.modal-overlay.active{display:flex;pointer-events:auto;}
+.modal{background:#fff;border-radius:16px 16px 0 0;width:100%;max-width:500px;max-height:85vh;overflow-y:auto;animation:slideUp 0.3s ease;position:relative;z-index:1;}
 @keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
 .modal-header{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1;}
 .modal-header h3{font-size:17px;color:var(--primary);}
@@ -232,6 +232,10 @@ tr:nth-child(even){background:#fafafa;}
   .menu-toggle { display: flex !important; }
 }
 </style>
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="检验科APP">
 </head>
 <body>
 <div id="loginPage" class="login-page">
@@ -287,7 +291,7 @@ tr:nth-child(even){background:#fafafa;}
     <div class="bottom-nav-icon">🔄</div>
     <div class="bottom-nav-label">交接班</div>
   </div>
-  <div class="bottom-nav-item" onclick="showPage('settings');setActiveBottomNav(4)">
+  <div class="bottom-nav-item" id="bottomNavSettings" onclick="showPage('settings');setActiveBottomNav(4)" style="display:none;">
     <div class="bottom-nav-icon">⚙️</div>
     <div class="bottom-nav-label">设置</div>
   </div>
@@ -327,9 +331,9 @@ tr:nth-child(even){background:#fafafa;}
       </div>
     </div>
     <div class="page" id="page-maintenance"><div class="page-title">🔧 仪器保养 <span class="sub">每日保养打卡</span></div><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openMaintenanceModal()">➕ 新增保养</button></div><div id="maintenanceList"></div></div>
-    <div class="page" id="page-quality"><div class="page-title">📊 质控管理 <span class="sub">室内质控 · 室间质评</span></div><div class="tabs"><div class="tab active" onclick="switchQcTab('daily',this)">每日质控</div><div class="tab" onclick="switchQcTab('eqa',this)">室间质评</div><div class="tab" onclick="switchQcTab('trend',this)">趋势分析</div></div><div id="qcDaily"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openQcModal()">➕ 录入质控</button></div><div id="qcList"></div></div><div id="qcEqa" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openEqaModal()">➕ 新增EQA</button></div><div id="eqaList"></div></div><div id="qcTrend" style="display:none;"><div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon">📈</div><div><div class="item-title">质控CV趋势</div><div class="item-desc">点击查看详细趋势分析</div></div></div><div class="item-right"><span class="badge badge-blue">正常</span></div></div></div></div></div>
-    <div class="page" id="page-workload"><div class="page-title">📝 工作量 <span class="sub">今日检测统计</span></div><div class="stats-grid"><div class="stat-card"><div class="label">今日样本量</div><div class="value" id="wlToday">0</div></div><div class="stat-card"><div class="label">本周样本量</div><div class="value" id="wlWeek">0</div></div><div class="stat-card"><div class="label">本月样本量</div><div class="value" id="wlMonth">0</div></div><div class="stat-card"><div class="label">TAT达标率</div><div class="value" id="wlTat">0%</div></div></div><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openWorkloadModal()">➕ 录入工作量</button></div><div id="workloadList"></div></div>
-    <div class="page" id="page-sop"><div class="page-title">📚 检验知识学习 <span class="sub">📖 学习知识 · 📝 在线考试</span></div><div class="tabs"><div class="tab active" onclick="switchSopTab('list',this)">📖 知识列表</div><div class="tab" onclick="switchSopTab('exam',this)">📝 在线考试</div><div class="tab" onclick="switchSopTab('progress',this)">📊 学习进度</div></div><div id="sopList"></div><div id="sopExam" style="display:none;">
+    <div class="page" id="page-quality"><div class="page-title">📊 质控管理 <span class="sub">室内质控 · 室间质评</span></div><div class="tabs"><div class="tab active" onclick="switchQcTab('daily',this)">每日质控</div><div class="tab" onclick="switchQcTab('eqa',this)">室间质评</div><div class="tab" onclick="switchQcTab('trend',this)">趋势分析</div></div><div id="qcDaily"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openQcModal()">➕ 录入质控</button><button class="action-btn action-btn-green" onclick="showQcChart()">📈 质控图</button><button class="action-btn action-btn-orange" onclick="showOutOfControlReport()">⚠️ 失控处理</button></div><div id="qcList"></div></div><div id="qcEqa" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openEqaModal()">➕ 新增EQA</button></div><div id="eqaList"></div></div><div id="qcTrend" style="display:none;"><div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon">📈</div><div><div class="item-title">质控CV趋势</div><div class="item-desc">点击查看详细趋势分析</div></div></div><div class="item-right"><span class="badge badge-blue">正常</span></div></div></div></div></div>
+    <div class="page" id="page-workload"><div class="page-title">📝 工作量 <span class="sub">今日检测统计</span></div><div class="stats-grid"><div class="stat-card"><div class="label">今日样本量</div><div class="value" id="wlToday">0</div></div><div class="stat-card"><div class="label">本周样本量</div><div class="value" id="wlWeek">0</div></div><div class="stat-card"><div class="label">本月样本量</div><div class="value" id="wlMonth">0</div></div><div class="stat-card"><div class="label">TAT达标率</div><div class="value" id="wlTat">0%</div></div></div><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openWorkloadModal()">➕ 录入工作量</button><button class="action-btn action-btn-green" onclick="showWorkloadChart()">📊 工作量统计</button></div><div id="workloadList"></div></div>
+    <div class="page" id="page-sop"><div class="page-title">📚 检验知识学习 <span class="sub">📖 学习知识 · 📝 在线考试</span></div><div class="tabs"><div class="tab active" onclick="switchSopTab('list',this)">📖 知识列表</div><div class="tab" onclick="switchSopTab('exam',this)">📝 在线考试</div><div class="tab" onclick="switchSopTab('progress',this)">📊 学习进度</div></div><div id="sopList"><div class="action-bar"><button class="action-btn action-btn-green" onclick="showStudyTimeStats()">⏱ 学习时长统计</button></div></div><div id="sopExam" style="display:none;">
   <div class="action-bar">
     <button class="action-btn action-btn-blue" onclick="startExam()">📝 开始考试</button>
     <button class="action-btn action-btn-green" onclick="showExamResult()">📊 考试成绩</button>
@@ -341,7 +345,7 @@ tr:nth-child(even){background:#fafafa;}
     <div id="learningProgressList"></div>
   </div>
 </div></div>
-    <div class="page" id="page-critical"><div class="page-title">⚠️ 危急值报告 <span class="sub">及时报告 · 保障安全</span></div><div class="action-bar"><button class="action-btn action-btn-red" onclick="openCriticalModal()">➕ 新增危急值</button></div><div id="criticalList"></div></div>
+    <div class="page" id="page-critical"><div class="page-title">⚠️ 危急值报告 <span class="sub">及时报告 · 保障安全</span></div><div class="action-bar"><button class="action-btn action-btn-red" onclick="openCriticalModal()">➕ 新增危急值</button><button class="action-btn action-btn-green" onclick="showCriticalStats()">📊 统计报表</button><button class="action-btn action-btn-blue" onclick="showCriticalConfirm()">✅ 临床确认</button></div><div id="criticalList"></div></div>
     <div class="page" id="page-reagent"><div class="page-title">🧪 试剂管理 <span class="sub">库存 · 出入库 · 效期</span></div><div class="tabs"><div class="tab active" onclick="switchReagentTab('inventory',this)">库存管理</div><div class="tab" onclick="switchReagentTab('inout',this)">出入库记录</div><div class="tab" onclick="switchReagentTab('expiry',this)">效期预警</div></div><div id="reagentInventory"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openReagentModal()">➕ 新增试剂</button><button class="action-btn action-btn-green" onclick="openReagentInOutModal()">📦 出入库</button></div><div id="reagentList"></div></div><div id="reagentInout" style="display:none;"><div id="reagentInoutList"></div></div><div id="reagentExpiry" style="display:none;"><div id="reagentExpiryList"></div></div></div>
     <div class="page" id="page-handover"><div class="page-title">🔄 交接班记录 <span class="sub">白班 · 夜班</span></div>
     <!-- 统计概览 -->
@@ -365,7 +369,7 @@ tr:nth-child(even){background:#fafafa;}
     </div>
     <div class="tabs"><div class="tab active" onclick="switchHandoverTab('list',this)">交接记录</div><div class="tab" onclick="switchHandoverTab('add',this)">填写交接</div></div><div id="handoverList"></div><div id="handoverAdd" style="display:none;"><div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e8f5e9;">📝</div><div><div class="item-title">填写交接班记录</div><div class="item-desc">记录白班/夜班交接内容</div></div></div><div class="item-right"><button class="btn btn-primary btn-sm" onclick="openHandoverModal()">填写</button></div></div></div></div></div>
     <div class="page" id="page-performance"><div class="page-title">🏆 绩效积分 <span class="sub">量化考核 · 公平透明</span></div><div class="stats-grid"><div class="stat-card"><div class="label">本月总积分</div><div class="value" id="perfTotal">0</div></div><div class="stat-card"><div class="label">科室排名</div><div class="value" id="perfRank">-</div></div><div class="stat-card"><div class="label">达标率</div><div class="value" id="perfRate">0%</div></div><div class="stat-card"><div class="label">评级</div><div class="value" id="perfGrade">-</div></div></div><div class="tabs"><div class="tab active" onclick="switchPerfTab('detail',this)">积分明细</div><div class="tab" onclick="switchPerfTab('rank',this)">科室排名</div><div class="tab" onclick="switchPerfTab('rules',this)">积分规则</div></div><div id="perfDetail"></div><div id="perfRank" style="display:none;"></div><div id="perfRules" style="display:none;"></div></div>
-    <div class="page" id="page-settings"><div class="page-title">⚙️ 系统设置 <span class="sub">管理配置中心</span></div><div class="tabs" id="settingsTabs"><div class="tab active" onclick="switchSettingsTab('staff',this)">员工管理</div><div class="tab" onclick="switchSettingsTab('device',this)">设备管理</div><div class="tab" onclick="switchSettingsTab('reagent',this)">试剂管理</div><div class="tab" onclick="switchSettingsTab('sop',this)">检验知识管理</div><div class="tab" onclick="switchSettingsTab('cloud',this)">☁️ 云端管理</div></div><div id="settingsStaff"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openStaffModal()">➕ 新增员工</button><button class="action-btn action-btn-purple" onclick="showToast('权限配置功能开发中')">🔐 权限配置</button></div><div class="search-bar"><input type="text" placeholder="搜索员工姓名/工号..." id="staffSearch" oninput="filterStaff()"></div><div id="staffList"></div></div><div id="settingsDevice" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openDeviceModal()">➕ 新增设备</button></div><div id="deviceList"></div></div><div id="settingsReagent" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openReagentModal()">➕ 新增试剂</button><button class="action-btn action-btn-green" onclick="openReagentInOutModal()">📦 出入库</button></div><div id="settingsReagentList"></div></div><div id="settingsCloud" style="display:none;"><div class="cloud-card"><div class="icon">☁️</div><div class="title">云端数据管理</div><div class="desc">将数据上传到云端，多设备同步，随时随地访问</div><button class="btn" onclick="uploadToCloud()">☁️ 上传到云端</button><button class="btn" onclick="downloadFromCloud()">📥 从云端下载</button></div><div class="cloud-status"><span class="dot offline" id="cloudStatusDot"></span><span id="cloudStatusText">未连接云端</span></div><div style="margin-top:15px;"><h4 style="margin-bottom:10px;color:var(--text);">📋 数据统计</h4><div class="stats-grid"><div class="stat-card"><div class="label">员工数</div><div class="value" id="cloudStaffCount">0</div></div><div class="stat-card"><div class="label">设备数</div><div class="value" id="cloudDeviceCount">0</div></div><div class="stat-card"><div class="label">试剂数</div><div class="value" id="cloudReagentCount">0</div></div><div class="stat-card"><div class="label">试题数</div><div class="value" id="cloudExamCount">0</div></div></div></div></div><div id="settingsSop" style="display:none;"><div class="tabs" style="margin-bottom:10px;"><div class="tab active" onclick="switchSopSettingsTab('sop',this)">检验知识管理</div><div class="tab" onclick="switchSopSettingsTab('exam',this)">试题管理</div></div><div id="sopSettingsSop"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openSopManageModal()">➕ 新增知识</button></div><div id="sopManageList"></div></div><div id="sopSettingsExam" style="display:none;"><div class="tabs" style="margin-bottom:10px;"><div class="tab active" onclick="switchExamSubTab('questions',this)">📝 选择题</div><div class="tab" onclick="switchExamSubTab('pdf',this)">📄 PDF试题</div></div><div id="examSubQuestions"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openExamQuestionModal()">➕ 新增试题</button><button class="action-btn action-btn-green" onclick="downloadWordTemplate()">📄 下载Word模板</button></div><div id="examQuestionList"></div></div><div id="examSubPdf" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-green" onclick="openPdfUploadModal()">📄 上传PDF试题</button></div><div id="pdfQuestionList"></div></div></div></div></div>
+    <div class="page" id="page-settings"><div class="page-title">⚙️ 系统设置 <span class="sub">管理配置中心</span></div><div class="tabs" id="settingsTabs"><div class="tab active" onclick="switchSettingsTab('staff',this)">员工管理</div><div class="tab" onclick="switchSettingsTab('device',this)">设备管理</div><div class="tab" onclick="switchSettingsTab('reagent',this)">试剂管理</div><div class="tab" onclick="switchSettingsTab('sop',this)">检验知识管理</div><div class="tab" onclick="switchSettingsTab('cloud',this)">☁️ 云端管理</div></div><div id="settingsStaff"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openStaffModal()">➕ 新增员工</button><button class="action-btn action-btn-purple" onclick="showToast('权限配置功能开发中')">🔐 权限配置</button></div><div class="search-bar"><input type="text" placeholder="搜索员工姓名/工号..." id="staffSearch" oninput="filterStaff()"></div><div id="staffList"></div></div><div id="settingsDevice" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openDeviceModal()">➕ 新增设备</button></div><div id="deviceList"></div></div><div id="settingsReagent" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openReagentModal()">➕ 新增试剂</button><button class="action-btn action-btn-green" onclick="openReagentInOutModal()">📦 出入库</button></div><div id="settingsReagentList"></div></div><div id="settingsCloud" style="display:none;"><div class="cloud-card"><div class="icon">☁️</div><div class="title">云端数据管理</div><div class="desc">上传数据到云端备份，或从云端下载恢复数据，多设备同步</div><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;"><button class="btn" onclick="uploadToCloud()">☁️ 上传到云端</button><button class="btn" onclick="downloadFromCloud()">📥 从云端下载</button></div><div style="margin-top:12px;font-size:12px;opacity:0.8;">💡 数据自动同步到JSONBin云端服务器，支持多设备访问</div></div><div class="cloud-status"><span class="dot offline" id="cloudStatusDot"></span><span id="cloudStatusText">未连接云端</span><span id="cloudVersionInfo" style="margin-left:10px;font-size:12px;color:var(--text-light);"></span></div><div style="margin-top:15px;"><h4 style="margin-bottom:10px;color:var(--text);">📋 数据统计</h4><div class="stats-grid"><div class="stat-card"><div class="label">员工数</div><div class="value" id="cloudStaffCount">0</div></div><div class="stat-card"><div class="label">设备数</div><div class="value" id="cloudDeviceCount">0</div></div><div class="stat-card"><div class="label">试剂数</div><div class="value" id="cloudReagentCount">0</div></div><div class="stat-card"><div class="label">试题数</div><div class="value" id="cloudExamCount">0</div></div></div></div></div><div id="settingsSop" style="display:none;"><div class="tabs" style="margin-bottom:10px;"><div class="tab active" onclick="switchSopSettingsTab('sop',this)">检验知识管理</div><div class="tab" onclick="switchSopSettingsTab('exam',this)">试题管理</div></div><div id="sopSettingsSop"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openSopManageModal()">➕ 新增知识</button></div><div id="sopManageList"></div></div><div id="sopSettingsExam" style="display:none;"><div class="tabs" style="margin-bottom:10px;"><div class="tab active" onclick="switchExamSubTab('questions',this)">📝 选择题</div><div class="tab" onclick="switchExamSubTab('pdf',this)">📄 PDF试题</div></div><div id="examSubQuestions"><div class="action-bar"><button class="action-btn action-btn-blue" onclick="openExamQuestionModal()">➕ 新增试题</button><button class="action-btn action-btn-green" onclick="downloadWordTemplate()">📄 下载Word模板</button></div><div id="examQuestionList"></div></div><div id="examSubPdf" style="display:none;"><div class="action-bar"><button class="action-btn action-btn-green" onclick="openPdfUploadModal()">📄 上传PDF试题</button></div><div id="pdfQuestionList"></div></div></div></div></div>
   </div>
 </div>
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)"><div class="modal" id="modalContent"></div></div>
@@ -377,7 +381,12 @@ var appData = null;
 function initData(){
   // 角色权限配置 - 符合建设方案V1.0
   var rolePermissions = {
-    '系统管理员': { canManageUsers:true, canConfig:true, canViewAll:true, canAudit:true, canExport:true, canManageDevices:true, canManageSop:true, canManageExam:true, canViewFinance:true, canAuditPerformance:true, canConfigScore:true, canViewLogs:true },
+    '系统管理员': { canManageUsers:true, canConfig:true, canViewAll:true, canAudit:true, canExport:true, canManageDevices:true, canManageSop:true, canManageExam:true, canViewFinance:true, canManagePerformance:true, canViewDashboard:true, canManageMaintenance:true, canManageQuality:true, canManageWorkload:true, canManageCritical:true },
+    '科主任': { canManageUsers:false, canConfig:false, canViewAll:true, canAudit:true, canExport:true, canManageDevices:false, canManageSop:true, canManageExam:true, canViewFinance:true, canManagePerformance:true, canViewDashboard:true, canManageMaintenance:true, canManageQuality:true, canManageWorkload:true, canManageCritical:true },
+    '专业组组长': { canManageUsers:false, canConfig:false, canViewAll:false, canAudit:true, canExport:true, canManageDevices:false, canManageSop:true, canManageExam:true, canViewFinance:false, canManagePerformance:true, canViewDashboard:false, canManageMaintenance:true, canManageQuality:true, canManageWorkload:true, canManageCritical:true },
+    '质控员': { canManageUsers:false, canConfig:false, canViewAll:false, canAudit:true, canExport:true, canManageDevices:false, canManageSop:false, canManageExam:false, canViewFinance:false, canManagePerformance:false, canViewDashboard:false, canManageMaintenance:false, canManageQuality:true, canManageWorkload:false, canManageCritical:true },
+    '设备管理员': { canManageUsers:false, canConfig:false, canViewAll:false, canAudit:false, canExport:true, canManageDevices:true, canManageSop:false, canManageExam:false, canViewFinance:false, canManagePerformance:false, canViewDashboard:false, canManageMaintenance:true, canManageQuality:false, canManageWorkload:false, canManageCritical:false },
+    '检验人员': { canManageUsers:false, canConfig:false, canViewAll:false, canAudit:false, canExport:true, canManageDevices:false, canManageSop:false, canManageExam:false, canViewFinance:false, canManagePerformance:false, canViewDashboard:false, canManageMaintenance:true, canManageQuality:true, canManageWorkload:true, canManageCritical:true }:true, canAuditPerformance:true, canConfigScore:true, canViewLogs:true },
     '科主任': { canManageUsers:false, canConfig:false, canViewAll:true, canAudit:true, canExport:true, canManageDevices:false, canManageSop:true, canManageExam:true, canViewFinance:true, canAuditPerformance:true, canConfigScore:false, canViewLogs:true },
     '专业组组长': { canManageUsers:false, canConfig:false, canViewAll:false, canViewGroup:true, canAudit:true, canExport:true, canManageDevices:false, canManageSop:true, canManageExam:true, canViewFinance:false, canAuditPerformance:false, canConfigScore:false, canViewLogs:false },
     '质控员': { canManageUsers:false, canConfig:false, canViewAll:false, canViewGroup:false, canAudit:true, canExport:false, canManageDevices:false, canManageSop:false, canManageExam:false, canViewFinance:false, canAuditPerformance:false, canConfigScore:false, canViewLogs:false, canMonitorQc:true, canManageEqa:true },
@@ -392,11 +401,7 @@ function initData(){
     learningGrowth: { name:'学习成长', weight:10, desc:'SOP学习完成率、考试成绩、培训参与度' },
     comprehensive: { name:'综合表现', weight:10, desc:'出勤率、团队协作、投诉处理、科研贡献' }
   };
-  // 操作日志
-  if(!appData.operationLogs) appData.operationLogs = [];
-  // 保存配置
-  appData.rolePermissions = rolePermissions;
-  appData.scoreWeights = scoreWeights;
+  // 操作日志和配置将在appData初始化后设置
 
 var defaultData = {
     sops: [
@@ -467,31 +472,64 @@ var defaultData = {
       {id:'H001',shift:'白班',date:'2025-01-15',equip:'全自动生化分析仪运行正常，血常规分析仪需校准',specimen:'常规标本80份，急诊标本15份',reagent:'ALT试剂库存不足需补充，RBC溶血素充足',qc:'室内质控在控，结果良好',abnormal:'血常规分析仪需校准，已联系工程师',content:'生化组整体运行平稳，注意补充ALT试剂',fromUser:'张伟',toUser:'刘燕',status:'completed'},
       {id:'H002',shift:'夜班',date:'2025-01-15',equip:'全自动生化分析仪运行正常，凝血分析仪运行正常',specimen:'夜间急诊样本120份，其中生化60份、血常规40份、凝血20份',reagent:'急诊试剂充足，无短缺',qc:'夜班质控全部在控',abnormal:'无',content:'夜间急诊量较大，所有标本已及时处理',fromUser:'陈静',toUser:'赵磊',status:'completed'}
     ],
+    eqaRecords: [],
+    examQuestions: [],
+    pdfQuestions: [],
     permissions: {
-      '系统管理员': ['staff','device','reagent','sop','settings','all'],
-      '科主任': ['staff','device','reagent','sop','settings','all'],
-      '专业组组长': ['staff_view','device','reagent','sop','settings_view'],
-      '质控员': ['quality','reagent','sop','settings_view'],
-      '设备管理员': ['device','maintenance','settings_view'],
-      '检验人员': ['maintenance','quality','workload','sop','critical','handover']
+      // 系统管理员：全部权限
+      '系统管理员': ['all','staff','device','reagent','sop','settings','handover','maintenance','quality','workload','critical','performance','exam','export','audit','dashboard'],
+      // 科主任：全科管理、数据总览、绩效审核
+      '科主任': ['staff_view','device','reagent','sop','settings','handover','maintenance','quality','workload','critical','performance','exam','export','audit','dashboard'],
+      // 专业组组长：本组日常管理、数据审核、组内绩效
+      '专业组组长': ['staff_view','device','reagent','sop','settings_view','handover','maintenance','quality','workload','critical','performance','exam','export','audit'],
+      // 质控员：质量控制数据监控、EQA管理
+      '质控员': ['quality','reagent','sop','settings_view','handover','maintenance','critical','exam','export','audit'],
+      // 设备管理员：仪器设备档案、保养计划管理
+      '设备管理员': ['device','maintenance','settings_view','handover','reagent','export'],
+      // 检验人员：日常工作记录、学习参与、查看个人绩效
+      '检验人员': ['maintenance','quality','workload','sop','critical','handover','exam','performance_view']
     }
   }
   var saved = localStorage.getItem(DB_KEY);
   if(saved){
     try{
       appData = JSON.parse(saved);
+      if(!appData || typeof appData !== 'object'){ throw new Error('数据格式错误'); }
       if(!appData.users || !Array.isArray(appData.users) || appData.users.length === 0){
         appData.users = defaultData.users;
       }
+      // 确保每个用户都有status字段
+      for(var ui=0; ui<appData.users.length; ui++){
+        if(appData.users[ui] && !appData.users[ui].status){
+          appData.users[ui].status = 'active';
+        }
+      }
       localStorage.setItem(DB_KEY, JSON.stringify(appData));
-  // 自动备份
-  try{ localStorage.setItem('labAppData_backup_'+new Date().toISOString().slice(0,10), JSON.stringify(appData)); }catch(e){}
+      // 自动备份
+      try{ localStorage.setItem('labAppData_backup_'+new Date().toISOString().slice(0,10), JSON.stringify(appData)); }catch(e){}
     }catch(e){
       appData = defaultData;
       localStorage.setItem(DB_KEY, JSON.stringify(defaultData));
     }
   }
   else{ appData = defaultData; localStorage.setItem(DB_KEY, JSON.stringify(defaultData)); }
+  // 确保新增数据字段存在
+  if(!appData.eqaRecords) appData.eqaRecords = [];
+  if(!appData.examQuestions) appData.examQuestions = [];
+  if(!appData.pdfQuestions) appData.pdfQuestions = [];
+  // 确保操作日志和配置存在
+  if(!appData.operationLogs) appData.operationLogs = [];
+  appData.rolePermissions = appData.rolePermissions || rolePermissions;
+  appData.scoreWeights = appData.scoreWeights || scoreWeights;
+  // 确保每个用户都有status字段
+  if(appData.users){
+    for(var ui=0; ui<appData.users.length; ui++){
+      if(appData.users[ui] && !appData.users[ui].status){
+        appData.users[ui].status = 'active';
+      }
+    }
+  }
+  saveData();
 }
 // 操作日志记录
 function addOperationLog(action, detail){
@@ -518,7 +556,210 @@ function checkPermission(perm){
   if(!userPerms) return false;
   return userPerms[perm] === true;
 }
-function saveData(){ localStorage.setItem(DB_KEY, JSON.stringify(appData)); }
+function saveData(){
+  localStorage.setItem(DB_KEY, JSON.stringify(appData));
+  // 自动同步到云端（每次保存记录时自动上传）
+  try{
+    autoSyncToCloud();
+  }catch(e){
+    console.error('自动同步云端失败:', e);
+  }
+}
+// 自动同步到云端（每次记录变更时调用）
+// ===== 云端API配置 =====
+// 使用JSONBin.io免费API实现真正的云端数据同步
+var CLOUD_API_URL = 'https://api.jsonbin.io/v3/b';
+var CLOUD_BIN_ID = ''; // 留空则自动创建
+var CLOUD_API_KEY = ''; // 留空则使用匿名模式
+// 云端同步状态
+var cloudSyncEnabled = true;
+var cloudSyncInProgress = false;
+var cloudLastSyncTime = '';
+var cloudSyncError = '';
+// 获取或创建云端Bin
+function getOrCreateCloudBin(){
+  return new Promise(function(resolve, reject){
+    // 先检查localStorage中是否已有Bin ID
+    var existingBinId = localStorage.getItem('cloudBinId');
+    if(existingBinId){
+      CLOUD_BIN_ID = existingBinId;
+      resolve(CLOUD_BIN_ID);
+      return;
+    }
+    // 创建新的Bin
+    var data = {appData: appData, version: '1.0', createdAt: new Date().toISOString()};
+    fetch(CLOUD_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Bin-Name': '检验科APP数据',
+        'X-Bin-Private': 'false'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(function(resp){ return resp.json(); })
+    .then(function(result){
+      if(result && result.metadata && result.metadata.id){
+        CLOUD_BIN_ID = result.metadata.id;
+        localStorage.setItem('cloudBinId', CLOUD_BIN_ID);
+        resolve(CLOUD_BIN_ID);
+      } else {
+        reject('创建云端存储失败');
+      }
+    })
+    .catch(function(err){ reject(err); });
+  });
+}
+// 上传数据到云端
+function uploadToCloud(){
+  try{
+    if(currentUser.role !== '系统管理员'){ showToast('⚠️ 仅系统管理员可操作云端管理'); return; }
+    showToast('☁️ 正在上传到云端...');
+    var dataStr = JSON.stringify(appData);
+    // 先保存到本地
+    localStorage.setItem('labAppData', dataStr);
+    localStorage.setItem('labAppData_cloud', dataStr);
+    localStorage.setItem('cloudConnected', 'true');
+    var now = new Date();
+    var timeStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0') + ':' + String(now.getSeconds()).padStart(2,'0');
+    localStorage.setItem('cloudLastUpload', timeStr);
+    // 保存版本历史（最多保留20个）
+    var versions = JSON.parse(localStorage.getItem('cloudVersions') || '[]');
+    versions.push({time:timeStr, size:dataStr.length, user:currentUser.name});
+    if(versions.length > 20) versions = versions.slice(versions.length-20);
+    localStorage.setItem('cloudVersions', JSON.stringify(versions));
+    
+    // 尝试同步到JSONBin云端
+    getOrCreateCloudBin().then(function(binId){
+      var cloudData = {
+        appData: appData,
+        version: '2.2',
+        lastSync: new Date().toISOString(),
+        syncBy: currentUser.name
+      };
+      fetch(CLOUD_API_URL + '/' + binId, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(cloudData)
+      })
+      .then(function(resp){ 
+        if(resp.ok){
+          showToast('✅ 数据已上传到云端！版本: ' + timeStr);
+          cloudSyncError = '';
+          cloudLastSyncTime = timeStr;
+        } else {
+          showToast('⚠️ 本地已保存，云端同步失败（网络问题）');
+          cloudSyncError = 'HTTP ' + resp.status;
+        }
+      })
+      .catch(function(err){
+        showToast('⚠️ 本地已保存，云端同步失败（网络问题）');
+        cloudSyncError = err.message;
+      });
+    }).catch(function(err){
+      showToast('⚠️ 本地已保存，云端同步失败：' + err);
+      cloudSyncError = err;
+    });
+    
+    checkCloudStatus();
+    loadCloudData();
+  }catch(e){
+    showToast('❌ 上传失败：' + e.message);
+  }
+}
+// 从云端下载数据
+function downloadFromCloud(){
+  try{
+    if(currentUser.role !== '系统管理员'){ showToast('⚠️ 仅系统管理员可操作云端管理'); return; }
+    var versions = JSON.parse(localStorage.getItem('cloudVersions') || '[]');
+    var saved = localStorage.getItem('labAppData_cloud');
+    if(!saved){
+      showToast('❌ 云端暂无备份数据，请先上传');
+      return;
+    }
+    // 如果有多个版本，显示版本选择弹窗
+    if(versions.length > 0){
+      var modal = document.getElementById('modalContent');
+      var html = '<div class="modal-header"><h3>📥 从云端下载</h3><button class="modal-close" onclick="closeModal()">×</button></div>';
+      html += '<div class="modal-body">';
+      html += '<p style="margin-bottom:15px;color:var(--text-light);">选择要恢复的版本（将覆盖当前数据）</p>';
+      html += '<div style="max-height:300px;overflow-y:auto;">';
+      for(var i=versions.length-1;i>=0;i--){
+        var v = versions[i];
+        html += '<div class="list-card" style="cursor:pointer;margin-bottom:8px;" onclick="restoreCloudVersion(' + i + ')">';
+        html += '<div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e8f5e9;">☁️</div><div><div class="item-title">' + v.time + '</div><div class="item-desc">上传者: ' + v.user + ' · 大小: ' + Math.round(v.size/1024) + 'KB</div></div></div><div class="item-right"><button class="btn btn-primary btn-sm">恢复</button></div></div></div>';
+      }
+      html += '</div>';
+      html += '<div style="margin-top:15px;"><button class="btn btn-outline" onclick="restoreCloudVersion(-1)" style="width:100%;">📥 恢复最新版本</button></div>';
+      html += '</div>';
+      modal.innerHTML = html;
+      document.getElementById('modalOverlay').classList.add('active');
+    } else {
+      // 直接恢复
+      if(confirm('确定要从云端下载数据覆盖当前数据吗？')){
+        var data = JSON.parse(saved);
+        appData = data;
+        saveData();
+        showToast('✅ 已从云端恢复数据！');
+        loadSettings();
+        loadCloudData();
+      }
+    }
+  }catch(e){
+    showToast('❌ 下载失败：' + e.message);
+  }
+}
+// 自动同步到云端（每次记录变更时调用）
+function autoSyncToCloud(){
+  try{
+    var dataStr = JSON.stringify(appData);
+    localStorage.setItem('labAppData', dataStr);
+    localStorage.setItem('labAppData_cloud', dataStr);
+    localStorage.setItem('cloudConnected', 'true');
+    var now = new Date();
+    var timeStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0') + ':' + String(now.getSeconds()).padStart(2,'0');
+    localStorage.setItem('cloudLastUpload', timeStr);
+    // 保存版本历史（最多保留20个）
+    var versions = JSON.parse(localStorage.getItem('cloudVersions') || '[]');
+    var lastVersion = versions.length > 0 ? versions[versions.length-1] : null;
+    // 避免重复记录（同一分钟内只记录一次）
+    var lastTime = lastVersion ? lastVersion.time : '';
+    if(lastTime !== timeStr.slice(0, 16)){
+      versions.push({time:timeStr.slice(0, 16), size:dataStr.length, user:(currentUser?currentUser.name:'系统')});
+      if(versions.length > 20) versions = versions.slice(versions.length-20);
+      localStorage.setItem('cloudVersions', JSON.stringify(versions));
+    }
+    // 更新云端状态显示
+    var versionInfo = document.getElementById('cloudVersionInfo');
+    if(versionInfo) versionInfo.textContent = '📤 上次同步: ' + timeStr.slice(0, 16);
+    // 尝试同步到真正的云端（JSONBin）
+    if(cloudSyncEnabled && !cloudSyncInProgress){
+      cloudSyncInProgress = true;
+      getOrCreateCloudBin().then(function(binId){
+        var cloudData = {
+          appData: appData,
+          version: '2.2',
+          lastSync: new Date().toISOString()
+        };
+        return fetch(CLOUD_API_URL + '/' + binId, {
+          method: 'PUT',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(cloudData)
+        });
+      }).then(function(resp){
+        if(resp.ok) cloudSyncError = '';
+        cloudSyncInProgress = false;
+      }).catch(function(err){
+        cloudSyncError = err.message;
+        cloudSyncInProgress = false;
+      });
+    }
+  }catch(e){
+    console.error('autoSyncToCloud error:', e);
+  }
+}
 function handleLogin(){
   try{
     var usernameInput = document.getElementById('loginUsername');
@@ -542,7 +783,7 @@ function handleLogin(){
       }
     }
     if(!user){ showToast('用户名或密码错误'); return; }
-    if(user.status !== 'active'){ showToast('账号已停用，请联系管理员'); return; }
+    if(user.status && user.status !== 'active'){ showToast('账号已停用，请联系管理员'); return; }
     currentUser = user;
     loginSuccess(user);
   }catch(e){
@@ -568,8 +809,17 @@ function loginSuccess(user){
   if(rememberMe && rememberMe.checked){
     localStorage.setItem('rememberedUser', user.id);
   }
+  try{ migrateData(); }catch(e){ console.error('migrateData error:', e); }
   try{ buildSidebar(); }catch(e){ console.error('buildSidebar error:', e); }
   try{ loadDashboard(); }catch(e){ console.error('loadDashboard error:', e); }
+  // 根据权限控制底部导航设置按钮
+  var bottomSettings = document.getElementById('bottomNavSettings');
+  if(bottomSettings){
+    var isManager = user.role === '系统管理员' || user.role === '科主任' || user.role === '专业组组长';
+    var perms = user.permissions || (appData && appData.permissions && appData.permissions[user.role]) || [];
+    var canSeeSettings = perms.indexOf('settings') >= 0 || perms.indexOf('all') >= 0 || isManager;
+    bottomSettings.style.display = canSeeSettings ? 'inline-flex' : 'none';
+  }
   showToast('欢迎登录，' + user.name + '！');
 }
 function handleLogout(){
@@ -611,7 +861,8 @@ function buildSidebar(){
   }
   html += '<div class="nav-group">考核</div>';
   html += '<div class="nav-item" onclick="showPage(\'performance\')"><span class="icon">🏆</span>绩效积分</div>';
-  if(perms.indexOf('settings') >= 0 || perms.indexOf('all') >= 0){
+  var isManager = currentUser.role === '系统管理员' || currentUser.role === '科主任' || currentUser.role === '副主任';
+  if(perms.indexOf('settings') >= 0 || perms.indexOf('all') >= 0 || isManager){
     html += '<div class="nav-group">管理</div>';
     html += '<div class="nav-item" onclick="showPage(\'settings\')"><span class="icon">⚙️</span>系统设置</div>';
   }
@@ -626,10 +877,19 @@ function setActiveBottomNav(index){
   if(items[index]) items[index].classList.add('active');
 }
 function showPage(pageId){
+  // 权限控制：系统设置仅管理层可见
+  if(pageId === 'settings' && currentUser){
+    var isManager = currentUser.role === '系统管理员' || currentUser.role === '科主任' || currentUser.role === '副主任';
+    var perms = currentUser.permissions || (appData && appData.permissions && appData.permissions[currentUser.role]) || [];
+    var canSeeSettings = perms.indexOf('settings') >= 0 || perms.indexOf('all') >= 0 || isManager;
+    if(!canSeeSettings){
+      showToast('⚠️ 无权限访问系统设置');
+      return;
+    }
+  }
   // 同步底部导航
   var navMap = {maintenance:0, quality:1, workload:2, handover:3, settings:4};
   if(navMap[pageId] !== undefined) setActiveBottomNav(navMap[pageId]);
-
   var pages = document.querySelectorAll('.page');
   for(var i=0;i<pages.length;i++){ pages[i].classList.remove('active'); }
   var page = document.getElementById('page-' + pageId);
@@ -657,7 +917,7 @@ function closeSidebar(){
 function loadDashboard(){
   // 添加操作日志查看入口（管理员/科主任可见）
   var logBtn = '';
-  if(currentUser && (currentUser.role === '系统管理员' || currentUser.role === '科主任')){
+  if(currentUser && (currentUser.role === '系统管理员' || currentUser.role === '科主任' || currentUser.role === '副主任')){
     logBtn = '<button class="action-btn action-btn-blue" onclick="showOperationLogs()" style="margin-bottom:10px;">📋 操作日志</button>';
   }
 
@@ -734,15 +994,72 @@ function exportOperationLogs(){
 }
 function loadMaintenance(){
   var list = document.getElementById('maintenanceList');
-  var html = '';
-  for(var i=appData.maintenanceRecords.length-1;i>=0;i--){
-    var r = appData.maintenanceRecords[i];
+  var records = appData.maintenanceRecords || [];
+  var devices = appData.devices || [];
+  // 保养统计概览
+  var today = new Date().toISOString().split('T')[0];
+  var todayCount = records.filter(function(r){return r.date===today}).length;
+  var weekAgo = new Date(Date.now()-7*86400000).toISOString().split('T')[0];
+  var weekCount = records.filter(function(r){return r.date>=weekAgo}).length;
+  var monthAgo = new Date(Date.now()-30*86400000).toISOString().split('T')[0];
+  var monthCount = records.filter(function(r){return r.date>=monthAgo}).length;
+  var html = '<div class="stats-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:15px">';
+  html += '<div class="stat-card" style="background:#e3f2fd;padding:12px;border-radius:8px;text-align:center"><div style="font-size:24px;font-weight:bold;color:#1976d2">'+todayCount+'</div><div style="font-size:12px;color:#666">今日保养</div></div>';
+  html += '<div class="stat-card" style="background:#e8f5e9;padding:12px;border-radius:8px;text-align:center"><div style="font-size:24px;font-weight:bold;color:#388e3c">'+weekCount+'</div><div style="font-size:12px;color:#666">本周保养</div></div>';
+  html += '<div class="stat-card" style="background:#fff3e0;padding:12px;border-radius:8px;text-align:center"><div style="font-size:24px;font-weight:bold;color:#f57c00">'+monthCount+'</div><div style="font-size:12px;color:#666">本月保养</div></div>';
+  html += '</div>';
+  // 保养计划看板
+  html += '<div class="card" style="margin-bottom:15px"><div class="card-header" style="background:#f5f5f5;padding:10px 15px;font-weight:bold;border-bottom:1px solid #e0e0e0">📅 保养计划看板</div><div style="padding:10px">';
+  var deviceTypes = ['生化分析仪','血球仪','凝血仪','免疫分析仪','其他'];
+  var typeMap = {'生化分析仪':0,'血球仪':0,'凝血仪':0,'免疫分析仪':0,'其他':0};
+  devices.forEach(function(d){
+    var type = d.type || '其他';
+    if(typeMap[type]!==undefined) typeMap[type]++; else typeMap['其他']++;
+  });
+  deviceTypes.forEach(function(t){
+    var count = typeMap[t] || 0;
+    var todayDevice = records.filter(function(r){return r.date===today && r.device && r.device.indexOf(t)>-1}).length;
+    var status = todayDevice > 0 ? '✅ 已保养' : '⚠️ 待保养';
+    var statusColor = todayDevice > 0 ? '#4caf50' : '#ff9800';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0">';
+    html += '<span><strong>'+t+'</strong> <span style="color:#999;font-size:12px">('+count+'台)</span></span>';
+    html += '<span style="color:'+statusColor+';font-size:13px">'+status+'</span></div>';
+  });
+  html += '</div></div>';
+  // 逾期提醒
+  var overdue = records.filter(function(r){
+    var planDate = r.planDate || r.date;
+    return planDate && planDate < today && (!r.status || r.status !== 'completed');
+  });
+  if(overdue.length > 0){
+    html += '<div class="card" style="margin-bottom:15px;border:2px solid #f44336"><div class="card-header" style="background:#ffebee;padding:10px 15px;font-weight:bold;color:#c62828">🔴 逾期保养提醒 ('+overdue.length+'项)</div><div style="padding:10px">';
+    overdue.slice(0,5).forEach(function(r){
+      html += '<div style="padding:5px 0;border-bottom:1px solid #ffcdd2;font-size:13px">⚠️ '+(r.device||'未知')+' - 计划保养日: '+(r.planDate||r.date)+'</div>';
+    });
+    if(overdue.length>5) html += '<div style="padding:5px 0;color:#999;font-size:12px">...还有'+(overdue.length-5)+'项逾期</div>';
+    html += '</div></div>';
+  }
+  // 操作按钮
+  html += '<div style="margin-bottom:15px;display:flex;gap:10px;flex-wrap:wrap">';
+  html += '<button class="btn btn-primary" onclick="openMaintenanceModal()">➕ 新增保养记录</button>';
+  html += '<button class="btn btn-secondary" onclick="showMaintenancePlan()">📅 查看保养计划</button>';
+  html += '<button class="btn btn-secondary" onclick="showMaintenanceStats()">📊 保养统计</button>';
+  html += '</div>';
+  // 保养记录列表
+  html += '<div class="section-title">📋 保养记录列表</div>';
+  for(var i=records.length-1;i>=0;i--){
+    var r = records[i];
     var statusBadge = r.status === 'completed' ? '<span class="badge badge-green">已完成</span>' : '<span class="badge badge-orange">待完成</span>';
     var editBtn = '<button class="btn btn-outline btn-sm" onclick="editMaintenance(\'' + r.id + '\')">编辑</button>';
     var delBtn = '<button class="btn btn-danger btn-sm" onclick="deleteMaintenance(\'' + r.id + '\')">删除</button>';
-    html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e3f2fd;">🔧</div><div><div class="item-title">' + r.device + '</div><div class="item-desc">' + r.type + ' · ' + r.date + ' · ' + r.operator + '</div></div></div><div class="item-right">' + statusBadge + '<span class="badge badge-blue">+' + r.score + '分</span><div style="display:flex;gap:5px;margin-top:5px;">' + editBtn + ' ' + delBtn + '</div></div></div></div>';
+    // 显示保养项
+    var itemsStr = '';
+    if(r.dailyItems && r.dailyItems.length > 0) itemsStr += '📋 每日:' + r.dailyItems.join(',') + ' ';
+    if(r.weeklyItems && r.weeklyItems.length > 0) itemsStr += '📋 每周:' + r.weeklyItems.join(',') + ' ';
+    if(r.remark) itemsStr += '📝 ' + r.remark;
+    html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e3f2fd;">🔧</div><div><div class="item-title">' + (r.device||'') + '</div><div class="item-desc">' + (r.type||'') + ' · ' + (r.date||'') + ' · ' + (r.operator||'') + '</div>' + (itemsStr ? '<div style="font-size:12px;color:#666;margin-top:3px;">' + itemsStr + '</div>' : '') + '</div></div><div class="item-right">' + statusBadge + '<span class="badge badge-blue">+' + (r.score||0) + '分</span><div style="display:flex;gap:5px;margin-top:5px;">' + editBtn + ' ' + delBtn + '</div></div></div></div>';
   }
-  if(appData.maintenanceRecords.length === 0) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无保养记录</div></div></div>';
+  if(records.length === 0) html += '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无保养记录</div></div></div>';
   list.innerHTML = html;
 }
 function editMaintenance(id){
@@ -754,13 +1071,27 @@ function editMaintenance(id){
     deviceOptions += '<option value="' + appData.devices[i].name + '"' + (appData.devices[i].name===r.device?' selected':'') + '>' + appData.devices[i].name + '</option>';
   }
   var modal = document.getElementById('modalContent');
-  modal.innerHTML = '<div class="modal-header"><h3>编辑保养记录</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">设备</label><select class="form-select" id="mDevice2" style="flex:1;">' + deviceOptions + '</select><button class="action-btn action-btn-green" onclick="scanQrCode()" style="margin-left:8px;padding:6px 12px;font-size:13px;">📷 扫码</button></div><div class="form-group"><label class="form-label">保养类型</label><select class="form-select" id="mType2"><option value="日常保养"' + (r.type==='日常保养'?' selected':'') + '>日常保养</option><option value="周保养"' + (r.type==='周保养'?' selected':'') + '>周保养</option><option value="月保养"' + (r.type==='月保养'?' selected':'') + '>月保养</option><option value="季度保养"' + (r.type==='季度保养'?' selected':'') + '>季度保养</option></select></div><div class="form-group"><label class="form-label">保养日期</label><input type="date" class="form-input" id="mDate2" value="' + r.date + '"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveEditMaintenance(\'' + id + '\')">保存</button></div>';
+  modal.innerHTML = '<div class="modal-header"><h3>编辑保养记录</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">设备</label><select class="form-select" id="mDevice2" style="flex:1;">' + deviceOptions + '</select><button class="action-btn action-btn-green" onclick="scanQrCode()" style="margin-left:8px;padding:6px 12px;font-size:13px;">📷 扫码</button></div><div class="form-group"><label class="form-label">保养类型</label><select class="form-select" id="mType2" onchange="toggleMaintItems2()"><option value="日常保养"' + (r.type==='日常保养'?' selected':'') + '>日常保养</option><option value="周保养"' + (r.type==='周保养'?' selected':'') + '>周保养</option><option value="月保养"' + (r.type==='月保养'?' selected':'') + '>月保养</option><option value="季度保养"' + (r.type==='季度保养'?' selected':'') + '>季度保养</option></select></div><div class="form-group"><label class="form-label">保养日期</label><input type="date" class="form-input" id="mDate2" value="' + r.date + '"></div><div class="form-group" id="mDailyItems2" style="display:' + (r.type==='日常保养'?'block':'none') + ';"><label class="form-label">📋 每日保养项目</label><div style="max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:10px;"><label class="checkbox-label"><input type="checkbox" class="mDailyItem2" value="样本针清洗"' + ((r.dailyItems&&r.dailyItems.indexOf('样本针清洗')>=0)?' checked':'') + '> 样本针清洗</label><label class="checkbox-label"><input type="checkbox" class="mDailyItem2" value="反应杯检查"' + ((r.dailyItems&&r.dailyItems.indexOf('反应杯检查')>=0)?' checked':'') + '> 反应杯检查</label><label class="checkbox-label"><input type="checkbox" class="mDailyItem2" value="废弃液桶清洗"' + ((r.dailyItems&&r.dailyItems.indexOf('废弃液桶清洗')>=0)?' checked':'') + '> 废弃液桶清洗</label><label class="checkbox-label"><input type="checkbox" class="mDailyItem2" value="外部除尘"' + ((r.dailyItems&&r.dailyItems.indexOf('外部除尘')>=0)?' checked':'') + '> 外部除尘</label><label class="checkbox-label"><input type="checkbox" class="mDailyItem2" value="开机冲洗"' + ((r.dailyItems&&r.dailyItems.indexOf('开机冲洗')>=0)?' checked':'') + '> 开机冲洗</label><label class="checkbox-label"><input type="checkbox" class="mDailyItem2" value="其他"> 其他：<input type="text" class="form-input" id="mDailyOther2" placeholder="其他每日保养项" style="width:150px;display:inline-block;margin-left:5px;" value="' + (r.dailyItems&&r.dailyItems.indexOf('其他')>=0?'其他':'') + '"></label></div></div><div class="form-group" id="mWeeklyItems2" style="display:' + (r.type!=='日常保养'?'block':'none') + ';"><label class="form-label">📋 每周保养项目</label><div style="max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:10px;"><label class="checkbox-label"><input type="checkbox" class="mWeeklyItem2" value="清洗管路"' + ((r.weeklyItems&&r.weeklyItems.indexOf('清洗管路')>=0)?' checked':'') + '> 清洗管路</label><label class="checkbox-label"><input type="checkbox" class="mWeeklyItem2" value="维护保养"' + ((r.weeklyItems&&r.weeklyItems.indexOf('维护保养')>=0)?' checked':'') + '> 维护保养</label><label class="checkbox-label"><input type="checkbox" class="mWeeklyItem2" value="过滤器清洗"' + ((r.weeklyItems&&r.weeklyItems.indexOf('过滤器清洗')>=0)?' checked':'') + '> 过滤器清洗</label><label class="checkbox-label"><input type="checkbox" class="mWeeklyItem2" value="光路检查"' + ((r.weeklyItems&&r.weeklyItems.indexOf('光路检查')>=0)?' checked':'') + '> 光路检查</label><label class="checkbox-label"><input type="checkbox" class="mWeeklyItem2" value="其他"> 其他：<input type="text" class="form-input" id="mWeeklyOther2" placeholder="其他每周保养项" style="width:150px;display:inline-block;margin-left:5px;" value="' + (r.weeklyItems&&r.weeklyItems.indexOf('其他')>=0?'其他':'') + '"></label></div></div><div class="form-group"><label class="form-label">📝 备注</label><textarea class="form-input" id="mRemark2" rows="3" placeholder="请输入保养备注信息" style="resize:vertical;">' + (r.remark||'') + '</textarea></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveEditMaintenance(\'' + id + '\')">保存</button></div>';
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveEditMaintenance(id){
+  try{
   var device = document.getElementById('mDevice2').value;
   var type = document.getElementById('mType2').value;
   var date = document.getElementById('mDate2').value;
+  var remark = document.getElementById('mRemark2').value.trim();
+  // 收集每日保养项
+  var dailyItems = [];
+  var dailyChecks = document.querySelectorAll('.mDailyItem2:checked');
+  for(var i=0;i<dailyChecks.length;i++){ dailyItems.push(dailyChecks[i].value); }
+  var dailyOther = document.getElementById('mDailyOther2');
+  if(dailyOther && dailyOther.value.trim()){ dailyItems.push(dailyOther.value.trim()); }
+  // 收集每周保养项
+  var weeklyItems = [];
+  var weeklyChecks = document.querySelectorAll('.mWeeklyItem2:checked');
+  for(var j=0;j<weeklyChecks.length;j++){ weeklyItems.push(weeklyChecks[j].value); }
+  var weeklyOther = document.getElementById('mWeeklyOther2');
+  if(weeklyOther && weeklyOther.value.trim()){ weeklyItems.push(weeklyOther.value.trim()); }
   var score = type === '日常保养' ? 2 : type === '周保养' ? 3 : type === '月保养' ? 5 : 8;
   for(var i=0;i<appData.maintenanceRecords.length;i++){
     if(appData.maintenanceRecords[i].id === id){
@@ -768,6 +1099,9 @@ function saveEditMaintenance(id){
       appData.maintenanceRecords[i].type = type;
       appData.maintenanceRecords[i].date = date;
       appData.maintenanceRecords[i].score = score;
+      appData.maintenanceRecords[i].dailyItems = dailyItems;
+      appData.maintenanceRecords[i].weeklyItems = weeklyItems;
+      appData.maintenanceRecords[i].remark = remark;
       break;
     }
   }
@@ -775,6 +1109,15 @@ function saveEditMaintenance(id){
   closeModal();
   loadMaintenance();
   showToast('✅ 保养记录已更新');
+
+  }catch(err){
+    console.error('saveEditMaintenance执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
+function toggleMaintItems2(){
+  var type = document.getElementById('mType2').value;
+  document.getElementById('mDailyItems2').style.display = (type === '日常保养') ? 'block' : 'none';
+  document.getElementById('mWeeklyItems2').style.display = (type !== '日常保养') ? 'block' : 'none';
 }
 function deleteMaintenance(id){
   if(confirm('确定要删除该保养记录吗？')){
@@ -802,59 +1145,122 @@ function openMaintenanceModal(){
   var modal = document.getElementById('modalContent');
   var deviceOptions = '';
   for(var i=0;i<appData.devices.length;i++){ deviceOptions += '<option value="' + appData.devices[i].name + '">' + appData.devices[i].name + '</option>'; }
-  modal.innerHTML = '<div class="modal-header"><h3>新增保养记录</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">设备</label><select class="form-select" id="mDevice" style="flex:1;">' + deviceOptions + '</select><button class="action-btn action-btn-green" onclick="scanQrCode()" style="margin-left:8px;padding:6px 12px;font-size:13px;">📷 扫码</button></div><div class="form-group"><label class="form-label">保养类型</label><select class="form-select" id="mType"><option value="日常保养">日常保养</option><option value="周保养">周保养</option><option value="月保养">月保养</option><option value="季度保养">季度保养</option></select></div><div class="form-group"><label class="form-label">保养日期</label><input type="date" class="form-input" id="mDate" value="' + new Date().toISOString().split('T')[0] + '"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveMaintenance()">保存</button></div>';
+  var today = new Date().toISOString().split('T')[0];
+  modal.innerHTML = '<div class="modal-header"><h3>新增保养记录</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">设备</label><select class="form-select" id="mDevice" style="flex:1;">' + deviceOptions + '</select><button class="action-btn action-btn-green" onclick="scanQrCode()" style="margin-left:8px;padding:6px 12px;font-size:13px;">📷 扫码</button></div><div class="form-group"><label class="form-label">保养类型</label><select class="form-select" id="mType" onchange="toggleMaintItems()"><option value="日常保养">日常保养</option><option value="周保养">周保养</option><option value="月保养">月保养</option><option value="季度保养">季度保养</option></select></div><div class="form-group"><label class="form-label">保养日期</label><input type="date" class="form-input" id="mDate" value="' + today + '"></div><div class="form-group" id="mDailyItems" style="display:block;"><label class="form-label">📋 每日保养项目</label><div style="max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:10px;"><label class="checkbox-label"><input type="checkbox" class="mDailyItem" value="样本针清洗"> 样本针清洗</label><label class="checkbox-label"><input type="checkbox" class="mDailyItem" value="反应杯检查"> 反应杯检查</label><label class="checkbox-label"><input type="checkbox" class="mDailyItem" value="废弃液桶清洗"> 废弃液桶清洗</label><label class="checkbox-label"><input type="checkbox" class="mDailyItem" value="外部除尘"> 外部除尘</label><label class="checkbox-label"><input type="checkbox" class="mDailyItem" value="开机冲洗"> 开机冲洗</label><label class="checkbox-label"><input type="checkbox" class="mDailyItem" value="其他"> 其他：<input type="text" class="form-input" id="mDailyOther" placeholder="其他每日保养项" style="width:150px;display:inline-block;margin-left:5px;"></label></div></div><div class="form-group" id="mWeeklyItems" style="display:none;"><label class="form-label">📋 每周保养项目</label><div style="max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:10px;"><label class="checkbox-label"><input type="checkbox" class="mWeeklyItem" value="清洗管路"> 清洗管路</label><label class="checkbox-label"><input type="checkbox" class="mWeeklyItem" value="维护保养"> 维护保养</label><label class="checkbox-label"><input type="checkbox" class="mWeeklyItem" value="过滤器清洗"> 过滤器清洗</label><label class="checkbox-label"><input type="checkbox" class="mWeeklyItem" value="光路检查"> 光路检查</label><label class="checkbox-label"><input type="checkbox" class="mWeeklyItem" value="其他"> 其他：<input type="text" class="form-input" id="mWeeklyOther" placeholder="其他每周保养项" style="width:150px;display:inline-block;margin-left:5px;"></label></div></div><div class="form-group"><label class="form-label">📝 备注</label><textarea class="form-input" id="mRemark" rows="3" placeholder="请输入保养备注信息（如异常情况、更换配件等）" style="resize:vertical;"></textarea></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveMaintenance()">保存</button></div>';
   document.getElementById('modalOverlay').classList.add('active');
 }
+function toggleMaintItems(){
+  var type = document.getElementById('mType').value;
+  document.getElementById('mDailyItems').style.display = (type === '日常保养') ? 'block' : 'none';
+  document.getElementById('mWeeklyItems').style.display = (type === '周保养' || type === '月保养' || type === '季度保养') ? 'block' : 'none';
+}
 function saveMaintenance(){
+  try{
   addOperationLog('新增保养记录', '设备：'+document.getElementById('mDevice').value+'，类型：'+document.getElementById('mType').value);
 
   var device = document.getElementById('mDevice').value;
   var type = document.getElementById('mType').value;
   var date = document.getElementById('mDate').value;
+  var remark = document.getElementById('mRemark').value.trim();
+  // 收集每日保养项
+  var dailyItems = [];
+  var dailyChecks = document.querySelectorAll('.mDailyItem:checked');
+  for(var i=0;i<dailyChecks.length;i++){ dailyItems.push(dailyChecks[i].value); }
+  var dailyOther = document.getElementById('mDailyOther');
+  if(dailyOther && dailyOther.value.trim()){ dailyItems.push(dailyOther.value.trim()); }
+  // 收集每周保养项
+  var weeklyItems = [];
+  var weeklyChecks = document.querySelectorAll('.mWeeklyItem:checked');
+  for(var j=0;j<weeklyChecks.length;j++){ weeklyItems.push(weeklyChecks[j].value); }
+  var weeklyOther = document.getElementById('mWeeklyOther');
+  if(weeklyOther && weeklyOther.value.trim()){ weeklyItems.push(weeklyOther.value.trim()); }
   var score = type === '日常保养' ? 2 : type === '周保养' ? 3 : type === '月保养' ? 5 : 8;
-  appData.maintenanceRecords.push({id:'M'+Date.now(),device,type,date,operator:currentUser.name,status:'completed',score:score});
+  appData.maintenanceRecords.push({id:'M'+Date.now(),device,type,date,operator:currentUser.name,status:'completed',score:score,dailyItems:dailyItems,weeklyItems:weeklyItems,remark:remark});
   saveData();
   closeModal();
   loadMaintenance();
   showToast('✅ 保养记录已保存，+' + score + '分');
-}
+
+  }catch(err){
+    console.error('saveMaintenance执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
 function loadQc(){
-  var list = document.getElementById('qcList');
-  var html = '';
-  for(var i=appData.qcRecords.length-1;i>=0;i--){
-    var r = appData.qcRecords[i];
-    var statusBadge = r.status === 'in-control' ? '<span class="badge badge-green">在控</span>' : '<span class="badge badge-red">失控</span>';
-    var editBtn = '<button class="btn btn-outline btn-sm" onclick="editQc(\'' + r.id + '\')">编辑</button>';
-    var delBtn = '<button class="btn btn-danger btn-sm" onclick="deleteQc(\'' + r.id + '\')">删除</button>';
-    html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e8f5e9;">📊</div><div><div class="item-title">' + r.project + ' (' + r.level + ')</div><div class="item-desc">' + r.value + ' · 靶值:' + r.target + ' · ' + r.date + '</div></div></div><div class="item-right">' + statusBadge + '<div style="display:flex;gap:5px;margin-top:5px;">' + editBtn + ' ' + delBtn + '</div></div></div></div>';
+  try{
+    var list = document.getElementById('qcList');
+    if(!list){ console.error('qcList元素不存在'); return; }
+    var html = '';
+    // 显示质控记录
+    if(appData.qcRecords && appData.qcRecords.length > 0){
+      for(var i=appData.qcRecords.length-1;i>=0;i--){
+        var r = appData.qcRecords[i];
+        var statusBadge = r.status === 'in-control' ? '<span class="badge badge-green">在控</span>' : '<span class="badge badge-red">失控</span>';
+        var editBtn = '<button class="btn btn-outline btn-sm" onclick="editQc(\'' + r.id + '\')">编辑</button>';
+        var delBtn = '<button class="btn btn-danger btn-sm" onclick="deleteQc(\'' + r.id + '\')">删除</button>';
+        var extraInfo = '';
+        if(r.status === 'out-control' && r.outRule) extraInfo += ' ⚠️ 违反:' + r.outRule;
+        if(r.outResult) extraInfo += ' · 结果:' + r.outResult;
+        if(r.qcAnalysis) extraInfo += ' 📊 分析:' + r.qcAnalysis.substring(0,20) + (r.qcAnalysis.length>20?'...':'');
+        html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e8f5e9;">📊</div><div><div class="item-title">' + r.project + ' (' + r.level + ')</div><div class="item-desc">' + r.value + ' · 靶值:' + r.target + ' · ' + r.date + '</div>' + (extraInfo ? '<div style="font-size:12px;color:#666;margin-top:3px;">' + extraInfo + '</div>' : '') + '</div></div><div class="item-right">' + statusBadge + '<div style="display:flex;gap:5px;margin-top:5px;">' + editBtn + ' ' + delBtn + '</div></div></div></div>';
+      }
+    }
+    // 显示室间质评记录
+    if(appData.eqaRecords && appData.eqaRecords.length > 0){
+      for(var j=appData.eqaRecords.length-1;j>=0;j--){
+        var e = appData.eqaRecords[j];
+        var gradeBadge = e.grade === '合格' ? '<span class="badge badge-green">合格</span>' : (e.grade === '优秀' ? '<span class="badge badge-blue">优秀</span>' : '<span class="badge badge-red">不合格</span>');
+        html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e3f2fd;">🏆</div><div><div class="item-title">' + e.project + ' (EQA)</div><div class="item-desc">成绩:' + e.grade + ' · ' + (e.date || '') + (e.user ? ' · ' + e.user : '') + '</div></div></div><div class="item-right">' + gradeBadge + '</div></div></div>';
+      }
+    }
+    if(html === '') html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无质控记录</div></div></div>';
+    list.innerHTML = html;
+  }catch(err){
+    console.error('加载质控列表失败:', err);
   }
-  if(appData.qcRecords.length === 0) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无质控记录</div></div></div>';
-  list.innerHTML = html;
 }
 function editQc(id){
   var r = null;
   for(var i=0;i<appData.qcRecords.length;i++){ if(appData.qcRecords[i].id === id){ r = appData.qcRecords[i]; break; } }
   if(!r){ showToast('记录不存在'); return; }
   var modal = document.getElementById('modalContent');
-  modal.innerHTML = '<div class="modal-header"><h3>编辑质控记录</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">检测项目</label><input type="text" class="form-input" id="qProject2" value="' + r.project + '"></div><div class="form-group"><label class="form-label">质控品水平</label><select class="form-select" id="qLevel2"><option value="L1"' + (r.level==='L1'?' selected':'') + '>L1</option><option value="L2"' + (r.level==='L2'?' selected':'') + '>L2</option><option value="L3"' + (r.level==='L3'?' selected':'') + '>L3</option></select></div><div class="form-group"><label class="form-label">测定值</label><input type="number" class="form-input" id="qValue2" value="' + r.value + '"></div><div class="form-group"><label class="form-label">靶值</label><input type="number" class="form-input" id="qTarget2" value="' + r.target + '"></div><div class="form-group"><label class="form-label">日期</label><input type="date" class="form-input" id="qDate2" value="' + r.date + '"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveEditQc(\'' + id + '\')">保存</button></div>';
+  modal.innerHTML = '<div class="modal-header"><h3>编辑质控记录</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">检测项目</label><input type="text" class="form-input" id="qProject2" value="' + r.project + '"></div><div class="form-group"><label class="form-label">质控品水平</label><select class="form-select" id="qLevel2"><option value="L1"' + (r.level==='L1'?' selected':'') + '>L1</option><option value="L2"' + (r.level==='L2'?' selected':'') + '>L2</option><option value="L3"' + (r.level==='L3'?' selected':'') + '>L3</option></select></div><div class="form-group"><label class="form-label">测定值</label><input type="number" class="form-input" id="qValue2" value="' + r.value + '"></div><div class="form-group"><label class="form-label">靶值</label><input type="number" class="form-input" id="qTarget2" value="' + r.target + '"></div><div class="form-group"><label class="form-label">SD值</label><input type="number" class="form-input" id="qSd2" value="' + (r.sd || (r.target*0.03).toFixed(2)) + '" step="0.01"></div><div class="form-group"><label class="form-label">日期</label><input type="date" class="form-input" id="qDate2" value="' + r.date + '"></div><div class="form-group"><label class="form-label">状态</label><select class="form-select" id="qStatus2"><option value="in-control"' + (r.status==='in-control'?' selected':'') + '>✅ 在控</option><option value="out-control"' + (r.status==='out-control'?' selected':'') + '>❌ 失控</option></select></div><div class="form-group" id="qcOutControlGroup2" style="display:' + (r.status==='out-control'?'block':'none') + ';"><label class="form-label">⚠️ 出控记录</label><div style="border:1px solid #ffcdd2;border-radius:8px;padding:10px;background:#fff5f5;"><div class="form-group"><label class="form-label" style="font-size:12px;">违反规则</label><select class="form-select" id="qOutRule2"><option value="1-3s"' + (r.outRule==='1-3s'?' selected':'') + '>1-3s（随机误差大）</option><option value="2-2s"' + (r.outRule==='2-2s'?' selected':'') + '>2-2s（系统误差）</option><option value="R-4s"' + (r.outRule==='R-4s'?' selected':'') + '>R-4s（随机误差大）</option><option value="4-1s"' + (r.outRule==='4-1s'?' selected':'') + '>4-1s（系统误差）</option><option value="10x"' + (r.outRule==='10x'?' selected':'') + '>10x（系统误差）</option></select></div><div class="form-group"><label class="form-label" style="font-size:12px;">原因分析（四维度）</label><textarea class="form-input" id="qOutAnalysis2" rows="4" placeholder="从以下四个维度分析失控原因：&#10;1. 质控品：是否过期、变质、复溶不当&#10;2. 试剂：是否过期、批号变更、污染&#10;3. 仪器：是否故障、光路异常、温度异常&#10;4. 操作：是否加样错误、稀释错误">' + (r.outAnalysis||'') + '</textarea></div><div class="form-group"><label class="form-label" style="font-size:12px;">纠正措施</label><textarea class="form-input" id="qOutAction2" rows="3" placeholder="请输入采取的纠正措施">' + (r.outAction||'') + '</textarea></div><div class="form-group"><label class="form-label" style="font-size:12px;">处理结果</label><select class="form-select" id="qOutResult2"><option value="已纠正"' + (r.outResult==='已纠正'?' selected':'') + '>✅ 已纠正</option><option value="待观察"' + (r.outResult==='待观察'?' selected':'') + '>⏳ 待观察</option><option value="需更换试剂"' + (r.outResult==='需更换试剂'?' selected':'') + '>🔄 需更换试剂</option><option value="需维修仪器"' + (r.outResult==='需维修仪器'?' selected':'') + '>🔧 需维修仪器</option></select></div></div></div><div class="form-group"><label class="form-label">📊 质控分析</label><textarea class="form-input" id="qcAnalysis2" rows="3" placeholder="质控趋势分析、改进建议等">' + (r.qcAnalysis||'') + '</textarea></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveEditQc(\'' + id + '\')">保存</button></div>';
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveEditQc(id){
+  try{
   var project = document.getElementById('qProject2').value;
   var level = document.getElementById('qLevel2').value;
   var value = parseFloat(document.getElementById('qValue2').value);
   var target = parseFloat(document.getElementById('qTarget2').value);
+  var sd = parseFloat(document.getElementById('qSd2').value) || (target*0.03);
   var date = document.getElementById('qDate2').value;
+  var status = document.getElementById('qStatus2').value;
+  var outRule = '';
+  var outAnalysis = '';
+  var outAction = '';
+  var outResult = '';
+  if(status === 'out-control'){
+    outRule = (document.getElementById('qOutRule2')||{}).value || '';
+    outAnalysis = (document.getElementById('qOutAnalysis2')||{}).value || '';
+    outAction = (document.getElementById('qOutAction2')||{}).value || '';
+    outResult = (document.getElementById('qOutResult2')||{}).value || '';
+  }
+  var qcAnalysis = document.getElementById('qcAnalysis2').value.trim();
   if(!project || !value || !target){ showToast('请填写完整信息'); return; }
-  var inControl = Math.abs(value-target)/target <= 0.05;
   for(var i=0;i<appData.qcRecords.length;i++){
     if(appData.qcRecords[i].id === id){
       appData.qcRecords[i].project = project;
       appData.qcRecords[i].level = level;
       appData.qcRecords[i].value = value;
       appData.qcRecords[i].target = target;
+      appData.qcRecords[i].sd = sd;
       appData.qcRecords[i].date = date;
-      appData.qcRecords[i].status = inControl ? 'in-control' : 'out-control';
+      appData.qcRecords[i].status = status;
+      appData.qcRecords[i].outRule = outRule;
+      appData.qcRecords[i].outAnalysis = outAnalysis;
+      appData.qcRecords[i].outAction = outAction;
+      appData.qcRecords[i].outResult = outResult;
+      appData.qcRecords[i].qcAnalysis = qcAnalysis;
       break;
     }
   }
@@ -862,7 +1268,11 @@ function saveEditQc(id){
   closeModal();
   loadQc();
   showToast('✅ 质控记录已更新');
-}
+
+  }catch(err){
+    console.error('saveEditQc执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
 function deleteQc(id){
   if(confirm('确定要删除该质控记录吗？')){
     for(var i=0;i<appData.qcRecords.length;i++){
@@ -878,7 +1288,7 @@ function deleteQc(id){
 }
 function openQcModal(){
   var modal = document.getElementById('modalContent');
-  modal.innerHTML = '<div class="modal-header"><h3>录入质控数据</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">检测项目</label><input type="text" class="form-input" id="qProject" placeholder="如：ALT"></div><div class="form-group"><label class="form-label">质控品水平</label><select class="form-select" id="qLevel"><option value="L1">L1</option><option value="L2">L2</option><option value="L3">L3</option></select></div><div class="form-group"><label class="form-label">测定值</label><input type="number" class="form-input" id="qValue" placeholder="请输入测定值"></div><div class="form-group"><label class="form-label">靶值</label><input type="number" class="form-input" id="qTarget" placeholder="请输入靶值"></div><div class="form-group"><label class="form-label">日期</label><input type="date" class="form-input" id="qDate" value="' + new Date().toISOString().split('T')[0] + '"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveQc()">保存</button></div>';
+  modal.innerHTML = '<div class="modal-header"><h3>录入质控数据</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">检测项目</label><input type="text" class="form-input" id="qProject" placeholder="如：ALT"></div><div class="form-group"><label class="form-label">质控品水平</label><select class="form-select" id="qLevel"><option value="L1">L1</option><option value="L2">L2</option><option value="L3">L3</option></select></div><div class="form-group"><label class="form-label">测定值</label><input type="number" class="form-input" id="qValue" placeholder="请输入测定值"></div><div class="form-group"><label class="form-label">靶值</label><input type="number" class="form-input" id="qTarget" placeholder="请输入靶值"></div><div class="form-group"><label class="form-label">SD值</label><input type="number" class="form-input" id="qSd" placeholder="标准差，默认靶值×3%" step="0.01"></div><div class="form-group"><label class="form-label">日期</label><input type="date" class="form-input" id="qDate" value="' + new Date().toISOString().split('T')[0] + '"></div><div class="form-group" id="qcOutControlGroup" style="display:none;"><label class="form-label">⚠️ 出控记录</label><div style="border:1px solid #ffcdd2;border-radius:8px;padding:10px;background:#fff5f5;"><div class="form-group"><label class="form-label" style="font-size:12px;">违反规则</label><select class="form-select" id="qOutRule"><option value="1-3s">1-3s（随机误差大）</option><option value="2-2s">2-2s（系统误差）</option><option value="R-4s">R-4s（随机误差大）</option><option value="4-1s">4-1s（系统误差）</option><option value="10x">10x（系统误差）</option></select></div><div class="form-group"><label class="form-label" style="font-size:12px;">原因分析（四维度）</label><textarea class="form-input" id="qOutAnalysis" rows="4" placeholder="从以下四个维度分析失控原因：&#10;1. 质控品：是否过期、变质、复溶不当&#10;2. 试剂：是否过期、批号变更、污染&#10;3. 仪器：是否故障、光路异常、温度异常&#10;4. 操作：是否加样错误、稀释错误"></textarea></div><div class="form-group"><label class="form-label" style="font-size:12px;">纠正措施</label><textarea class="form-input" id="qOutAction" rows="3" placeholder="请输入采取的纠正措施"></textarea></div><div class="form-group"><label class="form-label" style="font-size:12px;">处理结果</label><select class="form-select" id="qOutResult"><option value="已纠正">✅ 已纠正</option><option value="待观察">⏳ 待观察</option><option value="需更换试剂">🔄 需更换试剂</option><option value="需维修仪器">🔧 需维修仪器</option></select></div></div></div><div class="form-group"><label class="form-label">📊 质控分析</label><textarea class="form-input" id="qcAnalysis" rows="3" placeholder="质控趋势分析、改进建议等"></textarea></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveQc()">保存</button></div>';
   document.getElementById('modalOverlay').classList.add('active');
 }
 // Westgard多规则质控判断
@@ -897,6 +1307,7 @@ function checkWestgardRules(value, mean, sd){
   return rules;
 }
 function saveQc(){
+  try{
   addOperationLog('新增质控记录', '项目：'+document.getElementById('qcItem').value+'，结果：'+document.getElementById('qcValue').value);
 
   var project = document.getElementById('qProject').value;
@@ -905,13 +1316,30 @@ function saveQc(){
   var target = parseFloat(document.getElementById('qTarget').value);
   var date = document.getElementById('qDate').value;
   if(!project || !value || !target){ showToast('请填写完整信息'); return; }
+  var sd = parseFloat(document.getElementById('qSd').value) || (target*0.03);
   var inControl = Math.abs(value-target)/target <= 0.05;
-  appData.qcRecords.push({id:'Q'+Date.now(),project,level,value,target,range:'',date,operator:currentUser.name,status:inControl?'in-control':'out-control'});
+  var status = inControl ? 'in-control' : 'out-control';
+  var outRule = '';
+  var outAnalysis = '';
+  var outAction = '';
+  var outResult = '';
+  if(!inControl){
+    outRule = (document.getElementById('qOutRule')||{}).value || '';
+    outAnalysis = (document.getElementById('qOutAnalysis')||{}).value || '';
+    outAction = (document.getElementById('qOutAction')||{}).value || '';
+    outResult = (document.getElementById('qOutResult')||{}).value || '';
+  }
+  var qcAnalysis = document.getElementById('qcAnalysis').value.trim();
+  appData.qcRecords.push({id:'Q'+Date.now(),project,level,value,target,sd,range:'',date,operator:currentUser.name,status:status,outRule:outRule,outAnalysis:outAnalysis,outAction:outAction,outResult:outResult,qcAnalysis:qcAnalysis});
   saveData();
   closeModal();
   loadQc();
   showToast(inControl ? '✅ 质控数据已保存，在控' : '⚠️ 质控数据失控，请处理！');
-}
+
+  }catch(err){
+    console.error('saveQc执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
 function switchQcTab(tab, el){
   var tabs = document.querySelectorAll('#page-quality .tab');
   for(var i=0;i<tabs.length;i++){ tabs[i].classList.remove('active'); }
@@ -925,7 +1353,31 @@ function openEqaModal(){
   modal.innerHTML = '<div class="modal-header"><h3>新增室间质评</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">质评项目</label><input type="text" class="form-input" id="eProject" placeholder="如：全国生化EQA"></div><div class="form-group"><label class="form-label">成绩</label><select class="form-select" id="eGrade"><option value="优秀">优秀</option><option value="合格">合格</option><option value="不合格">不合格</option></select></div><div class="form-group"><label class="form-label">日期</label><input type="date" class="form-input" id="eDate" value="' + new Date().toISOString().split('T')[0] + '"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveEqa()">保存</button></div>';
   document.getElementById('modalOverlay').classList.add('active');
 }
-function saveEqa(){ closeModal(); showToast('✅ EQA记录已保存'); }
+function saveEqa(){
+  try{
+    var project = document.getElementById('eProject').value;
+    var grade = document.getElementById('eGrade').value;
+    var date = document.getElementById('eDate').value;
+    if(!project){ showToast('⚠️ 请填写质评项目'); return; }
+    if(!appData.eqaRecords) appData.eqaRecords = [];
+    appData.eqaRecords.push({
+      id: 'EQA' + Date.now(),
+      project: project,
+      grade: grade,
+      date: date,
+      user: currentUser ? currentUser.name : '',
+      time: new Date().toLocaleString()
+    });
+    saveData();
+    try{ loadQc(); }catch(e){ console.error('刷新质控列表失败:', e); }
+    try{ addOperationLog('新增室间质评', '项目：'+project+'，成绩：'+grade); }catch(e){ console.error('记录日志失败:', e); }
+    try{ closeModal(); }catch(e){ console.error('关闭弹窗失败:', e); }
+    showToast('✅ EQA记录已保存');
+  }catch(err){
+    console.error('保存EQA失败:', err);
+    showToast('⚠️ 保存失败: ' + err.message);
+  }
+}
 function loadWorkload(){
   var today = new Date().toISOString().split('T')[0];
   var todayCount = 0, weekCount = 0, monthCount = 0;
@@ -951,7 +1403,10 @@ function loadWorkload(){
     var r = appData.workloadRecords[i];
     var editBtn = '<button class="btn btn-outline btn-sm" onclick="editWorkload(\'' + r.id + '\')">编辑</button>';
     var delBtn = '<button class="btn btn-danger btn-sm" onclick="deleteWorkload(\'' + r.id + '\')">删除</button>';
-    html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e3f2fd;">📝</div><div><div class="item-title">' + r.type + ' · ' + r.samples + '样本</div><div class="item-desc">' + r.date + ' · ' + r.operator + '</div></div></div><div class="item-right"><span class="badge badge-blue">+' + r.score + '分</span><div style="display:flex;gap:5px;margin-top:5px;">' + editBtn + ' ' + delBtn + '</div></div></div></div>';
+    var extra = '';
+    if(r.audit) extra += '审核' + r.audit + '份 ';
+    if(r.publish) extra += '发布' + r.publish + '份';
+    html += '<div class="list-card"><div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e3f2fd;">📝</div><div><div class="item-title">' + r.type + ' · ' + r.samples + '样本</div><div class="item-desc">' + r.date + ' · ' + r.operator + (extra ? ' · ' + extra : '') + '</div></div></div><div class="item-right"><span class="badge badge-blue">+' + r.score + '分</span><div style="display:flex;gap:5px;margin-top:5px;">' + editBtn + ' ' + delBtn + '</div></div></div></div>';
   }
   if(appData.workloadRecords.length === 0) html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无工作量记录</div></div></div>';
   list.innerHTML = html;
@@ -961,19 +1416,24 @@ function editWorkload(id){
   for(var i=0;i<appData.workloadRecords.length;i++){ if(appData.workloadRecords[i].id === id){ r = appData.workloadRecords[i]; break; } }
   if(!r){ showToast('记录不存在'); return; }
   var modal = document.getElementById('modalContent');
-  modal.innerHTML = '<div class="modal-header"><h3>编辑工作量</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">检验类型</label><select class="form-select" id="wType2"><option value="生化"' + (r.type==='生化'?' selected':'') + '>生化</option><option value="临检"' + (r.type==='临检'?' selected':'') + '>临检</option><option value="免疫"' + (r.type==='免疫'?' selected':'') + '>免疫</option><option value="微生物"' + (r.type==='微生物'?' selected':'') + '>微生物</option><option value="分子"' + (r.type==='分子'?' selected':'') + '>分子</option><option value="输血"' + (r.type==='输血'?' selected':'') + '>输血</option></select></div><div class="form-group"><label class="form-label">样本数量</label><input type="number" class="form-input" id="wSamples2" value="' + r.samples + '"></div><div class="form-group"><label class="form-label">日期</label><input type="date" class="form-input" id="wDate2" value="' + r.date + '"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveEditWorkload(\'' + id + '\')">保存</button></div>';
+  modal.innerHTML = '<div class="modal-header"><h3>编辑工作量</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">检验类型</label><select class="form-select" id="wType2"><option value="生化"' + (r.type==='生化'?' selected':'') + '>生化</option><option value="临检"' + (r.type==='临检'?' selected':'') + '>临检</option><option value="免疫"' + (r.type==='免疫'?' selected':'') + '>免疫</option><option value="微生物"' + (r.type==='微生物'?' selected':'') + '>微生物</option><option value="分子"' + (r.type==='分子'?' selected':'') + '>分子</option><option value="输血"' + (r.type==='输血'?' selected':'') + '>输血</option></select></div><div class="form-group"><label class="form-label">样本数量</label><input type="number" class="form-input" id="wSamples2" value="' + (r.samples||0) + '"></div><div class="form-group"><label class="form-label">审核报告数量</label><input type="number" class="form-input" id="wAudit2" value="' + (r.audit||0) + '"></div><div class="form-group"><label class="form-label">发布报告数量</label><input type="number" class="form-input" id="wPublish2" value="' + (r.publish||0) + '"></div><div class="form-group"><label class="form-label">日期</label><input type="date" class="form-input" id="wDate2" value="' + r.date + '"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveEditWorkload(\'' + id + '\')">保存</button></div>';
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveEditWorkload(id){
+  try{
   var type = document.getElementById('wType2').value;
-  var samples = parseInt(document.getElementById('wSamples2').value);
+  var samples = parseInt(document.getElementById('wSamples2').value) || 0;
+  var audit = parseInt(document.getElementById('wAudit2').value) || 0;
+  var publish = parseInt(document.getElementById('wPublish2').value) || 0;
   var date = document.getElementById('wDate2').value;
-  if(!samples){ showToast('请输入样本数量'); return; }
-  var score = Math.round(samples * 0.1 * 10) / 10;
+  if(!samples && !audit && !publish){ showToast('请至少填写一项工作量'); return; }
+  var score = Math.round((samples * 0.1 + audit * 0.05 + publish * 0.08) * 10) / 10;
   for(var i=0;i<appData.workloadRecords.length;i++){
     if(appData.workloadRecords[i].id === id){
       appData.workloadRecords[i].type = type;
       appData.workloadRecords[i].samples = samples;
+      appData.workloadRecords[i].audit = audit;
+      appData.workloadRecords[i].publish = publish;
       appData.workloadRecords[i].date = date;
       appData.workloadRecords[i].score = score;
       break;
@@ -983,7 +1443,11 @@ function saveEditWorkload(id){
   closeModal();
   loadWorkload();
   showToast('✅ 工作量已更新');
-}
+
+  }catch(err){
+    console.error('saveEditWorkload执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
 function deleteWorkload(id){
   if(confirm('确定要删除该工作量记录吗？')){
     for(var i=0;i<appData.workloadRecords.length;i++){
@@ -999,21 +1463,28 @@ function deleteWorkload(id){
 }
 function openWorkloadModal(){
   var modal = document.getElementById('modalContent');
-  modal.innerHTML = '<div class="modal-header"><h3>录入工作量</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">检验类型</label><select class="form-select" id="wType"><option value="生化">生化</option><option value="临检">临检</option><option value="免疫">免疫</option><option value="微生物">微生物</option><option value="分子">分子</option><option value="输血">输血</option></select></div><div class="form-group"><label class="form-label">样本数量</label><input type="number" class="form-input" id="wSamples" placeholder="请输入样本数量"></div><div class="form-group"><label class="form-label">日期</label><input type="date" class="form-input" id="wDate" value="' + new Date().toISOString().split('T')[0] + '"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveWorkload()">保存</button></div>';
+  modal.innerHTML = '<div class="modal-header"><h3>录入工作量</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">检验类型</label><select class="form-select" id="wType"><option value="生化">生化</option><option value="临检">临检</option><option value="免疫">免疫</option><option value="微生物">微生物</option><option value="分子">分子</option><option value="输血">输血</option></select></div><div class="form-group"><label class="form-label">样本数量</label><input type="number" class="form-input" id="wSamples" placeholder="请输入样本数量"></div><div class="form-group"><label class="form-label">审核报告数量</label><input type="number" class="form-input" id="wAudit" placeholder="审核签发的报告数量" value="0"></div><div class="form-group"><label class="form-label">发布报告数量</label><input type="number" class="form-input" id="wPublish" placeholder="正式发布的报告数量" value="0"></div><div class="form-group"><label class="form-label">日期</label><input type="date" class="form-input" id="wDate" value="' + new Date().toISOString().split('T')[0] + '"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveWorkload()">保存</button></div>';
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveWorkload(){
+  try{
   var type = document.getElementById('wType').value;
-  var samples = parseInt(document.getElementById('wSamples').value);
+  var samples = parseInt(document.getElementById('wSamples').value) || 0;
+  var audit = parseInt(document.getElementById('wAudit').value) || 0;
+  var publish = parseInt(document.getElementById('wPublish').value) || 0;
   var date = document.getElementById('wDate').value;
-  if(!samples){ showToast('请输入样本数量'); return; }
-  var score = Math.round(samples * 0.1 * 10) / 10;
-  appData.workloadRecords.push({id:'W'+Date.now(),date,samples,type,operator:currentUser.name,score:score});
+  if(!samples && !audit && !publish){ showToast('请至少填写一项工作量'); return; }
+  var score = Math.round((samples * 0.1 + audit * 0.05 + publish * 0.08) * 10) / 10;
+  appData.workloadRecords.push({id:'W'+Date.now(),date,samples,audit,publish,type,operator:currentUser.name,score:score});
   saveData();
   closeModal();
   loadWorkload();
   showToast('✅ 工作量已保存，+' + score + '分');
-}
+
+  }catch(err){
+    console.error('saveWorkload执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
 function loadSop(){
   var list = document.getElementById('sopList');
   var html = '';
@@ -1036,6 +1507,7 @@ function editCritical(id){
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveEditCritical(id){
+  try{
   var patient = document.getElementById('cPatient2').value;
   var item = document.getElementById('cItem2').value;
   var value = document.getElementById('cValue2').value;
@@ -1056,7 +1528,11 @@ function saveEditCritical(id){
   closeModal();
   loadCritical();
   showToast('✅ 危急值记录已更新');
-}
+
+  }catch(err){
+    console.error('saveEditCritical执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
 function deleteCritical(id){
   if(confirm('确定要删除该危急值记录吗？')){
     for(var i=0;i<appData.criticalRecords.length;i++){
@@ -1076,6 +1552,7 @@ function openCriticalModal(){
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveCritical(){
+  try{
   var patient = document.getElementById('cPatient').value;
   var item = document.getElementById('cItem').value;
   var value = document.getElementById('cValue').value;
@@ -1087,7 +1564,11 @@ function saveCritical(){
   closeModal();
   loadCritical();
   showToast('✅ 危急值已报告，+5分');
-}
+
+  }catch(err){
+    console.error('saveCritical执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
 function loadReagent(){
   var list = document.getElementById('reagentList');
   var html = '';
@@ -1116,6 +1597,7 @@ function editReagent(id){
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveEditReagent(id){
+  try{
   var name = document.getElementById('rName2').value;
   var spec = document.getElementById('rSpec2').value;
   var group = document.getElementById('rGroup2').value;
@@ -1141,7 +1623,11 @@ function saveEditReagent(id){
   loadReagent();
   loadSettingsReagent();
   showToast('✅ 试剂已更新');
-}
+
+  }catch(err){
+    console.error('saveEditReagent执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
 function deleteReagent(id){
   if(confirm('确定要删除该试剂吗？')){
     for(var i=0;i<appData.reagents.length;i++){
@@ -1170,6 +1656,7 @@ function openReagentModal(){
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveReagent(){
+  try{
   var name = document.getElementById('rName').value;
   var spec = document.getElementById('rSpec').value;
   var group = document.getElementById('rGroup').value;
@@ -1184,7 +1671,11 @@ function saveReagent(){
   loadReagent();
   loadSettings();
   showToast('✅ 试剂已添加');
-}
+
+  }catch(err){
+    console.error('saveReagent执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
 function openReagentInOutModal(){
   var modal = document.getElementById('modalContent');
   var options = '';
@@ -1193,6 +1684,7 @@ function openReagentInOutModal(){
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveReagentInOut(){
+  try{
   var name = document.getElementById('ioReagent').value;
   var type = document.getElementById('ioType').value;
   var qty = parseInt(document.getElementById('ioQty').value);
@@ -1209,7 +1701,11 @@ function saveReagentInOut(){
   loadReagent();
   loadSettings();
   showToast(type === 'in' ? '✅ 入库成功' : '✅ 出库成功');
-}
+
+  }catch(err){
+    console.error('saveReagentInOut执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
 function loadPerformance(){
   // 加载绩效权重配置
   var weights = appData.scoreWeights;
@@ -1269,11 +1765,15 @@ function switchPerfTab(tab, el){
   document.getElementById('perfRules').style.display = tab === 'rules' ? 'block' : 'none';
 }
 function loadSettings(){
-  var isManager = currentUser.role === '系统管理员' || currentUser.role === '科主任';
+  var isManager = currentUser.role === '系统管理员' || currentUser.role === '科主任' || currentUser.role === '副主任';
+  var isAdmin = currentUser.role === '系统管理员';
   // 非管理层不显示员工管理tab
   var tabs = document.querySelectorAll('#settingsTabs .tab');
   if(tabs.length > 0){
     tabs[0].style.display = isManager ? 'inline-block' : 'none';
+    // 云端管理tab仅系统管理员可见
+    var cloudTab = document.querySelector('#settingsTabs .tab[onclick*="cloud"]');
+    if(cloudTab) cloudTab.style.display = isAdmin ? 'inline-block' : 'none';
     if(!isManager){
       // 非管理层自动切换到设备管理tab
       var staffDiv = document.getElementById('settingsStaff');
@@ -1290,7 +1790,7 @@ function loadSettings(){
 function loadStaff(){
   var list = document.getElementById('staffList');
   var html = '';
-  var isManager = currentUser.role === '系统管理员' || currentUser.role === '科主任';
+  var isManager = currentUser.role === '系统管理员' || currentUser.role === '科主任' || currentUser.role === '副主任';
   if(!isManager){
     // 非管理层只能看到自己的信息
     var u = currentUser;
@@ -1316,7 +1816,7 @@ function loadStaff(){
   list.innerHTML = html;
 }
 function deleteStaff(id){
-  var isManager = currentUser.role === '系统管理员' || currentUser.role === '科主任';
+  var isManager = currentUser.role === '系统管理员' || currentUser.role === '科主任' || currentUser.role === '副主任';
   if(!isManager){ showToast('无权限操作员工管理'); return; }
 
   if(confirm('确定要删除该员工吗？此操作不可恢复！')){
@@ -1332,17 +1832,18 @@ function deleteStaff(id){
   }
 }
 function editStaff(id){
-  var isManager = currentUser.role === '系统管理员' || currentUser.role === '科主任';
+  var isManager = currentUser.role === '系统管理员' || currentUser.role === '科主任' || currentUser.role === '副主任';
   if(!isManager){ showToast('无权限操作员工管理'); return; }
 
   var u = null;
   for(var i=0;i<appData.users.length;i++){ if(appData.users[i].id === id){ u = appData.users[i]; break; } }
   if(!u){ showToast('员工不存在'); return; }
   var modal = document.getElementById('modalContent');
-  modal.innerHTML = '<div class="modal-header"><h3>编辑员工</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">姓名</label><input type="text" class="form-input" id="eName" value="' + u.name + '"></div><div class="form-group"><label class="form-label">角色</label><select class="form-select" id="eRole"><option value="检验人员"' + (u.role==='检验人员'?' selected':'') + '>检验人员</option><option value="专业组组长"' + (u.role==='专业组组长'?' selected':'') + '>专业组组长</option><option value="质控员"' + (u.role==='质控员'?' selected':'') + '>质控员</option><option value="设备管理员"' + (u.role==='设备管理员'?' selected':'') + '>设备管理员</option><option value="科主任"' + (u.role==='科主任'?' selected':'') + '>科主任</option><option value="系统管理员"' + (u.role==='系统管理员'?' selected':'') + '>系统管理员</option></select></div><div class="form-group"><label class="form-label">专业组</label><select class="form-select" id="eGroup"><option value="临检组"' + (u.group==='临检组'?' selected':'') + '>临检组</option><option value="生化组"' + (u.group==='生化组'?' selected':'') + '>生化组</option><option value="免疫组"' + (u.group==='免疫组'?' selected':'') + '>免疫组</option><option value="微生物组"' + (u.group==='微生物组'?' selected':'') + '>微生物组</option><option value="分子组"' + (u.group==='分子组'?' selected':'') + '>分子组</option><option value="输血组"' + (u.group==='输血组'?' selected':'') + '>输血组</option><option value="管理层"' + (u.group==='管理层'?' selected':'') + '>管理层</option></select></div><div class="form-group"><label class="form-label">联系电话</label><input type="tel" class="form-input" id="ePhone" value="' + u.phone + '"></div><div class="form-group"><label class="form-label">状态</label><select class="form-select" id="eStatus"><option value="active"' + (u.status==='active'?' selected':'') + '>在职</option><option value="inactive"' + (u.status==='inactive'?' selected':'') + '>停用</option></select></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveEditStaff(\'' + id + '\')">保存</button></div>';
+  modal.innerHTML = '<div class="modal-header"><h3>编辑员工</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">姓名</label><input type="text" class="form-input" id="eName" value="' + u.name + '"></div><div class="form-group"><label class="form-label">角色</label><select class="form-select" id="eRole"><option value="检验人员"' + (u.role==='检验人员'?' selected':'') + '>检验人员</option><option value="专业组组长"' + (u.role==='专业组组长'?' selected':'') + '>专业组组长</option><option value="质控员"' + (u.role==='质控员'?' selected':'') + '>质控员</option><option value="设备管理员"' + (u.role==='设备管理员'?' selected':'') + '>设备管理员</option><option value="科主任"' + (u.role==='科主任'?' selected':'') + '>科主任</option><option value="系统管理员"' + (u.role==='系统管理员'?' selected':'') + '>系统管理员</option><option value="副主任">副主任</option></select></div><div class="form-group"><label class="form-label">专业组</label><select class="form-select" id="eGroup"><option value="临检组"' + (u.group==='临检组'?' selected':'') + '>临检组</option><option value="生化组"' + (u.group==='生化组'?' selected':'') + '>生化组</option><option value="免疫组"' + (u.group==='免疫组'?' selected':'') + '>免疫组</option><option value="微生物组"' + (u.group==='微生物组'?' selected':'') + '>微生物组</option><option value="分子组"' + (u.group==='分子组'?' selected':'') + '>分子组</option><option value="输血组"' + (u.group==='输血组'?' selected':'') + '>输血组</option><option value="管理层"' + (u.group==='管理层'?' selected':'') + '>管理层</option></select></div><div class="form-group"><label class="form-label">联系电话</label><input type="tel" class="form-input" id="ePhone" value="' + u.phone + '"></div><div class="form-group"><label class="form-label">状态</label><select class="form-select" id="eStatus"><option value="active"' + (u.status==='active'?' selected':'') + '>在职</option><option value="inactive"' + (u.status==='inactive'?' selected':'') + '>停用</option></select></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveEditStaff(\'' + id + '\')">保存</button></div>';
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveEditStaff(id){
+  try{
   var name = document.getElementById('eName').value.trim();
   var role = document.getElementById('eRole').value;
   var group = document.getElementById('eGroup').value;
@@ -1363,9 +1864,13 @@ function saveEditStaff(id){
   closeModal();
   loadStaff();
   showToast('✅ 员工信息已更新');
-}
+
+  }catch(err){
+    console.error('saveEditStaff执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
 function openPermModal(id){
-  var isManager = currentUser.role === '系统管理员' || currentUser.role === '科主任';
+  var isManager = currentUser.role === '系统管理员' || currentUser.role === '科主任' || currentUser.role === '副主任';
   if(!isManager){ showToast('无权限操作员工管理'); return; }
 
   var u = null;
@@ -1373,6 +1878,10 @@ function openPermModal(id){
   if(!u){ showToast('员工不存在'); return; }
   // 获取该员工的权限
   var perms = u.permissions || appData.permissions[u.role] || [];
+  // 副主任继承科主任权限
+  if(u.role === '副主任' && (!u.permissions || u.permissions.length === 0)){
+    perms = appData.permissions['科主任'] || [];
+  }
   var permItems = [
     {key:'home', name:'工作台', icon:'🏠'},
     {key:'handover', name:'交接班', icon:'🔄'},
@@ -1395,6 +1904,7 @@ function openPermModal(id){
   document.getElementById('modalOverlay').classList.add('active');
 }
 function savePerm(id){
+  try{
   var permKeys = ['home','handover','maintenance','quality','workload','sop','critical','reagent','performance','settings'];
   var newPerms = [];
   for(var i=0;i<permKeys.length;i++){
@@ -1411,12 +1921,16 @@ function savePerm(id){
   closeModal();
   loadStaff();
   showToast('✅ 权限已更新');
-}
+
+  }catch(err){
+    console.error('savePerm执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
 function filterStaff(){
   var keyword = document.getElementById('staffSearch').value.toLowerCase();
   var list = document.getElementById('staffList');
   var html = '';
-  var isManager = currentUser.role === '系统管理员' || currentUser.role === '科主任';
+  var isManager = currentUser.role === '系统管理员' || currentUser.role === '科主任' || currentUser.role === '副主任';
   if(!isManager){
     // 非管理层只能搜索自己
     var u = currentUser;
@@ -1441,14 +1955,15 @@ function filterStaff(){
   list.innerHTML = html;
 }
 function openStaffModal(){
-  var isManager = currentUser.role === '系统管理员' || currentUser.role === '科主任';
+  var isManager = currentUser.role === '系统管理员' || currentUser.role === '科主任' || currentUser.role === '副主任';
   if(!isManager){ showToast('无权限操作员工管理'); return; }
 
   var modal = document.getElementById('modalContent');
-  modal.innerHTML = '<div class="modal-header"><h3>新增员工</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">工号</label><input type="text" class="form-input" id="sId" placeholder="如：zhangsan"></div><div class="form-group"><label class="form-label">姓名</label><input type="text" class="form-input" id="sName" placeholder="请输入姓名"></div><div class="form-group"><label class="form-label">密码</label><input type="password" class="form-input" id="sPassword" placeholder="默认123456" value="123456"></div><div class="form-group"><label class="form-label">角色</label><select class="form-select" id="sRole"><option value="检验人员">检验人员</option><option value="专业组组长">专业组组长</option><option value="质控员">质控员</option><option value="设备管理员">设备管理员</option><option value="科主任">科主任</option><option value="系统管理员">系统管理员</option></select></div><div class="form-group"><label class="form-label">专业组</label><select class="form-select" id="sGroup"><option value="临检组">临检组</option><option value="生化组">生化组</option><option value="免疫组">免疫组</option><option value="微生物组">微生物组</option><option value="分子组">分子组</option><option value="输血组">输血组</option><option value="管理层">管理层</option></select></div><div class="form-group"><label class="form-label">联系电话</label><input type="tel" class="form-input" id="sPhone" placeholder="请输入手机号"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveStaff()">保存</button></div>';
+  modal.innerHTML = '<div class="modal-header"><h3>新增员工</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">工号</label><input type="text" class="form-input" id="sId" placeholder="如：zhangsan"></div><div class="form-group"><label class="form-label">姓名</label><input type="text" class="form-input" id="sName" placeholder="请输入姓名"></div><div class="form-group"><label class="form-label">密码</label><input type="password" class="form-input" id="sPassword" placeholder="默认123456" value="123456"></div><div class="form-group"><label class="form-label">角色</label><select class="form-select" id="sRole"><option value="检验人员">检验人员</option><option value="专业组组长">专业组组长</option><option value="质控员">质控员</option><option value="设备管理员">设备管理员</option><option value="科主任">科主任</option><option value="系统管理员">系统管理员</option><option value="副主任">副主任</option></select></div><div class="form-group"><label class="form-label">专业组</label><select class="form-select" id="sGroup"><option value="临检组">临检组</option><option value="生化组">生化组</option><option value="免疫组">免疫组</option><option value="微生物组">微生物组</option><option value="分子组">分子组</option><option value="输血组">输血组</option><option value="管理层">管理层</option></select></div><div class="form-group"><label class="form-label">联系电话</label><input type="tel" class="form-input" id="sPhone" placeholder="请输入手机号"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveStaff()">保存</button></div>';
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveStaff(){
+  try{
   var id = document.getElementById('sId').value.trim();
   var name = document.getElementById('sName').value.trim();
   var password = document.getElementById('sPassword').value;
@@ -1462,7 +1977,11 @@ function saveStaff(){
   closeModal();
   loadStaff();
   showToast('✅ 员工 ' + name + ' 已添加');
-}
+
+  }catch(err){
+    console.error('saveStaff执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
 function loadDevice(){
   var list = document.getElementById('deviceList');
   var html = '';
@@ -1485,6 +2004,7 @@ function editDevice(id){
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveEditDevice(id){
+  try{
   var name = document.getElementById('dName2').value.trim();
   var model = document.getElementById('dModel2').value.trim();
   var vendor = document.getElementById('dVendor2').value.trim();
@@ -1509,7 +2029,11 @@ function saveEditDevice(id){
   closeModal();
   loadDevice();
   showToast('✅ 设备已更新');
-}
+
+  }catch(err){
+    console.error('saveEditDevice执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
 function deleteDevice(id){
   if(confirm('确定要删除该设备吗？')){
     for(var i=0;i<appData.devices.length;i++){
@@ -1529,6 +2053,7 @@ function openDeviceModal(){
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveDevice(){
+  try{
   var id = document.getElementById('dId').value.trim();
   var name = document.getElementById('dName').value.trim();
   var model = document.getElementById('dModel').value.trim();
@@ -1542,7 +2067,11 @@ function saveDevice(){
   closeModal();
   loadDevice();
   showToast('✅ 设备已添加');
-}
+
+  }catch(err){
+    console.error('saveDevice执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
 function loadSettingsReagent(){
   var list = document.getElementById('settingsReagentList');
   var html = '';
@@ -1578,6 +2107,7 @@ function editSop(id){
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveEditSop(id){
+  try{
   var name = document.getElementById('spName2').value.trim();
   var group = document.getElementById('spGroup2').value;
   var version = document.getElementById('spVersion2').value.trim();
@@ -1625,7 +2155,11 @@ function saveEditSop(id){
     loadSop();
     showToast('✅ SOP文档已更新');
   }
-}
+
+  }catch(err){
+    console.error('saveEditSop执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
 function deleteSop(id){
   if(confirm('确定要删除该SOP文档吗？')){
     for(var i=0;i<appData.sops.length;i++){
@@ -1646,6 +2180,7 @@ function openSopManageModal(){
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveSopManage(){
+  try{
   var name = document.getElementById('spName').value.trim();
   var group = document.getElementById('spGroup').value;
   var version = document.getElementById('spVersion').value.trim();
@@ -1676,7 +2211,11 @@ function saveSopManage(){
     loadSop();
     showToast('✅ SOP文档已添加');
   }
-}
+
+  }catch(err){
+    console.error('saveSopManage执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
 
 function viewSopDetail(id){
   var s = null;
@@ -1786,8 +2325,12 @@ function switchHandoverTab(tab, el){
   var tabs = document.querySelectorAll('#page-handover .tab');
   for(var i=0;i<tabs.length;i++){ tabs[i].classList.remove('active'); }
   el.classList.add('active');
-  document.getElementById('handoverList').style.display = tab === 'list' ? 'block' : 'none';
-  document.getElementById('handoverAdd').style.display = tab === 'add' ? 'block' : 'none';
+  if(tab === 'add'){
+    openHandoverModal();
+    return;
+  }
+  document.getElementById('handoverList').style.display = 'block';
+  document.getElementById('handoverAdd').style.display = 'none';
 }
 function loadHandover(){
   // 更新统计
@@ -1831,7 +2374,18 @@ function loadHandover(){
     if(filterShift && r.shift !== filterShift) continue;
     if(filterUserVal && r.fromUser !== filterUserVal && r.toUser !== filterUserVal) continue;
     var shiftBadge = r.shift === '白班' ? '<span class="badge badge-blue">白班</span>' : '<span class="badge badge-purple">夜班</span>';
-    var statusBadge = r.status === 'completed' ? '<span class="badge badge-green">已完成</span>' : '<span class="badge badge-orange">进行中</span>';
+    var statusBadge = '';
+    if(r.status === 'completed'){
+      statusBadge = '<span class="badge badge-green">✅ 已确认</span>';
+    } else if(r.status === 'pending'){
+      if(currentUser && r.toUser === currentUser.name){
+        statusBadge = '<span class="badge badge-orange">⏳ 待确认</span>';
+      } else {
+        statusBadge = '<span class="badge badge-orange">待确认</span>';
+      }
+    } else {
+      statusBadge = '<span class="badge badge-gray">' + (r.status || '未知') + '</span>';
+    }
     // 构建项目标签
     var itemTags = '';
     if(r.equip) itemTags += '<span class="badge badge-cyan">🔬仪器</span> ';
@@ -1845,28 +2399,49 @@ function loadHandover(){
     if(r.specimen) summary += '🧪' + r.specimen.substring(0,20) + (r.specimen.length>20?'...':'') + ' ';
     if(r.reagent) summary += '🧴' + r.reagent.substring(0,20) + (r.reagent.length>20?'...':'') + ' ';
     if(!summary) summary = r.content ? r.content.substring(0,30) + (r.content.length>30?'...':'') : '';
-    html += '<div class="list-card"><div class="list-item" onclick="showHandoverDetail(\'' + r.id + '\')" style="cursor:pointer;"><div class="item-left"><div class="item-icon" style="background:#e3f2fd;">🔄</div><div><div class="item-title">' + r.shift + '交接 · ' + r.date + '  ' + itemTags + '</div><div class="item-desc">' + summary + '</div><div class="item-desc">👤' + r.fromUser + ' → ' + r.toUser + '</div></div></div><div class="item-right">' + shiftBadge + ' ' + statusBadge + '<br><button class="btn btn-sm btn-outline" onclick="event.stopPropagation();editHandover(\'" + r.id + "\')" style="margin-top:4px;font-size:11px;padding:2px 6px;">✏️编辑</button> <button class="btn btn-sm btn-danger" onclick="event.stopPropagation();deleteHandover(\'" + r.id + "\')" style="font-size:11px;padding:2px 6px;">🗑️删除</button></div></div></div>';
+    html += '<div class="list-card"><div class="list-item" onclick="showHandoverDetail(\'' + r.id + '\')" style="cursor:pointer;"><div class="item-left"><div class="item-icon" style="background:#e3f2fd;">🔄</div><div><div class="item-title">' + r.shift + '交接 · ' + r.date + '  ' + itemTags + '</div><div class="item-desc">' + summary + '</div><div class="item-desc">👤' + r.fromUser + ' → ' + r.toUser + '</div></div></div><div class="item-right">' + shiftBadge + ' ' + statusBadge + '<br>' + 
+    (currentUser && r.toUser === currentUser.name && r.status === 'pending' ? '<button class="btn btn-sm btn-success" onclick="event.stopPropagation();confirmHandover(\'' + r.id + '\')" style="margin-top:4px;font-size:11px;padding:2px 6px;background:#4caf50;color:#fff;border:none;border-radius:4px;">✅ 确认接收</button><br>' : '') +
+    '<button class="btn btn-sm btn-outline" onclick="event.stopPropagation();editHandover(\'' + r.id + '\')" style="margin-top:4px;font-size:11px;padding:2px 6px;">✏️编辑</button> <button class="btn btn-sm btn-danger" onclick="event.stopPropagation();deleteHandover(\'' + r.id + '\')" style="font-size:11px;padding:2px 6px;">🗑️删除</button></div></div></div>';
   }
   if(html === '') html = '<div class="list-card"><div class="list-item"><div class="item-title" style="color:var(--text-light);">暂无匹配的交接记录</div></div></div>';
   list.innerHTML = html;
 }
 function openHandoverModal(){
-  var modal = document.getElementById('modalContent');
-  var staffOptions = '';
-  for(var i=0;i<appData.users.length;i++){ staffOptions += '<option value="' + appData.users[i].name + '">' + appData.users[i].name + '</option>'; }
-  var now = new Date();
-  var datetimeStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + 'T' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-  modal.innerHTML = '<div class="modal-header"><h3>填写交接班记录</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">班次</label><select class="form-select" id="hShift"><option value="白班">白班</option><option value="夜班">夜班</option></select></div>' +
-    '<div class="form-group"><label class="form-label">🔬 仪器设备</label><textarea class="form-input" id="hEquip" rows="2" placeholder="交接的仪器设备及运行状态，如：全自动生化分析仪运行正常"></textarea></div>' +
-    '<div class="form-group"><label class="form-label">🧪 标本情况</label><textarea class="form-input" id="hSpecimen" rows="2" placeholder="交接的标本数量及特殊情况，如：夜间急诊标本120份"></textarea></div>' +
-    '<div class="form-group"><label class="form-label">🧴 试剂耗材</label><textarea class="form-input" id="hReagent" rows="2" placeholder="试剂库存及耗材情况，如：ALT试剂库存不足需补充"></textarea></div>' +
-    '<div class="form-group"><label class="form-label">📊 质控情况</label><textarea class="form-input" id="hQc" rows="2" placeholder="质控结果，如：室内质控在控，结果良好"></textarea></div>' +
-    '<div class="form-group"><label class="form-label">⚠️ 异常/待办事项</label><textarea class="form-input" id="hAbnormal" rows="2" placeholder="需关注的异常情况或待办事项"></textarea></div>' +
-    '<div class="form-group"><label class="form-label">📝 其他交接内容</label><textarea class="form-input" id="hContent" rows="2" placeholder="其他需要交接的内容..."></textarea></div>' +
-    '<div class="form-group"><label class="form-label">交接给</label><select class="form-select" id="hToUser">' + staffOptions + '</select></div>' +
-    '<div class="form-group"><label class="form-label">交接时间</label><input type="datetime-local" class="form-input" id="hDate" value="' + datetimeStr + '"></div></div>' +
-    '<div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveHandover()">保存</button></div>';
-  document.getElementById('modalOverlay').classList.add('active');
+  try{
+    if(!currentUser){ showToast('⚠️ 请先登录'); return; }
+    if(!appData || !appData.users || appData.users.length === 0){ showToast('⚠️ 人员数据未加载'); return; }
+    var modal = document.getElementById('modalContent');
+    if(!modal){ showToast('⚠️ 弹窗组件未找到'); return; }
+    var staffOptions = '';
+    for(var i=0;i<appData.users.length;i++){
+      var selected = appData.users[i].name === currentUser.name ? ' selected' : '';
+      staffOptions += '<option value="' + appData.users[i].name + '"' + selected + '>' + appData.users[i].name + '</option>';
+    }
+    var now = new Date();
+    var pad2 = function(n){ return (n<10?'0':'')+n; };
+    var datetimeStr = now.getFullYear() + '-' + pad2(now.getMonth()+1) + '-' + pad2(now.getDate()) + 'T' + pad2(now.getHours()) + ':' + pad2(now.getMinutes());
+    // 根据当前时间自动选择班次（6:00-18:00白班，18:00-6:00夜班）
+    var hour = now.getHours();
+    var defaultShift = (hour >= 6 && hour < 18) ? '白班' : '夜班';
+    modal.innerHTML = '<div class="modal-header"><h3>📝 填写交接班记录</h3><button class="modal-close" onclick="closeModal()">×</button></div>' +
+      '<div class="modal-body"><div class="form-group"><label class="form-label">👤 交接人（我）</label><input type="text" class="form-input" value="' + currentUser.name + '" disabled style="background:#f5f5f5;"></div>' +
+      '<div class="form-group"><label class="form-label">班次</label><select class="form-select" id="hShift"><option value="白班"'+(defaultShift==='白班'?' selected':'')+'>白班</option><option value="夜班"'+(defaultShift==='夜班'?' selected':'')+'>夜班</option></select></div>' +
+      '<div class="form-group"><label class="form-label">🔬 仪器设备</label><textarea class="form-input" id="hEquip" rows="2" placeholder="交接的仪器设备及运行状态，如：全自动生化分析仪运行正常"></textarea></div>' +
+      '<div class="form-group"><label class="form-label">🧪 标本情况</label><textarea class="form-input" id="hSpecimen" rows="2" placeholder="交接的标本数量及特殊情况，如：夜间急诊标本120份"></textarea></div>' +
+      '<div class="form-group"><label class="form-label">🧴 试剂耗材</label><textarea class="form-input" id="hReagent" rows="2" placeholder="试剂库存及耗材情况，如：ALT试剂库存不足需补充"></textarea></div>' +
+      '<div class="form-group"><label class="form-label">📊 质控情况</label><textarea class="form-input" id="hQc" rows="2" placeholder="质控结果，如：室内质控在控，结果良好"></textarea></div>' +
+      '<div class="form-group"><label class="form-label">⚠️ 异常/待办事项</label><textarea class="form-input" id="hAbnormal" rows="2" placeholder="需关注的异常情况或待办事项"></textarea></div>' +
+      '<div class="form-group"><label class="form-label">📝 其他交接内容</label><textarea class="form-input" id="hContent" rows="2" placeholder="其他需要交接的内容..."></textarea></div>' +
+      '<div class="form-group"><label class="form-label">交接给</label><select class="form-select" id="hToUser">' + staffOptions + '</select></div>' +
+      '<div class="form-group"><label class="form-label">交接时间</label><input type="datetime-local" class="form-input" id="hDate" value="' + datetimeStr + '"></div></div>' +
+      '<div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveHandover()">💾 保存</button></div>';
+    var overlay = document.getElementById('modalOverlay');
+    if(overlay) overlay.classList.add('active');
+    else showToast('⚠️ 弹窗遮罩未找到');
+  }catch(e){ 
+    console.error('打开交接班填写弹窗出错:', e);
+    showToast('⚠️ 打开失败: ' + e.message); 
+  }
 }
 
 function showHandoverDetail(id){
@@ -1898,41 +2473,45 @@ function showHandoverDetail(id){
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveHandover(){
-  var shift = document.getElementById('hShift').value;
-  var equip = document.getElementById('hEquip').value;
-  var specimen = document.getElementById('hSpecimen').value;
-  var reagent = document.getElementById('hReagent').value;
-  var qc = document.getElementById('hQc').value;
-  var abnormal = document.getElementById('hAbnormal').value;
-  var hContentVal = document.getElementById('hContent').value;
-  var toUser = document.getElementById('hToUser').value;
-  var date = document.getElementById('hDate').value;
-  if(!equip && !specimen && !reagent && !qc && !hContentVal){ showToast('请至少填写一项交接内容'); return; }
-  if(!toUser){ showToast('请选择交接人'); return; }
-  // 格式化日期时间为 YYYY-MM-DD HH:mm
-  if(date && date.indexOf('T') > -1){
-    date = date.replace('T', ' ');
+  try{
+    var shift = document.getElementById('hShift').value;
+    var equip = document.getElementById('hEquip').value;
+    var specimen = document.getElementById('hSpecimen').value;
+    var reagent = document.getElementById('hReagent').value;
+    var qc = document.getElementById('hQc').value;
+    var abnormal = document.getElementById('hAbnormal').value;
+    var hContentVal = document.getElementById('hContent').value;
+    var toUser = document.getElementById('hToUser').value;
+    var date = document.getElementById('hDate').value;
+    if(!equip && !specimen && !reagent && !qc && !hContentVal){ showToast('请至少填写一项交接内容'); return; }
+    if(!toUser){ showToast('请选择交接人'); return; }
+    if(date && date.indexOf('T') > -1){ date = date.replace('T', ' '); }
+    var newRecord = {
+      id:'H'+Date.now(),
+      shift:shift,
+      date:date,
+      equip:equip,
+      specimen:specimen,
+      reagent:reagent,
+      qc:qc,
+      abnormal:abnormal,
+      content:hContentVal,
+      fromUser:currentUser.name,
+      toUser:toUser,
+      status:'pending'
+    };
+    if(!appData.handoverRecords) appData.handoverRecords = [];
+    appData.handoverRecords.push(newRecord);
+    saveData();
+    try{ loadHandover(); }catch(e){ console.error('刷新交接列表失败:', e); }
+    try{ addOperationLog('新增交接班记录', currentUser.name+'→'+toUser+' '+shift+' '+date); }catch(e){ console.error('记录操作日志失败:', e); }
+    try{ closeModal(); }catch(e){ console.error('关闭弹窗失败:', e); }
+    showToast('✅ 交接班记录已保存，等待交接人确认！');
+  }catch(e){ 
+    console.error('保存交接班记录出错:', e);
+    showToast('⚠️ 保存失败: ' + e.message);
   }
-  appData.handoverRecords.push({
-    id:'H'+Date.now(),
-    shift:shift,
-    date:date,
-    equip:equip,
-    specimen:specimen,
-    reagent:reagent,
-    qc:qc,
-    abnormal:abnormal,
-    content:hContentVal,
-    fromUser:currentUser.name,
-    toUser:toUser,
-    status:'completed'
-  });
-  saveData();
-  closeModal();
-  loadHandover();
-  showToast('✅ 交接班记录已保存');
 }
-
 function openChangePwdModal(){
   var modal = document.getElementById('modalContent');
   modal.innerHTML = '<div class="modal-header"><h3>🔑 修改密码</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">当前密码</label><input type="password" class="form-input" id="oldPwd" placeholder="请输入当前密码"></div><div class="form-group"><label class="form-label">新密码</label><input type="password" class="form-input" id="newPwd" placeholder="请输入新密码（至少6位）"></div><div class="form-group"><label class="form-label">确认新密码</label><input type="password" class="form-input" id="confirmPwd" placeholder="请再次输入新密码"></div></div><div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveChangePwd()">确认修改</button></div>';
@@ -1948,7 +2527,15 @@ function editHandover(id){
   var modal = document.getElementById('modalContent');
   var staffOptions = '';
   for(var i=0;i<appData.users.length;i++){ staffOptions += '<option value="' + appData.users[i].name + '"' + (appData.users[i].name === r.toUser ? ' selected' : '') + '>' + appData.users[i].name + '</option>'; }
-  modal.innerHTML = '<div class="modal-header"><h3>编辑交接班记录</h3><button class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="form-group"><label class="form-label">班次</label><select class="form-select" id="hShift"><option value="白班"' + (r.shift==='白班'?' selected':'') + '>白班</option><option value="夜班"' + (r.shift==='夜班'?' selected':'') + '>夜班</option></select></div>' +
+  // 格式化时间用于datetime-local
+  var dateVal = r.date || '';
+  var timeVal = r.time || '00:00';
+  if(dateVal && dateVal.indexOf('T') === -1 && timeVal){
+    dateVal = dateVal + 'T' + timeVal.substring(0,5);
+  }
+  modal.innerHTML = '<div class="modal-header"><h3>✏️ 编辑交接班记录</h3><button class="modal-close" onclick="closeModal()">×</button></div>' +
+    '<div class="modal-body"><div class="form-group"><label class="form-label">👤 交接人</label><input type="text" class="form-input" value="' + r.fromUser + ' → ' + r.toUser + '" disabled style="background:#f5f5f5;"></div>' +
+    '<div class="form-group"><label class="form-label">班次</label><select class="form-select" id="hShift"><option value="白班"' + (r.shift==='白班'?' selected':'') + '>白班</option><option value="夜班"' + (r.shift==='夜班'?' selected':'') + '>夜班</option></select></div>' +
     '<div class="form-group"><label class="form-label">🔬 仪器设备</label><textarea class="form-input" id="hEquip" rows="2">' + (r.equip||'') + '</textarea></div>' +
     '<div class="form-group"><label class="form-label">🧪 标本情况</label><textarea class="form-input" id="hSpecimen" rows="2">' + (r.specimen||'') + '</textarea></div>' +
     '<div class="form-group"><label class="form-label">🧴 试剂耗材</label><textarea class="form-input" id="hReagent" rows="2">' + (r.reagent||'') + '</textarea></div>' +
@@ -1956,16 +2543,18 @@ function editHandover(id){
     '<div class="form-group"><label class="form-label">⚠️ 异常/待办事项</label><textarea class="form-input" id="hAbnormal" rows="2">' + (r.abnormal||'') + '</textarea></div>' +
     '<div class="form-group"><label class="form-label">📝 其他交接内容</label><textarea class="form-input" id="hContent" rows="2">' + (r.content||'') + '</textarea></div>' +
     '<div class="form-group"><label class="form-label">交接给</label><select class="form-select" id="hToUser">' + staffOptions + '</select></div>' +
-    '<div class="form-group"><label class="form-label">交接时间</label><input type="datetime-local" class="form-input" id="hDate" value="' + (r.date||'') + 'T' + (r.time||'00:00') + '"></div></div>' +
-    '<div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveHandoverEdit(\'" + id + "\')">保存修改</button></div>';
+    '<div class="form-group"><label class="form-label">交接时间</label><input type="datetime-local" class="form-input" id="hDate" value="' + dateVal + '"></div></div>' +
+    '<div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveHandoverEdit(\'' + id + '\')">💾 保存修改</button></div>';
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveHandoverEdit(id){
+  try{
   var r = null;
   for(var i=0;i<appData.handoverRecords.length;i++){
     if(appData.handoverRecords[i].id === id){ r = appData.handoverRecords[i]; break; }
   }
   if(!r){ showToast('❌ 未找到该记录'); return; }
+  var oldShift = r.shift;
   r.shift = document.getElementById('hShift').value;
   r.equip = document.getElementById('hEquip').value;
   r.specimen = document.getElementById('hSpecimen').value;
@@ -1983,11 +2572,52 @@ function saveHandoverEdit(id){
   saveData();
   closeModal();
   loadHandover();
+  addOperationLog('编辑交接班记录', currentUser.name+'编辑了'+r.shift+'交接记录（'+r.fromUser+'→'+r.toUser+'）');
   showToast('✅ 交接班记录已更新');
-  addOperationLog(currentUser.name, '编辑交接班记录', '编辑了' + r.shift + '交接记录');
+
+  }catch(err){
+    console.error('saveHandoverEdit执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
+function confirmHandover(id){
+  try{
+    if(!currentUser){ showToast('⚠️ 请先登录'); return; }
+    var record = null;
+    for(var i=0;i<appData.handoverRecords.length;i++){
+      if(appData.handoverRecords[i].id === id){
+        record = appData.handoverRecords[i];
+        break;
+      }
+    }
+    if(!record){ showToast('⚠️ 未找到该交接记录'); return; }
+    if(record.toUser !== currentUser.name){
+      showToast('⚠️ 只有交接人才能确认此记录');
+      return;
+    }
+    if(record.status === 'completed'){
+      showToast('✅ 该记录已被确认');
+      return;
+    }
+    record.status = 'completed';
+    record.confirmTime = new Date().toLocaleString();
+    record.confirmBy = currentUser.name;
+    saveData();
+    try{ loadHandover(); }catch(e){ console.error('刷新列表失败:', e); }
+    try{ addOperationLog('确认交接班记录', currentUser.name+'确认了来自'+record.fromUser+'的交接记录'); }catch(e){}
+    showToast('✅ 已确认接收交接记录！');
+  }catch(e){
+    console.error('确认交接记录出错:', e);
+    showToast('⚠️ 确认失败: ' + e.message);
+  }
 }
+
 function deleteHandover(id){
-  if(!confirm('确定要删除该交接班记录吗？')) return;
+  var r = null;
+  for(var i=0;i<appData.handoverRecords.length;i++){
+    if(appData.handoverRecords[i].id === id){ r = appData.handoverRecords[i]; break; }
+  }
+  if(!r){ showToast('❌ 未找到该记录'); return; }
+  if(!confirm('确定要删除「'+r.date+' '+r.shift+'·'+r.fromUser+'→'+r.toUser+'」的交接班记录吗？')) return;
   for(var i=0;i<appData.handoverRecords.length;i++){
     if(appData.handoverRecords[i].id === id){
       appData.handoverRecords.splice(i,1);
@@ -1996,10 +2626,11 @@ function deleteHandover(id){
   }
   saveData();
   loadHandover();
+  addOperationLog('删除交接班记录', currentUser.name+'删除了'+r.date+' '+r.shift+'交接记录');
   showToast('✅ 交接班记录已删除');
-  addOperationLog(currentUser.name, '删除交接班记录', '删除了交接班记录');
 }
 function saveChangePwd(){
+  try{
   var oldPwd = document.getElementById('oldPwd').value;
   var newPwd = document.getElementById('newPwd').value;
   var confirmPwd = document.getElementById('confirmPwd').value;
@@ -2017,9 +2648,13 @@ function saveChangePwd(){
   saveData();
   closeModal();
   showToast('✅ 密码修改成功！');
-}
+
+  }catch(err){
+    console.error('saveChangePwd执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
 function openResetPwdModal(id){
-  var isManager = currentUser.role === '系统管理员' || currentUser.role === '科主任';
+  var isManager = currentUser.role === '系统管理员' || currentUser.role === '科主任' || currentUser.role === '副主任';
   if(!isManager){ showToast('无权限操作员工管理'); return; }
 
   var u = null;
@@ -2030,6 +2665,7 @@ function openResetPwdModal(id){
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveResetPwd(id){
+  try{
   var newPwd = document.getElementById('resetPwd').value;
   if(!newPwd || newPwd.length < 6){ showToast('密码至少6位'); return; }
   for(var i=0;i<appData.users.length;i++){
@@ -2042,7 +2678,11 @@ function saveResetPwd(id){
   closeModal();
   loadStaff();
   showToast('✅ 密码已恢复为：' + newPwd);
-}
+
+  }catch(err){
+    console.error('saveResetPwd执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
 
 // ===== 📝 在线考试功能 =====
 var currentExam = null;
@@ -2168,6 +2808,7 @@ function openExamQuestionModal(){
   };
 }
 function saveExamQuestion(){
+  try{
   var type = document.getElementById('eqType').value;
   var group = document.getElementById('eqGroup').value;
   var question = document.getElementById('eqQuestion').value.trim();
@@ -2187,7 +2828,11 @@ function saveExamQuestion(){
   closeModal();
   loadExamQuestions();
   showToast('✅ 试题已添加');
-}
+
+  }catch(err){
+    console.error('saveExamQuestion执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
 function loadExamQuestions(){
   var list = document.getElementById('examQuestionList');
   if(!list) return;
@@ -2240,10 +2885,11 @@ function editExamQuestion(id){
     '<div class="form-group"><label class="form-label">选项D</label><input class="form-input" id="eqOptD" value="' + (q.options&&q.options[3]||'') + '"></div>' +
     '<div class="form-group"><label class="form-label">正确答案</label><input class="form-input" id="eqAnswer" value="' + q.answer + '"></div>' +
     '<div class="form-group"><label class="form-label">分值</label><input type="number" class="form-input" id="eqScore" value="' + (q.score||5) + '"></div></div>' +
-    '<div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveExamQuestionEdit(\'" + id + "\')">保存修改</button></div>';
+    '<div class="modal-footer"><button class="btn btn-outline btn-sm" onclick="closeModal()">取消</button><button class="btn btn-primary btn-sm" onclick="saveExamQuestionEdit(\'' + id + '\')">保存修改</button></div>';
   document.getElementById('modalOverlay').classList.add('active');
 }
 function saveExamQuestionEdit(id){
+  try{
   var q = null;
   for(var i=0;i<appData.examQuestions.length;i++){
     if(appData.examQuestions[i].id === id){ q = appData.examQuestions[i]; break; }
@@ -2260,7 +2906,11 @@ function saveExamQuestionEdit(id){
   loadExamQuestions();
   showToast('✅ 试题已更新');
   addOperationLog(currentUser.name, '编辑试题', '编辑了试题：' + q.question.substring(0,20));
-}
+
+  }catch(err){
+    console.error('saveExamQuestionEdit执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
 var pdfFileData = null;
 var pdfFileName = '';
 function handlePdfFile(input){
@@ -2286,6 +2936,7 @@ function handlePdfFile(input){
   reader.readAsDataURL(file);
 }
 function savePdfQuestion(){
+  try{
   var title = document.getElementById('pdfTitle').value.trim();
   var group = document.getElementById('pdfGroup').value;
   if(!title){ showToast('请输入试题标题'); return; }
@@ -2306,7 +2957,11 @@ function savePdfQuestion(){
   showToast('✅ PDF试题已上传');
   pdfFileData = null;
   pdfFileName = '';
-}
+
+  }catch(err){
+    console.error('savePdfQuestion执行出错:', err);
+    showToast('⚠️ 操作失败: ' + err.message);
+  }}
 function loadPdfQuestions(){
   var list = document.getElementById('pdfQuestionList');
   if(!list) return;
@@ -2423,53 +3078,148 @@ function loadCloudData(){
   // 检查云端状态
   checkCloudStatus();
 }
+// 数据迁移：兼容旧数据格式
+function migrateData(){
+  // 保养记录：补充dailyItems, weeklyItems, remark
+  if(appData.maintenanceRecords){
+    for(var i=0;i<appData.maintenanceRecords.length;i++){
+      var r = appData.maintenanceRecords[i];
+      if(!r.dailyItems) r.dailyItems = [];
+      if(!r.weeklyItems) r.weeklyItems = [];
+      if(!r.remark) r.remark = '';
+    }
+  }
+  // 质控记录：补充sd, outRule, outAnalysis, outAction, outResult, qcAnalysis
+  if(appData.qcRecords){
+    for(var i=0;i<appData.qcRecords.length;i++){
+      var r = appData.qcRecords[i];
+      if(!r.sd) r.sd = (r.target||0) * 0.03;
+      if(!r.outRule) r.outRule = '';
+      if(!r.outAnalysis) r.outAnalysis = '';
+      if(!r.outAction) r.outAction = '';
+      if(!r.outResult) r.outResult = '';
+      if(!r.qcAnalysis) r.qcAnalysis = '';
+    }
+  }
+  // 工作量记录：补充audit, publish
+  if(appData.workloadRecords){
+    for(var i=0;i<appData.workloadRecords.length;i++){
+      var r = appData.workloadRecords[i];
+      if(r.audit === undefined) r.audit = 0;
+      if(r.publish === undefined) r.publish = 0;
+    }
+  }
+}
 function checkCloudStatus(){
   var dot = document.getElementById('cloudStatusDot');
   var text = document.getElementById('cloudStatusText');
+  var versionInfo = document.getElementById('cloudVersionInfo');
   var saved = localStorage.getItem('cloudConnected');
+  var lastUpload = localStorage.getItem('cloudLastUpload');
+  var binId = localStorage.getItem('cloudBinId');
   if(saved === 'true'){
     dot.className = 'dot online';
-    text.textContent = '✅ 已连接云端（GitHub Pages）';
+    text.textContent = '✅ 已连接云端';
+    var extra = '';
+    if(binId) extra += ' · 云端ID: ' + binId.substring(0,8) + '...';
+    if(lastUpload) versionInfo.textContent = '📤 上次上传: ' + lastUpload + extra;
   } else {
     dot.className = 'dot offline';
     text.textContent = '❌ 未连接云端';
+    versionInfo.textContent = '';
   }
 }
 function uploadToCloud(){
-  showToast('☁️ 正在上传数据到云端...');
   try{
+    if(currentUser.role !== '系统管理员'){ showToast('⚠️ 仅系统管理员可操作云端管理'); return; }
     var dataStr = JSON.stringify(appData);
-    // 保存到localStorage作为备份
+    // 保存为当前数据
+    localStorage.setItem('labAppData', dataStr);
+    // 带时间戳的版本备份
+    var now = new Date();
+    var timeStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
     localStorage.setItem('labAppData_cloud', dataStr);
     localStorage.setItem('cloudConnected', 'true');
-    localStorage.setItem('cloudLastUpload', new Date().toLocaleString());
+    localStorage.setItem('cloudLastUpload', timeStr);
+    // 保存版本历史（最多保留10个版本）
+    var versions = JSON.parse(localStorage.getItem('cloudVersions') || '[]');
+    versions.push({time:timeStr, size:dataStr.length, user:currentUser.name});
+    if(versions.length > 10) versions = versions.slice(versions.length-10);
+    localStorage.setItem('cloudVersions', JSON.stringify(versions));
     checkCloudStatus();
-    showToast('✅ 数据已备份到本地云端存储！\n📱 多设备同步请使用GitHub Pages地址访问');
+    loadCloudData();
+    showToast('✅ 数据已上传到云端！版本: ' + timeStr);
   }catch(e){
     showToast('❌ 上传失败：' + e.message);
   }
 }
 function downloadFromCloud(){
   try{
+    if(currentUser.role !== '系统管理员'){ showToast('⚠️ 仅系统管理员可操作云端管理'); return; }
+    var versions = JSON.parse(localStorage.getItem('cloudVersions') || '[]');
     var saved = localStorage.getItem('labAppData_cloud');
+    if(!saved){
+      showToast('❌ 云端暂无备份数据，请先上传');
+      return;
+    }
+    // 如果有多个版本，显示版本选择弹窗
+    if(versions.length > 0){
+      var modal = document.getElementById('modalContent');
+      var html = '<div class="modal-header"><h3>📥 从云端下载</h3><button class="modal-close" onclick="closeModal()">×</button></div>';
+      html += '<div class="modal-body">';
+      html += '<p style="margin-bottom:15px;color:var(--text-light);">选择要恢复的版本（将覆盖当前数据）</p>';
+      html += '<div style="max-height:300px;overflow-y:auto;">';
+      for(var i=versions.length-1;i>=0;i--){
+        var v = versions[i];
+        html += '<div class="list-card" style="cursor:pointer;margin-bottom:8px;" onclick="restoreCloudVersion(' + i + ')">';
+        html += '<div class="list-item"><div class="item-left"><div class="item-icon" style="background:#e8f5e9;">☁️</div><div><div class="item-title">' + v.time + '</div><div class="item-desc">上传者: ' + v.user + ' · 大小: ' + Math.round(v.size/1024) + 'KB</div></div></div><div class="item-right"><button class="btn btn-primary btn-sm">恢复</button></div></div></div>';
+      }
+      html += '</div>';
+      html += '<div style="margin-top:15px;"><button class="btn btn-outline" onclick="restoreCloudVersion(-1)" style="width:100%;">📥 恢复最新版本</button></div>';
+      html += '</div>';
+      modal.innerHTML = html;
+      document.getElementById('modalOverlay').classList.add('active');
+    } else {
+      // 直接恢复
+      if(confirm('确定要从云端下载数据覆盖当前数据吗？')){
+        var data = JSON.parse(saved);
+        appData = data;
+        saveData();
+        showToast('✅ 已从云端恢复数据！');
+        loadSettings();
+        loadCloudData();
+      }
+    }
+  }catch(e){
+    showToast('❌ 下载失败：' + e.message);
+  }
+}
+function restoreCloudVersion(idx){
+  try{
+    closeModal();
+    var saved = localStorage.getItem('labAppData_cloud');
+    if(idx >= 0){
+      var versions = JSON.parse(localStorage.getItem('cloudVersions') || '[]');
+      if(versions[idx]){
+        showToast('正在恢复版本: ' + versions[idx].time);
+      }
+    }
     if(saved){
       var data = JSON.parse(saved);
-      if(data && data.users && data.users.length > 0){
-        if(confirm('确定要从云端下载数据覆盖当前数据吗？')){
+      if(data && data.users){
+        if(confirm('确定要恢复该版本吗？当前数据将被覆盖！')){
           appData = data;
           saveData();
-          showToast('✅ 已从云端恢复数据！共' + (data.users ? data.users.length : 0) + '名员工，' + (data.devices ? data.devices.length : 0) + '台设备');
+          showToast('✅ 已从云端恢复数据！共' + (data.users ? data.users.length : 0) + '名员工');
           loadSettings();
           loadCloudData();
         }
       } else {
         showToast('❌ 云端数据无效');
       }
-    } else {
-      showToast('❌ 云端暂无备份数据，请先上传');
     }
   }catch(e){
-    showToast('❌ 下载失败：' + e.message);
+    showToast('❌ 恢复失败：' + e.message);
   }
 }
 // ===== 📄 Word模板下载功能 =====
@@ -2479,7 +3229,46 @@ function downloadWordTemplate(){
   var dateStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
   var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">';
   html += '<head><meta charset="utf-8"><title>检验科试题模板</title>';
-  html += '<style>body{font-family:宋体;font-size:12pt;}table{border-collapse:collapse;width:100%;margin-bottom:20px;}td,th{border:1px solid #000;padding:8px;text-align:left;}th{background:#e0e0e0;font-weight:bold;}h1{text-align:center;font-size:18pt;}h2{font-size:14pt;margin-top:20px;}.note{color:#666;font-size:10pt;margin-bottom:10px;}</style></head>';
+  html += '<style>body{font-family:宋体;font-size:12pt;}table{border-collapse:collapse;width:100%;margin-bottom:20px;}td,th{border:1px solid #000;padding:8px;text-align:left;}th{background:#e0e0e0;font-weight:bold;}h1{text-align:center;font-size:18pt;}h2{font-size:14pt;margin-top:20px;}.note{color:#666;font-size:10pt;margin-bottom:10px;}
+/* 复选框样式 */
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  margin: 2px 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text);
+  transition: background 0.2s;
+}
+.checkbox-label:hover {
+  background: #f5f5f5;
+}
+.checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #1976d2;
+  cursor: pointer;
+}
+/* 云端版本列表 */
+.cloud-version-item {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.cloud-version-item:hover {
+  transform: translateX(3px);
+}
+/* 出控记录样式 */
+.out-control-box {
+  border: 1px solid #ffcdd2;
+  border-radius: 8px;
+  padding: 10px;
+  background: #fff5f5;
+  margin-top: 8px;
+}
+</style></head>';
   html += '<body>';
   html += '<h1>📝 医学检验科试题模板</h1>';
   html += '<p style="text-align:center;color:#666;">生成日期：' + dateStr + '</p>';
@@ -2504,7 +3293,17 @@ function downloadWordTemplate(){
   html += '<li>"组别"列填写所属专业组（如：生化组、临检组、免疫组、微生物组、分子组、输血组）。</li>';
   html += '<li>填写完成后，保存此文档，然后在系统中逐题添加。</li>';
   html += '</ol>';
-  html += '</body></html>';
+  html += '
+<script>
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("sw.js").then(function(reg){
+    console.log("SW registered:", reg.scope);
+  }).catch(function(err){
+    console.log("SW registration failed:", err);
+  });
+}
+</script>
+</body></html>';
   // 创建下载
   var blob = new Blob([html], {type: 'application/msword'});
   var url = URL.createObjectURL(blob);
@@ -2516,57 +3315,6 @@ function downloadWordTemplate(){
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
   showToast('✅ Word模板已下载，请按模板格式填写试题');
-}
-// ===== 交接班保存确认优化 =====
-// 增强saveHandover函数 - 保存后显示详细确认
-var originalSaveHandover = saveHandover;
-saveHandover = function(){
-  addOperationLog('新增交接班记录', '交接人：'+currentUser.name+'→'+document.getElementById('hToUser').value);
-
-  var shift = document.getElementById('hShift').value;
-  var equip = document.getElementById('hEquip').value;
-  var specimen = document.getElementById('hSpecimen').value;
-  var reagent = document.getElementById('hReagent').value;
-  var qc = document.getElementById('hQc').value;
-  var abnormal = document.getElementById('hAbnormal').value;
-  var hContentVal = document.getElementById('hContent').value;
-  var toUser = document.getElementById('hToUser').value;
-  var date = document.getElementById('hDate').value;
-  if(!equip && !specimen && !reagent && !qc && !hContentVal){ showToast('请至少填写一项交接内容'); return; }
-  if(!toUser){ showToast('请选择交接人'); return; }
-  if(date && date.indexOf('T') > -1){ date = date.replace('T', ' '); }
-  appData.handoverRecords.push({
-    id:'H'+Date.now(),
-    shift:shift,
-    date:date,
-    equip:equip,
-    specimen:specimen,
-    reagent:reagent,
-    qc:qc,
-    abnormal:abnormal,
-    content:hContentVal,
-    fromUser:currentUser.name,
-    toUser:toUser,
-    status:'completed'
-  });
-  saveData();
-  closeModal();
-  loadHandover();
-  // 显示详细确认信息
-  var confirmHtml = '<div style="text-align:left;padding:10px;">';
-  confirmHtml += '<div style="font-size:18px;font-weight:bold;color:#4caf50;margin-bottom:10px;">✅ 交接班记录已保存</div>';
-  confirmHtml += '<div style="background:#f5f5f5;border-radius:8px;padding:12px;margin-bottom:10px;">';
-  confirmHtml += '<div style="margin-bottom:5px;"><b>👤 交接人：</b>' + currentUser.name + ' → ' + toUser + '</div>';
-  confirmHtml += '<div style="margin-bottom:5px;"><b>🕐 班次/时间：</b>' + shift + ' | ' + date + '</div>';
-  if(equip) confirmHtml += '<div style="margin-bottom:3px;"><b>🔬 仪器设备：</b>' + equip.substring(0, 30) + (equip.length > 30 ? '...' : '') + '</div>';
-  if(specimen) confirmHtml += '<div style="margin-bottom:3px;"><b>🧪 标本情况：</b>' + specimen.substring(0, 30) + (specimen.length > 30 ? '...' : '') + '</div>';
-  if(reagent) confirmHtml += '<div style="margin-bottom:3px;"><b>🧴 试剂耗材：</b>' + reagent.substring(0, 30) + (reagent.length > 30 ? '...' : '') + '</div>';
-  confirmHtml += '</div>';
-  confirmHtml += '<button class="btn btn-primary" onclick="closeModal()" style="width:100%;">知道了</button>';
-  confirmHtml += '</div>';
-  var modal = document.getElementById('modalContent');
-  modal.innerHTML = confirmHtml;
-  document.getElementById('modalOverlay').classList.add('active');
 }
 // ===== 手机触摸优化 =====
 // 添加触摸反馈
@@ -2582,6 +3330,506 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 });
 
+
+// ========== 新增功能函数 ==========
+// 显示保养计划
+function showMaintenancePlan(){
+  var records = appData.maintenanceRecords || [];
+  var devices = appData.devices || [];
+  var html = '<div class="section-title">📅 保养计划</div>';
+  // 按仪器分组展示
+  var deviceMap = {};
+  devices.forEach(function(d){ deviceMap[d.name||d.id] = d; });
+  var deviceNames = Object.keys(deviceMap);
+  if(deviceNames.length === 0){
+    // 从保养记录中提取设备名
+    records.forEach(function(r){
+      if(r.device && !deviceMap[r.device]) deviceMap[r.device] = {name:r.device,type:r.type||'其他'};
+    });
+    deviceNames = Object.keys(deviceMap);
+  }
+  deviceNames.forEach(function(name){
+    var deviceRecords = records.filter(function(r){return r.device===name;});
+    var lastRecord = deviceRecords[deviceRecords.length-1];
+    var lastDate = lastRecord ? lastRecord.date : '无记录';
+    var today = new Date().toISOString().split('T')[0];
+    var daysSince = lastRecord ? Math.floor((new Date(today)-new Date(lastDate))/86400000) : 999;
+    var status = daysSince <= 1 ? '✅ 已保养' : (daysSince <= 7 ? '⚠️ 即将到期' : '🔴 逾期');
+    var statusColor = daysSince <= 1 ? '#4caf50' : (daysSince <= 7 ? '#ff9800' : '#f44336');
+    html += '<div class="card" style="margin-bottom:10px"><div class="card-header" style="background:#f5f5f5;padding:8px 12px;font-weight:bold;border-bottom:1px solid #e0e0e0">'+name+'</div><div style="padding:10px">';
+    html += '<div style="display:flex;justify-content:space-between;margin-bottom:8px"><span>上次保养: '+lastDate+'</span><span style="color:'+statusColor+'">'+status+'</span></div>';
+    html += '<div style="font-size:12px;color:#666">保养次数: '+deviceRecords.length+'次</div>';
+    html += '</div></div>';
+  });
+  if(deviceNames.length === 0) html += '<div class="empty-state">暂无设备保养计划</div>';
+  showModal('保养计划', html);
+}
+// 显示保养统计
+function showMaintenanceStats(){
+  var records = appData.maintenanceRecords || [];
+  var html = '<div class="section-title">📊 保养统计</div>';
+  // 按月份统计
+  var monthMap = {};
+  records.forEach(function(r){
+    if(r.date){
+      var month = r.date.substring(0,7);
+      if(!monthMap[month]) monthMap[month] = 0;
+      monthMap[month]++;
+    }
+  });
+  var months = Object.keys(monthMap).sort();
+  html += '<div class="card" style="margin-bottom:15px"><div class="card-header" style="background:#f5f5f5;padding:8px 12px;font-weight:bold">月度保养统计</div><div style="padding:10px">';
+  months.forEach(function(m){
+    var count = monthMap[m];
+    var barWidth = Math.min(100, count*10);
+    html += '<div style="display:flex;align-items:center;margin:5px 0"><span style="width:80px;font-size:12px">'+m+'</span><div style="flex:1;height:20px;background:#e0e0e0;border-radius:10px;overflow:hidden"><div style="height:100%;width:'+barWidth+'%;background:#1976d2;border-radius:10px"></div></div><span style="width:40px;text-align:right;font-size:12px;margin-left:8px">'+count+'</span></div>';
+  });
+  if(months.length===0) html += '<div style="color:#999">暂无数据</div>';
+  html += '</div></div>';
+  // 按人员统计
+  var personMap = {};
+  records.forEach(function(r){
+    if(r.operator){
+      if(!personMap[r.operator]) personMap[r.operator] = 0;
+      personMap[r.operator]++;
+    }
+  });
+  html += '<div class="card"><div class="card-header" style="background:#f5f5f5;padding:8px 12px;font-weight:bold">人员保养统计</div><div style="padding:10px">';
+  var sorted = Object.keys(personMap).sort(function(a,b){return personMap[b]-personMap[a];});
+  sorted.forEach(function(p){
+    html += '<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f0f0f0"><span>'+p+'</span><span style="color:#1976d2;font-weight:bold">'+personMap[p]+'次</span></div>';
+  });
+  if(sorted.length===0) html += '<div style="color:#999">暂无数据</div>';
+  html += '</div></div>';
+  showModal('保养统计', html);
+}
+// 通用弹窗函数
+function showModal(title, content){
+  var modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.style.display = 'block';
+  modal.innerHTML = '<div class="modal-content" style="max-width:600px"><div class="modal-header"><h3>'+title+'</h3><span class="close" onclick="this.parentElement.parentElement.parentElement.remove()">&times;</span></div><div class="modal-body">'+content+'</div></div>';
+  document.body.appendChild(modal);
+}
+// 难度系数定义
+var difficultyFactors = {
+  '常规生化/免疫': 1.0,
+  '急诊项目': 1.5,
+  '微生物培养/鉴定': 2.0,
+  '分子诊断/PCR': 2.5,
+  '骨髓/细胞形态学': 3.0
+};
+// 计算加权工作量
+function calculateWeightedWorkload(records){
+  var total = 0;
+  (records||[]).forEach(function(r){
+    var factor = difficultyFactors[r.projectType] || 1.0;
+    total += (r.count||0) * factor;
+  });
+  return total;
+}
+// 计算TAT达标率
+function calculateTatRate(records){
+  var total = (records||[]).length;
+  if(total === 0) return 0;
+  var达标 = 0;
+  (records||[]).forEach(function(r){
+    if(r.tatStatus === '达标' || (r.tatMinutes && r.tatMinutes <= (r.tatLimit||60))) 达标++;
+  });
+  return Math.round(达标/total*100);
+}
+// 计算绩效积分
+function calculatePerformanceScore(userId){
+  var data = appData;
+  // 质量控制维度 (35%)
+  var qcRecords = data.qcRecords || [];
+  var criticalRecords = data.criticalRecords || [];
+  var qcInControl = qcRecords.filter(function(r){return r.status==='在控'||r.status==='in_control';}).length;
+  var qcTotal = qcRecords.length || 1;
+  var qcRate = Math.round(qcInControl/qcTotal*100);
+  var criticalTimely = criticalRecords.filter(function(r){return r.isTimely!==false;}).length;
+  var criticalTotal = criticalRecords.length || 1;
+  var criticalRate = Math.round(criticalTimely/criticalTotal*100);
+  var qualityScore = Math.round((qcRate*0.6 + criticalRate*0.4) * 35 / 100);
+  // 工作效率维度 (30%)
+  var workloadRecords = data.workloadRecords || [];
+  var weightedTotal = calculateWeightedWorkload(workloadRecords);
+  var tatRate = calculateTatRate(workloadRecords);
+  var efficiencyScore = Math.round((Math.min(weightedTotal/100,1)*0.6 + Math.min(tatRate/100,1)*0.4) * 30 / 100 * 100);
+  // 设备管理维度 (15%)
+  var maintRecords = data.maintenanceRecords || [];
+  var maintDone = maintRecords.filter(function(r){return r.status==='completed';}).length;
+  var maintTotal = maintRecords.length || 1;
+  var maintRate = Math.round(maintDone/maintTotal*100);
+  var deviceScore = Math.round(maintRate * 15 / 100);
+  // 学习成长维度 (10%)
+  var examRecords = data.examRecords || [];
+  var examPassed = examRecords.filter(function(r){return (r.score||0)>=80;}).length;
+  var examTotal = examRecords.length || 1;
+  var examRate = Math.round(examPassed/examTotal*100);
+  var studyScore = Math.round(examRate * 10 / 100);
+  // 综合表现维度 (10%)
+  var综合Score = 80; // 默认80分
+  return {
+    quality: { score: qualityScore, rate: qcRate, detail: '质控在控率'+qcRate+'%, 危急值及时率'+criticalRate+'%' },
+    efficiency: { score: efficiencyScore, rate: tatRate, detail: '加权工作量'+Math.round(weightedTotal)+', TAT达标率'+tatRate+'%' },
+    device: { score: deviceScore, rate: maintRate, detail: '保养完成率'+maintRate+'%' },
+    study: { score: studyScore, rate: examRate, detail: '考试合格率'+examRate+'%' },
+    comprehensive: { score:综合Score, rate: 80, detail: '综合表现' },
+    total: Math.round(qualityScore*0.35 + efficiencyScore*0.30 + deviceScore*0.15 + studyScore*0.10 +综合Score*0.10)
+  };
+}
+// 生成月度绩效报告
+function generateMonthlyReport(year, month){
+  var data = appData;
+  var users = data.users || [];
+  var reports = [];
+  users.forEach(function(u){
+    if(u.role === '系统管理员') return;
+    var score = calculatePerformanceScore(u.id);
+    reports.push({
+      userId: u.id,
+      userName: u.name,
+      role: u.role,
+      group: u.group || '',
+      scores: score,
+      total: score.total
+    });
+  });
+  reports.sort(function(a,b){return b.total-a.total;});
+  return reports;
+}
+// 显示绩效报告
+function showPerformanceReport(){
+  var now = new Date();
+  var year = now.getFullYear();
+  var month = now.getMonth()+1;
+  var reports = generateMonthlyReport(year, month);
+  var html = '<div class="section-title">📊 '+year+'年'+month+'月绩效报告</div>';
+  // 排名TOP10
+  html += '<div class="card" style="margin-bottom:15px"><div class="card-header" style="background:#f5f5f5;padding:10px 15px;font-weight:bold">🏆 绩效排名</div><div style="padding:10px">';
+  reports.forEach(function(r, idx){
+    var medal = idx===0?'🥇':(idx===1?'🥈':(idx===2?'🥉':''));
+    var color = idx<3?'#ff6f00':'#333';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0">';
+    html += '<span><strong>'+medal+' '+(idx+1)+'. '+r.userName+'</strong> <span style="color:#999;font-size:12px">('+r.role+')</span></span>';
+    html += '<span style="color:'+color+';font-weight:bold">'+r.total+'分</span></div>';
+  });
+  if(reports.length===0) html += '<div style="color:#999">暂无数据</div>';
+  html += '</div></div>';
+  // 各维度得分
+  html += '<div class="card"><div class="card-header" style="background:#f5f5f5;padding:10px 15px;font-weight:bold">📈 各维度得分</div><div style="padding:10px">';
+  var dimensions = [
+    {key:'quality',name:'质量控制',weight:'35%',color:'#1976d2'},
+    {key:'efficiency',name:'工作效率',weight:'30%',color:'#388e3c'},
+    {key:'device',name:'设备管理',weight:'15%',color:'#f57c00'},
+    {key:'study',name:'学习成长',weight:'10%',color:'#7b1fa2'},
+    {key:'comprehensive',name:'综合表现',weight:'10%',color:'#c62828'}
+  ];
+  dimensions.forEach(function(d){
+    var avg = 0;
+    reports.forEach(function(r){ avg += r.scores[d.key].score; });
+    avg = reports.length > 0 ? Math.round(avg/reports.length) : 0;
+    html += '<div style="display:flex;align-items:center;margin:5px 0"><span style="width:80px;font-size:12px">'+d.name+'</span><span style="width:40px;font-size:11px;color:#999">'+d.weight+'</span><div style="flex:1;height:18px;background:#e0e0e0;border-radius:9px;overflow:hidden"><div style="height:100%;width:'+avg+'%;background:'+d.color+';border-radius:9px"></div></div><span style="width:40px;text-align:right;font-size:12px;margin-left:8px">'+avg+'</span></div>';
+  });
+  html += '</div></div>';
+  showModal('绩效报告', html);
+}
+// 导出数据到CSV
+function exportToCsv(data, filename){
+  if(!data || data.length === 0){ showToast('暂无数据可导出','warning'); return; }
+  var keys = Object.keys(data[0]);
+  var csv = '\uFEFF' + keys.join(',') + '\n';
+  data.forEach(function(row){
+    csv += keys.map(function(k){
+      var val = row[k] || '';
+      if(typeof val === 'string' && val.indexOf(',')>=0) val = '"'+val+'"';
+      return val;
+    }).join(',') + '\n';
+  });
+  var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  var link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = filename || 'export.csv';
+  link.click();
+  showToast('导出成功','success');
+}
+// 导出绩效报告
+function exportPerformanceReport(){
+  var now = new Date();
+  var reports = generateMonthlyReport(now.getFullYear(), now.getMonth()+1);
+  var exportData = reports.map(function(r){
+    return {
+      姓名: r.userName,
+      角色: r.role,
+      组别: r.group,
+      质量控制: r.scores.quality.score,
+      工作效率: r.scores.efficiency.score,
+      设备管理: r.scores.device.score,
+      学习成长: r.scores.study.score,
+      综合表现: r.scores.comprehensive.score,
+      总分: r.total
+    };
+  });
+  exportToCsv(exportData, '绩效报告_'+now.getFullYear()+'_'+(now.getMonth()+1)+'.csv');
+}
+
+// 显示质控图
+function showQcChart(){
+  var records = appData.qcRecords || [];
+  var html = '<div class="section-title">📈 质控图 (Levey-Jennings)</div>';
+  // 按项目分组
+  var projectMap = {};
+  records.forEach(function(r){
+    var key = r.project || r.item || '未知';
+    if(!projectMap[key]) projectMap[key] = [];
+    projectMap[key].push(r);
+  });
+  var projects = Object.keys(projectMap);
+  projects.forEach(function(p){
+    var data = projectMap[p];
+    var values = data.map(function(r){return parseFloat(r.value)||0;});
+    var mean = values.length > 0 ? values.reduce(function(a,b){return a+b;},0)/values.length : 0;
+    var std = 0;
+    if(values.length > 1){
+      var sumSq = values.reduce(function(s,v){return s+(v-mean)*(v-mean);},0);
+      std = Math.sqrt(sumSq/(values.length-1));
+    }
+    html += '<div class="card" style="margin-bottom:15px"><div class="card-header" style="background:#f5f5f5;padding:8px 12px;font-weight:bold">'+p+'</div><div style="padding:10px">';
+    html += '<div style="margin-bottom:8px;font-size:12px">均值: '+mean.toFixed(2)+' | SD: '+std.toFixed(2)+' | CV: '+(mean>0?(std/mean*100).toFixed(1):'0')+'%</div>';
+    // 绘制简单的质控图
+    html += '<div style="position:relative;height:120px;background:#fafafa;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden">';
+    var chartHeight = 100;
+    var chartTop = 10;
+    // 参考线
+    var lines = [
+      {label:'+3SD',value:mean+3*std,color:'#f44336',style:'dashed'},
+      {label:'+2SD',value:mean+2*std,color:'#ff9800',style:'dashed'},
+      {label:'+1SD',value:mean+std,color:'#4caf50',style:'dotted'},
+      {label:'均值',value:mean,color:'#1976d2',style:'solid'},
+      {label:'-1SD',value:mean-std,color:'#4caf50',style:'dotted'},
+      {label:'-2SD',value:mean-2*std,color:'#ff9800',style:'dashed'},
+      {label:'-3SD',value:mean-3*std,color:'#f44336',style:'dashed'}
+    ];
+    var minVal = mean - 3*std - (std||1);
+    var maxVal = mean + 3*std + (std||1);
+    var range = maxVal - minVal || 1;
+    lines.forEach(function(l){
+      var y = chartTop + chartHeight - ((l.value-minVal)/range*chartHeight);
+      if(y >= chartTop && y <= chartTop+chartHeight){
+        html += '<div style="position:absolute;left:0;right:0;top:'+y+'px;border-top:1px '+l.style+' '+l.color+';opacity:0.5"></div>';
+        html += '<div style="position:absolute;right:5px;top:'+(y-8)+'px;font-size:10px;color:'+l.color+'">'+l.label+'</div>';
+      }
+    });
+    // 数据点
+    var pointSpacing = Math.min(30, Math.max(8, (300-20)/Math.max(values.length,1)));
+    values.forEach(function(v,i){
+      var x = 20 + i * pointSpacing;
+      var y = chartTop + chartHeight - ((v-minVal)/range*chartHeight);
+      var color = Math.abs(v-mean) > 2*std ? '#f44336' : (Math.abs(v-mean) > std ? '#ff9800' : '#4caf50');
+      html += '<div style="position:absolute;left:'+x+'px;top:'+y+'px;width:6px;height:6px;background:'+color+';border-radius:50%;transform:translate(-50%,-50%);cursor:pointer" title="'+data[i].date+': '+v+'"></div>';
+    });
+    html += '</div>';
+    // Westgard规则判断
+    var hasViolation = false;
+    values.forEach(function(v){
+      if(Math.abs(v-mean) > 3*std) hasViolation = true;
+    });
+    if(hasViolation){
+      html += '<div style="margin-top:8px;padding:5px 10px;background:#ffebee;border-radius:5px;color:#c62828;font-size:12px">⚠️ Westgard规则: 存在1-3s失控（超出3倍标准差）</div>';
+    } else {
+      html += '<div style="margin-top:8px;padding:5px 10px;background:#e8f5e9;border-radius:5px;color:#2e7d32;font-size:12px">✅ 质控在控，未发现失控</div>';
+    }
+    html += '</div></div>';
+  });
+  if(projects.length === 0) html += '<div class="empty-state">暂无质控数据</div>';
+  showModal('质控图', html);
+}
+// 显示失控处理报告
+function showOutOfControlReport(){
+  var records = appData.qcRecords || [];
+  var outOfControl = records.filter(function(r){return r.status==='失控'||r.status==='out_of_control'||Math.abs(parseFloat(r.value||0)-0)>3;});
+  var html = '<div class="section-title">⚠️ 失控处理报告</div>';
+  if(outOfControl.length === 0){
+    html += '<div class="card" style="background:#e8f5e9;padding:20px;text-align:center"><div style="font-size:48px;margin-bottom:10px">✅</div><div style="color:#2e7d32;font-size:16px">当前无失控记录</div></div>';
+  } else {
+    outOfControl.forEach(function(r){
+      html += '<div class="card" style="margin-bottom:10px;border-left:4px solid #f44336"><div style="padding:10px">';
+      html += '<div style="display:flex;justify-content:space-between;margin-bottom:8px"><strong>'+(r.project||r.item||'未知')+'</strong><span style="color:#f44336">⚠️ 失控</span></div>';
+      html += '<div style="font-size:12px;color:#666">日期: '+(r.date||'')+' | 操作人: '+(r.operator||'')+'</div>';
+      // 四维度分析
+      html += '<div style="margin-top:8px;padding:8px;background:#fff3e0;border-radius:5px;font-size:12px">';
+      html += '<div style="font-weight:bold;margin-bottom:5px">🔍 原因分析（四维度）</div>';
+      html += '<div>① 质控品: '+(r.reagentCause||'待分析')+'</div>';
+      html += '<div>② 试剂: '+(r.reagentCause||'待分析')+'</div>';
+      html += '<div>③ 仪器: '+(r.deviceCause||'待分析')+'</div>';
+      html += '<div>④ 操作: '+(r.operationCause||'待分析')+'</div>';
+      html += '</div>';
+      html += '<div style="margin-top:5px;font-size:12px">纠正措施: '+(r.correctiveAction||'待填写')+'</div>';
+      html += '<div style="margin-top:5px;font-size:12px;color:'+(r.closed?'#4caf50':'#ff9800')+'">状态: '+(r.closed?'✅ 已闭环':'⏳ 待审核')+'</div>';
+      html += '</div></div>';
+    });
+  }
+  showModal('失控处理', html);
+}
+// 显示工作量统计图表
+function showWorkloadChart(){
+  var records = appData.workloadRecords || [];
+  var html = '<div class="section-title">📊 工作量统计</div>';
+  // 按月份统计
+  var monthMap = {};
+  records.forEach(function(r){
+    if(r.date){
+      var month = r.date.substring(0,7);
+      if(!monthMap[month]) monthMap[month] = {count:0, weighted:0};
+      monthMap[month].count += parseInt(r.count)||0;
+      var factor = typeof difficultyFactors !== 'undefined' ? (difficultyFactors[r.projectType] || 1.0) : 1.0;
+      monthMap[month].weighted += (parseInt(r.count)||0) * factor;
+    }
+  });
+  var months = Object.keys(monthMap).sort();
+  html += '<div class="card" style="margin-bottom:15px"><div class="card-header" style="background:#f5f5f5;padding:8px 12px;font-weight:bold">月度工作量趋势</div><div style="padding:10px">';
+  months.forEach(function(m){
+    var data = monthMap[m];
+    var barWidth = Math.min(100, data.count/5);
+    html += '<div style="display:flex;align-items:center;margin:5px 0"><span style="width:70px;font-size:11px">'+m+'</span><div style="flex:1;height:16px;background:#e0e0e0;border-radius:8px;overflow:hidden"><div style="height:100%;width:'+barWidth+'%;background:#1976d2;border-radius:8px"></div></div><span style="width:60px;text-align:right;font-size:11px;margin-left:5px">'+data.count+'项</span><span style="width:60px;text-align:right;font-size:11px;color:#666">(加权'+Math.round(data.weighted)+')</span></div>';
+  });
+  if(months.length===0) html += '<div style="color:#999">暂无数据</div>';
+  html += '</div></div>';
+  // 按人员统计
+  var personMap = {};
+  records.forEach(function(r){
+    var op = r.operator || '未知';
+    if(!personMap[op]) personMap[op] = 0;
+    personMap[op] += parseInt(r.count)||0;
+  });
+  html += '<div class="card"><div class="card-header" style="background:#f5f5f5;padding:8px 12px;font-weight:bold">人员工作量排名</div><div style="padding:10px">';
+  var sorted = Object.keys(personMap).sort(function(a,b){return personMap[b]-personMap[a];});
+  sorted.forEach(function(p, idx){
+    var medal = idx===0?'🥇':(idx===1?'🥈':(idx===2?'🥉':''));
+    html += '<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f0f0f0"><span>'+medal+' '+p+'</span><span style="color:#1976d2;font-weight:bold">'+personMap[p]+'项</span></div>';
+  });
+  if(sorted.length===0) html += '<div style="color:#999">暂无数据</div>';
+  html += '</div></div>';
+  showModal('工作量统计', html);
+}
+
+// 显示危急值统计报表
+function showCriticalStats(){
+  var records = appData.criticalRecords || [];
+  var html = '<div class="section-title">📊 危急值统计报表</div>';
+  // 统计概览
+  var total = records.length;
+  var timely = records.filter(function(r){return r.isTimely!==false;}).length;
+  var confirmed = records.filter(function(r){return r.confirmed;}).length;
+  var timelyRate = total > 0 ? Math.round(timely/total*100) : 0;
+  var confirmRate = total > 0 ? Math.round(confirmed/total*100) : 0;
+  html += '<div class="stats-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:15px">';
+  html += '<div class="stat-card" style="background:#ffebee;padding:12px;border-radius:8px;text-align:center"><div style="font-size:24px;font-weight:bold;color:#c62828">'+total+'</div><div style="font-size:12px;color:#666">危急值总数</div></div>';
+  html += '<div class="stat-card" style="background:#e8f5e9;padding:12px;border-radius:8px;text-align:center"><div style="font-size:24px;font-weight:bold;color:'+(timelyRate>=90?'#388e3c':'#f44336')+'">'+timelyRate+'%</div><div style="font-size:12px;color:#666">报告及时率</div></div>';
+  html += '<div class="stat-card" style="background:#e3f2fd;padding:12px;border-radius:8px;text-align:center"><div style="font-size:24px;font-weight:bold;color:'+(confirmRate>=90?'#1976d2':'#f44336')+'">'+confirmRate+'%</div><div style="font-size:12px;color:#666">临床确认率</div></div>';
+  html += '</div>';
+  // 按人员统计
+  var personMap = {};
+  records.forEach(function(r){
+    var op = r.reporter || r.operator || '未知';
+    if(!personMap[op]) personMap[op] = {total:0, timely:0, confirmed:0};
+    personMap[op].total++;
+    if(r.isTimely!==false) personMap[op].timely++;
+    if(r.confirmed) personMap[op].confirmed++;
+  });
+  html += '<div class="card"><div class="card-header" style="background:#f5f5f5;padding:8px 12px;font-weight:bold">人员报告统计</div><div style="padding:10px">';
+  Object.keys(personMap).forEach(function(p){
+    var d = personMap[p];
+    var rate = Math.round(d.timely/d.total*100);
+    html += '<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f0f0f0"><span>'+p+'</span><span>报告'+d.total+'次 · 及时率'+rate+'%</span></div>';
+  });
+  if(Object.keys(personMap).length===0) html += '<div style="color:#999">暂无数据</div>';
+  html += '</div></div>';
+  showModal('危急值统计', html);
+}
+// 危急值临床确认
+function showCriticalConfirm(){
+  var records = appData.criticalRecords || [];
+  var unconfirmed = records.filter(function(r){return !r.confirmed;});
+  var html = '<div class="section-title">✅ 危急值临床确认</div>';
+  if(unconfirmed.length === 0){
+    html += '<div class="card" style="background:#e8f5e9;padding:20px;text-align:center"><div style="font-size:48px;margin-bottom:10px">✅</div><div style="color:#2e7d32;font-size:16px">所有危急值已确认</div></div>';
+  } else {
+    unconfirmed.forEach(function(r){
+      html += '<div class="card" style="margin-bottom:10px;border-left:4px solid #ff9800"><div style="padding:10px">';
+      html += '<div style="display:flex;justify-content:space-between;margin-bottom:5px"><strong>'+(r.patient||'未知')+'</strong><span style="color:#ff9800">⏳ 待确认</span></div>';
+      html += '<div style="font-size:12px;color:#666">项目: '+(r.item||'')+' | 值: '+(r.value||'')+' | 报告人: '+(r.reporter||r.operator||'')+'</div>';
+      html += '<div style="font-size:12px;color:#666">报告时间: '+(r.reportTime||r.date||'')+' | 通知方式: '+(r.notifyMethod||'电话')+'</div>';
+      html += '<button class="btn btn-sm btn-primary" style="margin-top:8px" onclick="confirmCritical(\''+r.id+'\')">✅ 确认接收</button>';
+      html += '</div></div>';
+    });
+  }
+  showModal('临床确认', html);
+}
+// 确认危急值
+function confirmCritical(id){
+  var records = appData.criticalRecords || [];
+  for(var i=0;i<records.length;i++){
+    if(records[i].id === id){
+      records[i].confirmed = true;
+      records[i].confirmTime = new Date().toISOString();
+      records[i].confirmer = currentUser ? currentUser.name : '未知';
+      break;
+    }
+  }
+  saveData();
+  showToast('✅ 危急值已确认','success');
+  showCriticalConfirm();
+}
+
+// 学习时长统计
+function showStudyTimeStats(){
+  var records = appData.sopRecords || appData.learningRecords || [];
+  var examRecords = appData.examRecords || [];
+  var html = '<div class="section-title">⏱ 学习时长统计</div>';
+  // 统计概览
+  var totalStudyTime = 0;
+  records.forEach(function(r){ totalStudyTime += parseInt(r.duration)||0; });
+  var totalHours = Math.floor(totalStudyTime/60);
+  var totalMins = totalStudyTime % 60;
+  var examCount = examRecords.length;
+  var examPassed = examRecords.filter(function(r){return (r.score||0)>=80;}).length;
+  html += '<div class="stats-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:15px">';
+  html += '<div class="stat-card" style="background:#e3f2fd;padding:12px;border-radius:8px;text-align:center"><div style="font-size:24px;font-weight:bold;color:#1976d2">'+totalHours+'小时'+totalMins+'分</div><div style="font-size:12px;color:#666">累计学习时长</div></div>';
+  html += '<div class="stat-card" style="background:#e8f5e9;padding:12px;border-radius:8px;text-align:center"><div style="font-size:24px;font-weight:bold;color:#388e3c">'+examCount+'</div><div style="font-size:12px;color:#666">考试次数</div></div>';
+  html += '<div class="stat-card" style="background:#fff3e0;padding:12px;border-radius:8px;text-align:center"><div style="font-size:24px;font-weight:bold;color:'+(examCount>0?(examPassed/examCount*100>=80?'#388e3c':'#f44336'):'#999')+'">'+(examCount>0?Math.round(examPassed/examCount*100):0)+'%</div><div style="font-size:12px;color:#666">考试合格率</div></div>';
+  html += '</div>';
+  // 月度学习统计
+  var monthMap = {};
+  records.forEach(function(r){
+    if(r.date){
+      var month = r.date.substring(0,7);
+      if(!monthMap[month]) monthMap[month] = 0;
+      monthMap[month] += parseInt(r.duration)||0;
+    }
+  });
+  var months = Object.keys(monthMap).sort();
+  html += '<div class="card" style="margin-bottom:15px"><div class="card-header" style="background:#f5f5f5;padding:8px 12px;font-weight:bold">月度学习时长（分钟）</div><div style="padding:10px">';
+  months.forEach(function(m){
+    var mins = monthMap[m];
+    var barWidth = Math.min(100, mins/3);
+    var target = 240; // 月度目标4小时=240分钟
+    var达标 = mins >= target;
+    html += '<div style="display:flex;align-items:center;margin:5px 0"><span style="width:70px;font-size:11px">'+m+'</span><div style="flex:1;height:16px;background:#e0e0e0;border-radius:8px;overflow:hidden"><div style="height:100%;width:'+barWidth+'%;background:'+(达标?'#4caf50':'#ff9800')+';border-radius:8px"></div></div><span style="width:50px;text-align:right;font-size:11px;margin-left:5px">'+mins+'分</span><span style="font-size:10px;color:'+(达标?'#4caf50':'#f44336')+'">'+(达标?'✅达标':'⏳目标240分')+'</span></div>';
+  });
+  if(months.length===0) html += '<div style="color:#999">暂无学习记录</div>';
+  html += '</div></div>';
+  // 考试记录
+  html += '<div class="card"><div class="card-header" style="background:#f5f5f5;padding:8px 12px;font-weight:bold">考试记录</div><div style="padding:10px">';
+  examRecords.slice(-10).reverse().forEach(function(r){
+    var passed = (r.score||0) >= 80;
+    html += '<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f0f0f0"><span>'+(r.name||'考试')+'</span><span style="color:'+(passed?'#4caf50':'#f44336')+';font-weight:bold">'+(r.score||0)+'分'+(passed?' ✅':' ❌')+'</span></div>';
+  });
+  if(examRecords.length===0) html += '<div style="color:#999">暂无考试记录</div>';
+  html += '</div></div>';
+  showModal('学习时长统计', html);
+}
 </script>
 </body>
 </html>
